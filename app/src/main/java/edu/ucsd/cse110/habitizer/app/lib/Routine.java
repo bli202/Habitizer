@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.habitizer.app;
+package edu.ucsd.cse110.habitizer.app.lib;
 
 import java.util.List;
 import java.time.Duration;
