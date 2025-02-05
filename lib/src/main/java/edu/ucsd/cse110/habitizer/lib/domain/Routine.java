@@ -14,13 +14,14 @@ public class Routine {
 
     private String name;
     private Instant startTime;
-    public Routine(List<Task> taskList, Duration estimatedTime) {
+    public Routine(List<Task> taskList, Duration estimatedTime, String name) {
         this.taskList = taskList;
         this.estimatedTime = estimatedTime;
         this.elapsedTime = Duration.ZERO;
         this.cumTaskTime = Duration.ZERO;
         this.ongoing = false;
         this.tasksDone = 0;
+        this.name = name;
     }
 
     /**
