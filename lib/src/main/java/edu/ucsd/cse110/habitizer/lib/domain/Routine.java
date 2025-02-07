@@ -1,46 +1,71 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
+import java.lang.reflect.GenericDeclaration;
+import java.util.ArrayList;
 import java.util.List;
 import java.time.Duration;
 import java.time.Instant;
 
 public class Routine {
     private List<Task> taskList;
+    private Instant startTime;
+
     private Duration elapsedTime;
     private final Duration estimatedTime;
     private Duration cumTaskTime;
     private boolean ongoing;
     private int tasksDone;
-
     private String name;
-    private Instant startTime;
-    public Routine(List<Task> taskList, Duration estimatedTime, String name) {
-        this.taskList = taskList;
+
+    /**
+     * Routine Constructor
+     *
+     * @param name  The nname of the routine (Hardcoded to monring and night)
+     * @param estimatedTime the total estimated time user picks to display
+     */
+    public Routine(Duration estimatedTime, String name) {
+        this.name = name;
+        this.taskList = new ArrayList<>();
         this.estimatedTime = estimatedTime;
         this.elapsedTime = Duration.ZERO;
         this.cumTaskTime = Duration.ZERO;
         this.ongoing = false;
         this.tasksDone = 0;
-        this.name = name;
     }
 
     /**
-     * Starts the routine by initializing elapsed time tracking and resetting progress metrics
-     * Additional clean up tasks
+     * Adds a task to the routine
+     *
+     * @param task
+     * @return true if the task was added, false if the
+     * routine is already started
+     */
+    public boolean addTask(Task task) {
+
+        if (ongoing) return false;
+
+        return taskList.add(task);
+    }
+
+    /**
+     * Starts routine that is timers
+     *
+     * @throws IllegalArgumentException if routine has no tasks
      */
     public void startRoutine() {
-        if (!ongoing) {
-            startTime = Instant.now();
-            cumTaskTime = Duration.ZERO;
-            tasksDone = 0;
-            ongoing = true;
+        if (ongoing) return;
+
+        if (taskList.isEmpty()) {
+            throw new IllegalArgumentException("Cannot start a routine with no tasks");
         }
+
+        this.startTime = Instant.now();
+        this.elapsedTime = Duration.ZERO;
+        this.cumTaskTime = Duration.ZERO;
+        this.tasksDone = 0;
+        this.ongoing = true;
     }
 
-    /**
-     * Ends the routine and finalizes elapsed time
-     * End routine needs to exit task view, as well as other items
-     */
     public void endRoutine() {
         if (ongoing) {
             elapsedTime = Duration.between(startTime, Instant.now());
@@ -49,57 +74,90 @@ public class Routine {
     }
 
     /**
-     * Marks a task as complete if it exists in the routine and updates progress
-     * @param task The task to be checked off
-     * @return boolean indicating if the task was successfully checked off
+     * Marks a task done and checks it off by its name
+     * This method's function:
+     * - Finds task in list
+     * - Start task timer if it hasn't started
+     * - Complete the task and stops its timer
+     * - Update the cumulative task time and progress
+     * - Auto end routine when all tasks are done
+     *
+     * @param taskName Name of the task to check off
+     * @return true if task is checked off, false otherwise
      */
-    public boolean checkoffTask(Task task) {
-        if (!ongoing) {
-            return false;
-        }
+    public boolean checkOffTask(String taskName) {
+        if (ongoing) return false;
 
-        // Find the task in the list and mark it as complete if it exists and isn't already completed
         for (Task t : taskList) {
-            if (t.equals(task) && !t.isCompleted()) {
-                t.setCompleted(true);
+            if (t.getName().equals(taskName) && !t.isCompleted()) {
+                t.startTask();
+                t.completeTask();
                 tasksDone++;
                 cumTaskTime = cumTaskTime.plus(t.getTimeSpent());
 
-                // If all tasks are done, end the routine
                 if (tasksDone == taskList.size()) {
                     endRoutine();
                 }
+
                 return true;
             }
         }
         return false;
     }
 
-    // Getters
+
+    //Getters for Routine
+
+    /*
+     * Returns list of tasks in the routine
+     */
     public List<Task> getTaskList() {
         return taskList;
     }
 
+    /*
+     * Returns overall elapsed time of the routine
+     * If the routine is ongoing, calculates the duration from start to now
+     */
     public Duration getElapsedTime() {
-        if (ongoing) {
+        if (ongoing && startTime != null) {
             return Duration.between(startTime, Instant.now());
         }
         return elapsedTime;
     }
 
+    /*
+     * Returns the estimated time on the duration (set by user)
+     */
     public Duration getEstimatedTime() {
         return estimatedTime;
     }
 
+    /*
+     * Returns the cumulative time spent on all tasks
+     */
     public Duration getCumTaskTime() {
         return cumTaskTime;
     }
 
-    public boolean isOngoing() {
+    /*
+     * Indicates if the routine is started or not
+     */
+    public boolean isOnGoing() {
         return ongoing;
     }
 
+    /*
+     * Return the num of tasks done
+     */
     public int getTasksDone() {
         return tasksDone;
+    }
+
+    /*
+     * Returns name of task (In this case either morning or night)
+     */
+    public String getName() {
+        return name;
     }
 }
