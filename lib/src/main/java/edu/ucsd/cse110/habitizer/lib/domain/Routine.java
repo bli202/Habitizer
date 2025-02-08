@@ -44,6 +44,12 @@ public class Routine {
 
         if (ongoing) return false;
 
+        for (Task t : taskList) {
+            if (t.getName().equals(task.getName())) {
+                throw new IllegalArgumentException("Cannot have two tasks with the same name in Routine");
+            }
+        }
+
         return taskList.add(task);
     }
 
