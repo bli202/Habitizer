@@ -9,13 +9,12 @@ import java.time.Instant;
 public class Routine {
     private List<Task> taskList;
     private Instant startTime;
-
     private Duration elapsedTime;
     private final Duration estimatedTime;
     private Duration cumTaskTime;
     private boolean ongoing;
     private int tasksDone;
-    private String name;
+    private final String name;
 
     /**
      * Routine Constructor
@@ -92,19 +91,20 @@ public class Routine {
      * @return true if task is checked off, false otherwise
      */
     public boolean checkOffTask(String taskName) {
-        if (ongoing) return false;
+        if (!ongoing) return false;
 
+        // Finding task to check off
         for (Task t : taskList) {
             if (t.getName().equals(taskName) && !t.isCompleted()) {
-                t.startTask();
                 t.completeTask();
                 tasksDone++;
-                cumTaskTime = cumTaskTime.plus(t.getTimeSpent());
-
+                var taskTime = elapsedTime.minus(cumTaskTime);
+                cumTaskTime = elapsedTime;
+                int minutes = (int) taskTime.toMinutes();
+                t.setTime(minutes);
                 if (tasksDone == taskList.size()) {
                     endRoutine();
                 }
-
                 return true;
             }
         }

@@ -12,10 +12,6 @@ import java.time.*;
 
 
 
-/**
- * Example test demonstrating use of Hamcrest matchers (which are also
- * used for espresso assertions in instrumented Android UI tests).
- */
 public class TaskTest {
 
     private final Task shower = new Task("Take shower");

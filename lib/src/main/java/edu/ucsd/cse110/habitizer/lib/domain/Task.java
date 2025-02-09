@@ -1,6 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
+
 import java.time.Duration;
-import java.time.Instant;
 
 /*
  * This class represents an individual task
@@ -14,41 +14,25 @@ public class Task {
     private String name;
     private boolean completed;
 
-    // elapsed time in minutes
-    private Instant startTime;
-    private Duration timeSpent;
-
+    private int timeSpent;
     public Task(String name) {
         this.name = name;
         this.completed = false;
-        this.timeSpent = Duration.ZERO;
-        this.startTime = null;
     }
-
-    /*
-     * Starts the task's own timer
-     */
-    public void startTask() {
-        if (startTime == null) {
-            startTime = Instant.now();
-        }
-    }
-
     public void completeTask() {
-        if (!completed) {
-            if (startTime == null) startTask();
-
-            timeSpent = Duration.between(startTime, Instant.now());
-            completed = true;
-        }
+        completed = true;
     }
 
     public boolean isCompleted() {
         return completed;
     }
 
-    public Duration getTimeSpent() {
+    public int getTimeSpent() {
         return timeSpent;
+    }
+
+    public void setTime(int timeSpent) {
+        this.timeSpent = timeSpent;
     }
 
     public String getName() {
