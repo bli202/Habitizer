@@ -53,12 +53,12 @@ public class Routine {
         return taskList.add(task);
     }
 
-    public boolean removeTask(String name) {
-        if (ongoing) return false;
+    public boolean removeTask(Task task) {
+        if (ongoing || taskList.isEmpty()) return false;
 
         // remove task from List
         for (Task t : taskList) {
-            if (t.getName().equals(name)) {
+            if (t.getName().equals(task.getName())) {
                 return taskList.remove(t);
             }
         }
@@ -183,5 +183,12 @@ public class Routine {
      */
     public int getNumTasks() {
         return taskList.size();
+    }
+
+    /**
+     * Returns the start time
+     */
+    public Instant getStartTime() {
+        return startTime;
     }
 }

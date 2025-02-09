@@ -1,8 +1,12 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 import static org.junit.Assert.*;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.Duration;
+import java.time.Instant;
+import java.util.*;
 
 public class RoutineTest {
     int duration = 45;
@@ -41,9 +45,9 @@ public class RoutineTest {
         morning.addTask(lunch);
 
         assertEquals(morning.getTaskList().size(), 3);
-        assertEquals(morning.getTaskList().getFirst().getName(), "shower");
+        assertEquals(morning.getTaskList().get(0).getName(), "shower");
         assertEquals(morning.getTaskList().get(1).getName(), "brush");
-        assertEquals(morning.getTaskList().getLast().getName(), "lunch");
+        assertEquals(morning.getTaskList().get(2).getName(), "lunch");
 
     }
 
@@ -74,25 +78,30 @@ public class RoutineTest {
         morning.addTask(shower);
         morning.startRoutine();
         assertFalse(morning.addTask(brush));
-
     }
 
     @Test
     public void testRemoveTaskOngoing() {
 
+        final Task shower = new Task("shower");
+        morning.addTask(shower);
+        morning.startRoutine();
+        assertFalse(morning.removeTask(shower));
     }
 
     @Test
     public void testRemoveTask() {
+
       final Task lunch = new Task("lunch");
       night.addTask(lunch);
       assertEquals(night.getTaskList().size(), 1);
-      night.removeTask("lunch");
+      night.removeTask(lunch);
       assertEquals(night.getTaskList().size(), 0);
     }
 
     @Test
     public void testCheckOffTask() {
+
       final Task dinner = new Task("dinner");
       final Task lunch = new Task("lunch");
 
@@ -106,7 +115,7 @@ public class RoutineTest {
 
 
     @Test
-    public void testTimer() throws InterruptedException {
+    public void testTaskTimer() throws InterruptedException {
         final Task lunch = new Task("lunch");
         final Task dinner = new Task("dinner");
         final Task snack = new Task("snack");
@@ -132,4 +141,48 @@ public class RoutineTest {
         assertEquals(elapsedTimeThree, school.getElapsedTime().toMillis(), 100);
     }
 
+    @Test
+    public void testStartRoutineNoTask() {
+
+        try {
+            morning.startRoutine();
+            fail("Expected IllegalArgumentException thrown");
+        } catch (IllegalArgumentException e){
+            assertEquals( "Cannot start a routine with no tasks", e.getMessage());
+        }
     }
+
+    @Test
+    public void testStartRoutineState() {
+
+        final Task lunch = new Task("lunch");
+        morning.addTask(lunch);
+        morning.startRoutine();
+
+        assertEquals(0, morning.getTasksDone());
+        assertEquals(0, morning.getElapsedTime().toMillis(), 100);
+        assertEquals(Instant.now().toEpochMilli(), morning.getStartTime().toEpochMilli(), 100);
+        assertTrue(morning.isOnGoing());
+    }
+
+    @Test
+    public void testGetTaskList() {
+        final Task lunch = new Task("lunch");
+        final Task dinner = new Task("dinner");
+        final Task read = new Task("Read");
+
+        school.addTask(lunch);
+        school.addTask(dinner);
+        school.addTask(read);
+
+        List<Task> actualAns = school.getTaskList();
+        List<Task> expectedAns = new ArrayList<>();
+
+        expectedAns.add(lunch);
+        expectedAns.add(dinner);
+        expectedAns.add(read);
+
+        assertEquals(expectedAns, actualAns);
+    }
+
+}
