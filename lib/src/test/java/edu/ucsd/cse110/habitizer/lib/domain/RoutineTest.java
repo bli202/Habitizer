@@ -1,16 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
-
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-
-import junit.framework.AssertionFailedError;
-
-import org.junit.Assert;
 import org.junit.Test;
-
-import java.time.*;
 
 public class RoutineTest {
     int duration = 45;
@@ -38,14 +28,14 @@ public class RoutineTest {
 
     }
 
-//    @Test
-//    public void testRemoveTask() {
-//      final Task lunch = new Task("lunch");
-//      night.addTask(lunch);
-//      assertEquals(night.getTaskList().size(), 1);
-//      night.removeTask(lunch);
-//      assertEquals(night.getTaskList().size(), 0);
-//    }
+    @Test
+    public void testRemoveTask() {
+      final Task lunch = new Task("lunch");
+      night.addTask(lunch);
+      assertEquals(night.getTaskList().size(), 1);
+      night.removeTask("lunch");
+      assertEquals(night.getTaskList().size(), 0);
+    }
 
     @Test
     public void testCheckOffTask() {

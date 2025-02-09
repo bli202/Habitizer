@@ -52,6 +52,18 @@ public class Routine {
         return taskList.add(task);
     }
 
+    public boolean removeTask(String name) {
+        if (ongoing) return false;
+
+        // remove task from List
+        for (Task t : taskList) {
+            if (t.getName().equals(name)) {
+                return taskList.remove(t);
+            }
+        }
+        return false;
+    }
+
     /**
      * Starts routine that is timers
      *
