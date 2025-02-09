@@ -13,10 +13,9 @@ import org.junit.Test;
 import java.time.*;
 
 public class RoutineTest {
-    Duration duration = Duration.ofMinutes(45);
-    Duration duration_2 = Duration.ofMinutes(90);
-
-    Duration duration_3 = Duration.ofMinutes(120);
+    int duration = 45;
+    int duration_2 = 60;
+    int duration_3 = 120;
 
     private final Routine morning = new Routine(duration, "Morning");
     private final Routine night = new Routine(duration_2, "Night");
@@ -55,17 +54,38 @@ public class RoutineTest {
 
       school.addTask(dinner);
       school.addTask(lunch);
+      school.startRoutine();
       school.checkOffTask("dinner");
-
       assertTrue(dinner.isCompleted());
       assertFalse(lunch.isCompleted());
-
-      // Test time?
-
     }
-//
-//    @Test
-//    public void testTimer() {}
 
+
+    @Test
+    public void testTimer() throws InterruptedException {
+        final Task lunch = new Task("lunch");
+        final Task dinner = new Task("dinner");
+        final Task snack = new Task("snack");
+
+        school.addTask(dinner);
+        school.addTask(lunch);
+        school.addTask(snack);
+
+        // Testing two task timers
+        long startTime = System.currentTimeMillis();
+        school.startRoutine();
+        Thread.sleep(1000);
+        school.checkOffTask("dinner");
+        int elapsedTime = (int) (System.currentTimeMillis() - startTime);
+        assertEquals(elapsedTime, dinner.getTimeSpent(), 100);
+        Thread.sleep(1000);
+        school.checkOffTask("lunch");
+        assertEquals(elapsedTime, lunch.getTimeSpent(), 100);
+
+        // Testing routine elapsed time.
+        Thread.sleep(2000);
+        long elapsedTimeThree = System.currentTimeMillis() - startTime;
+        assertEquals(elapsedTimeThree, school.getElapsedTime().toMillis(), 100);
+    }
 
     }

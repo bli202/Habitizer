@@ -10,8 +10,8 @@ public class Routine {
     private List<Task> taskList;
     private Instant startTime;
     private Duration elapsedTime;
-    private final Duration estimatedTime;
-    private Duration cumTaskTime;
+    private final int estimatedTime;
+    private Instant cumTaskTime;
     private boolean ongoing;
     private int tasksDone;
     private final String name;
@@ -22,12 +22,12 @@ public class Routine {
      * @param name  The nname of the routine (Hardcoded to monring and night)
      * @param estimatedTime the total estimated time user picks to display
      */
-    public Routine(Duration estimatedTime, String name) {
+    public Routine(int estimatedTime, String name) {
         this.name = name;
         this.taskList = new ArrayList<>();
         this.estimatedTime = estimatedTime;
         this.elapsedTime = Duration.ZERO;
-        this.cumTaskTime = Duration.ZERO;
+        this.cumTaskTime = Instant.now();
         this.ongoing = false;
         this.tasksDone = 0;
     }
@@ -66,7 +66,7 @@ public class Routine {
 
         this.startTime = Instant.now();
         this.elapsedTime = Duration.ZERO;
-        this.cumTaskTime = Duration.ZERO;
+        this.cumTaskTime = Instant.now();
         this.tasksDone = 0;
         this.ongoing = true;
     }
@@ -98,10 +98,9 @@ public class Routine {
             if (t.getName().equals(taskName) && !t.isCompleted()) {
                 t.completeTask();
                 tasksDone++;
-                var taskTime = elapsedTime.minus(cumTaskTime);
-                cumTaskTime = elapsedTime;
-                int minutes = (int) taskTime.toMinutes();
-                t.setTime(minutes);
+                int taskTime = (int) Duration.between(cumTaskTime, Instant.now()).getSeconds() * 1000;
+                cumTaskTime = Instant.now();
+                t.setTime(taskTime);
                 if (tasksDone == taskList.size()) {
                     endRoutine();
                 }
@@ -135,14 +134,14 @@ public class Routine {
     /*
      * Returns the estimated time on the duration (set by user)
      */
-    public Duration getEstimatedTime() {
+    public int getEstimatedTime() {
         return estimatedTime;
     }
 
     /*
      * Returns the cumulative time spent on all tasks
      */
-    public Duration getCumTaskTime() {
+    public Instant getCumTaskTime() {
         return cumTaskTime;
     }
 
