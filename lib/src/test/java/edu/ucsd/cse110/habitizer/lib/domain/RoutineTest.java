@@ -2,6 +2,8 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.time.Duration;
+
 public class RoutineTest {
     int duration = 45;
     int duration_2 = 60;
@@ -12,7 +14,24 @@ public class RoutineTest {
     private final Routine school = new Routine(duration_3, "School");
 
     @Test
+    public void testRoutineInitialState() {
+        var morning = new Routine(duration, "Morning");
+        var expectedDuration = duration;
+        var actDuration = morning.getEstimatedTime();
+        //checks initial num of task in routine
+        assertEquals(0, morning.getNumTasks());
+        assertFalse(morning.isOnGoing());
+        assertEquals(Duration.ZERO, morning.getElapsedTime());
+        assertEquals(expectedDuration, actDuration);
+        assertEquals("Morning", morning.getName());
+        assertEquals(0, morning.getTasksDone());
+
+    }
+
+    @Test
     public void testAddTask() {
+
+        var morning = new Routine(duration, "Morning");
         final Task shower = new Task("shower");
         final Task brush = new Task("brush");
         final Task lunch = new Task("lunch");
@@ -25,6 +44,41 @@ public class RoutineTest {
         assertEquals(morning.getTaskList().getFirst().getName(), "shower");
         assertEquals(morning.getTaskList().get(1).getName(), "brush");
         assertEquals(morning.getTaskList().getLast().getName(), "lunch");
+
+    }
+
+    @Test
+    public void testAddTaskDup() {
+
+        var morning = new Routine(duration, "Morning");
+        final Task shower = new Task("shower");
+        final Task dupShower = new Task("shower");
+        String expectedErrMsg = "Cannot have two tasks with the same name in Routine";
+        morning.addTask(shower);
+
+        try {
+            morning.addTask(dupShower);
+            fail("Expected exception thrown");
+
+        } catch (IllegalArgumentException e) {
+
+            assertEquals(expectedErrMsg, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAddTaskOngoingRoutine() {
+
+        final Task shower = new Task("shower");
+        final Task brush = new Task("brush");
+        morning.addTask(shower);
+        morning.startRoutine();
+        assertFalse(morning.addTask(brush));
+
+    }
+
+    @Test
+    public void testRemoveTaskOngoing() {
 
     }
 

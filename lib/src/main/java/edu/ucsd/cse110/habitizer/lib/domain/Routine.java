@@ -15,6 +15,7 @@ public class Routine {
     private boolean ongoing;
     private int tasksDone;
     private final String name;
+    private int numTasks;
 
     /**
      * Routine Constructor
@@ -94,8 +95,7 @@ public class Routine {
      * Marks a task done and checks it off by its name
      * This method's function:
      * - Finds task in list
-     * - Start task timer if it hasn't started
-     * - Complete the task and stops its timer
+     * - Finds the diff between cumulative task time and current time
      * - Update the cumulative task time and progress
      * - Auto end routine when all tasks are done
      *
@@ -125,14 +125,14 @@ public class Routine {
 
     //Getters for Routine
 
-    /*
+    /**
      * Returns list of tasks in the routine
      */
     public List<Task> getTaskList() {
         return taskList;
     }
 
-    /*
+    /**
      * Returns overall elapsed time of the routine
      * If the routine is ongoing, calculates the duration from start to now
      */
@@ -143,38 +143,45 @@ public class Routine {
         return elapsedTime;
     }
 
-    /*
+    /**
      * Returns the estimated time on the duration (set by user)
      */
     public int getEstimatedTime() {
         return estimatedTime;
     }
 
-    /*
+    /**
      * Returns the cumulative time spent on all tasks
      */
     public Instant getCumTaskTime() {
         return cumTaskTime;
     }
 
-    /*
+    /**
      * Indicates if the routine is started or not
      */
     public boolean isOnGoing() {
         return ongoing;
     }
 
-    /*
+    /**
      * Return the num of tasks done
      */
     public int getTasksDone() {
         return tasksDone;
     }
 
-    /*
+    /**
      * Returns name of task (In this case either morning or night)
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Returns number of tasks in the routine
+     */
+    public int getNumTasks() {
+        return taskList.size();
     }
 }

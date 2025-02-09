@@ -1,8 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
-import java.time.Duration;
-
-/*
+/**
  * This class represents an individual task
  *
  * Responsibilities:

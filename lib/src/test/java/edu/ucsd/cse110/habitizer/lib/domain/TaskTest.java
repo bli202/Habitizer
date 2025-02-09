@@ -49,21 +49,19 @@ public class TaskTest {
                 expectedName, actName);
     }
 
-
+    //Testing getTime and setTime getter/setter
     @Test
-    public void testStartTaskNotCompleted() {
+    public void testSetGetTaskTime() {
         var shower = new Task("Take shower");
-//        shower.startTask();
-        assertFalse("The started task should not be marked complete", shower.isCompleted());
-        assertEquals("Incomplete task should have a 0 timer",
-                shower.getTimeSpent(), 0);
+        shower.setTime(5);
+        int expectedAns = 5;
+        int actAns = shower.getTimeSpent();
+        assertEquals(expectedAns, actAns);
     }
 
 
-    @Test
-    public void testStartTaskCompleteTask() {
 
-    }
+
 
 
 
