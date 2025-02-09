@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Habitizer</string>
+    <string name="start">Start Routine</string>
+    <string name="end">End Routine</string>
 </resources>

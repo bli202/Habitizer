@@ -4,16 +4,20 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-//import android.os.Bundle;
-//import android.view.Menu;
-//import android.view.MenuItem;
-//
-//import androidx.annotation.NonNull;
-//import androidx.annotation.Nullable;
-//import androidx.appcompat.app.AppCompatActivity;
-//import androidx.lifecycle.ViewModel;
-//import androidx.lifecycle.ViewModelProvider;
-//
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+
+import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.habitizer.app.ui.routine.RoutineView;
+import edu.ucsd.cse110.habitizer.app.ui.home.HomePage;
+
 //public class MainActivity extends AppCompatActivity {
 //    private ActivityMainBinding view;
 //    private boolean isHome = true;
@@ -21,7 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 //    @Override
 //    public void onCreate(@Nullable Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        setTitle(R.string.app_title);
+//        setTitle(R.string.app_name);
 //
 //        // Initialize the View
 //        this.view = ActivityMainBinding.inflate(getLayoutInflater());
@@ -45,9 +49,9 @@ import androidx.appcompat.app.AppCompatActivity;
 //
 //    private void swapFragments() {
 //        if (isHome) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, CardListFragment.newInstance()).commit();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, RoutineView.newInstance()).commit();
 //        } else {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, StudyFragment.newInstance()).commit();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, HomePage.newInstance()).commit();
 //        }
 //        isHome = !isHome;
 //    }
@@ -58,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_page);
+//        setContentView(R.layout.home_page);
+        setContentView(R.layout.routine_view);
 
 
     }

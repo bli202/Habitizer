@@ -4,24 +4,57 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.List;
-
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
+import edu.ucsd.cse110.habitizer.app.databinding.RoutineViewBinding;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
 
 public class RoutineView extends Fragment {
 
+
+    private MainViewModel activityModel;
+    private RoutineViewBinding view;
+
+    public RoutineView() {
+        // Required empty public constructor
+    }
+
+    public static RoutineView newInstance() {
+        RoutineView fragment = new RoutineView();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        var modelOwner = requireActivity();
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        this.activityModel = modelProvider.get(MainViewModel.class);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        view = RoutineViewBinding.inflate(inflater, container, false);
+
+        view.addTaskButton.setOnClickListener(v -> {
+            var dialogFragment = AddTaskDialogFragment.newInstance();
+            dialogFragment.show(getParentFragmentManager(), "AddTaskDialogFragment");
+        });
+
+        return view.getRoot();
+
+
+    }
 
 }
 
