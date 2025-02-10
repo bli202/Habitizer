@@ -129,7 +129,7 @@ public class RoutineTest {
         school.checkOffTask(dinner);
         assertEquals(1000, dinner.getTimeSpent(), 100);
         Thread.sleep(3400);
-        school.checkOffTask(dinner);
+        school.checkOffTask(lunch);
         assertEquals(3000, lunch.getTimeSpent(), 100);
     }
 
