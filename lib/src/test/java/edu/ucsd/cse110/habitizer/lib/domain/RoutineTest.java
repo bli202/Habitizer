@@ -108,7 +108,7 @@ public class RoutineTest {
       school.addTask(dinner);
       school.addTask(lunch);
       school.startRoutine();
-      school.checkOffTask("dinner");
+      school.checkOffTask(dinner);
       assertTrue(dinner.isCompleted());
       assertFalse(lunch.isCompleted());
     }
@@ -125,20 +125,13 @@ public class RoutineTest {
         school.addTask(snack);
 
         // Testing two task timers
-        long startTime = System.currentTimeMillis();
         school.startRoutine();
         Thread.sleep(1000);
-        school.checkOffTask("dinner");
-        int elapsedTime = (int) (System.currentTimeMillis() - startTime);
-        assertEquals(elapsedTime, dinner.getTimeSpent(), 100);
-        Thread.sleep(1000);
-        school.checkOffTask("lunch");
-        assertEquals(elapsedTime, lunch.getTimeSpent(), 100);
-
-        // Testing routine elapsed time.
-        Thread.sleep(2000);
-        long elapsedTimeThree = System.currentTimeMillis() - startTime;
-        assertEquals(elapsedTimeThree, school.getElapsedTime().toMillis(), 100);
+        school.checkOffTask(dinner);
+        assertEquals(1000, dinner.getTimeSpent(), 100);
+        Thread.sleep(3400);
+        school.checkOffTask(dinner);
+        assertEquals(3000, lunch.getTimeSpent(), 100);
     }
 
     @Test
@@ -184,5 +177,30 @@ public class RoutineTest {
 
         assertEquals(expectedAns, actualAns);
     }
+
+    @Test
+    public void testGetEstimatedTime() {
+        assertEquals(duration, morning.getEstimatedTime());
+    }
+
+    @Test
+    public void testGetCumTaskTime() throws InterruptedException {
+        var morning = new Routine(duration, "Morning");
+        final Task brush = new Task("brush");
+        assertNotNull(morning.getCumTaskTime());
+
+        morning.addTask(brush);
+        morning.startRoutine();
+        //Get the cumulative task time before checking off a task, which should be 0
+        Instant beforeCheckOff = morning.getCumTaskTime();
+        Thread.sleep(1000);
+        morning.checkOffTask(brush);
+        //here we should get a time for 1 second
+        Instant afterCheckOff = morning.getCumTaskTime();
+
+        int actAns = (int) (afterCheckOff.toEpochMilli() - beforeCheckOff.toEpochMilli());
+        assertEquals(1000, actAns, 100);
+    }
+
 
 }
