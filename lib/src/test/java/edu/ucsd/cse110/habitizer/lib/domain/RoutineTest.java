@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 import static org.junit.Assert.*;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.Duration;
@@ -179,11 +178,6 @@ public class RoutineTest {
     }
 
     @Test
-    public void testGetEstimatedTime() {
-        assertEquals(duration, morning.getEstimatedTime());
-    }
-
-    @Test
     public void testGetCumTaskTime() throws InterruptedException {
         var morning = new Routine(duration, "Morning");
         final Task brush = new Task("brush");
@@ -201,6 +195,71 @@ public class RoutineTest {
         int actAns = (int) (afterCheckOff.toEpochMilli() - beforeCheckOff.toEpochMilli());
         assertEquals(1000, actAns, 100);
     }
+
+    @Test
+    public void testIsOnGoing() {
+
+        final Task brush = new Task("brush");
+        final Task eat = new Task("eat");
+
+        assertFalse(morning.isOnGoing());
+        morning.addTask(brush);
+        morning.addTask(eat);
+        morning.startRoutine();
+        assertTrue(morning.isOnGoing());
+        morning.checkOffTask(brush);
+        assertTrue(morning.isOnGoing());
+        morning.endRoutine();
+        assertFalse(morning.isOnGoing());
+
+        school.addTask(eat);
+        school.startRoutine();
+        school.checkOffTask(eat);
+        assertFalse(school.isOnGoing());
+
+    }
+
+    @Test
+    public void testGetTasksDoneGetNumTask() {
+
+        final Task brush = new Task("brush");
+        final Task eat = new Task("eat");
+        final Task shower = new Task("shower");
+
+        morning.addTask(brush);
+        morning.addTask(eat);
+        morning.addTask(shower);
+
+        assertEquals(3, morning.getNumTasks());
+        morning.removeTask(shower);
+        assertEquals(2, morning.getNumTasks());
+
+        morning.startRoutine();
+        morning.checkOffTask(brush);
+        assertEquals(1, morning.getTasksDone());
+        morning.checkOffTask(eat);
+        assertEquals(2, morning.getTasksDone());
+    }
+
+    @Test
+    public void getNameandEstimatedTime() {
+        String name = "New Routine";
+        int expectedTime = 1000;
+        final Routine testRoutine = new Routine(expectedTime, name);
+        assertEquals(expectedTime, testRoutine.getEstimatedTime());
+        assertEquals(name, testRoutine.getName());
+    }
+
+    @Test
+    public void getStartTime() throws InterruptedException{
+        final Task brush = new Task("brush");
+        Instant expStartTime = Instant.now();
+        morning.addTask(brush);
+        morning.startRoutine();
+        assertEquals(expStartTime.toEpochMilli(), morning.getStartTime().toEpochMilli(), 100);
+    }
+
+
 
 
 }
