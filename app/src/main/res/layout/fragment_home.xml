@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Container for the Morning Routine -->
-
     <FrameLayout
         android:id="@+id/morningRoutineContainer"
         android:layout_width="0dp"

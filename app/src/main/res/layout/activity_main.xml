@@ -39,7 +39,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/HomeFragment"
-        android:name="edu.ucsd.cse110.habitizer.app.ui.home.homeFragment"
+        android:name="edu.ucsd.cse110.habitizer.app.ui.home.HomeFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
