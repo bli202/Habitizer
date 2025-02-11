@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
-import java.lang.reflect.GenericDeclaration;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.Duration;
@@ -15,7 +14,6 @@ public class Routine {
     private boolean ongoing;
     private int tasksDone;
     private final String name;
-    private int numTasks;
 
     /**
      * Routine Constructor
@@ -36,7 +34,7 @@ public class Routine {
     /**
      * Adds a task to the routine
      *
-     * @param task
+     * @param task Task to add.
      * @return true if the task was added, false if the
      * routine is already started
      */
@@ -53,6 +51,12 @@ public class Routine {
         return taskList.add(task);
     }
 
+    /**
+     * Removes selected task
+     *
+     * @param task Task to remove.
+     * @return true if task was removed, false otherwise.
+     */
     public boolean removeTask(Task task) {
         if (ongoing || taskList.isEmpty()) return false;
 
@@ -158,9 +162,9 @@ public class Routine {
     }
 
     /**
-     * Indicates if the routine is started or not
+     * Returns if the routine is started or not
      */
-    public boolean isOnGoing() {
+    public boolean getongoing() {
         return ongoing;
     }
 
@@ -176,13 +180,6 @@ public class Routine {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Returns number of tasks in the routine
-     */
-    public int getNumTasks() {
-        return taskList.size();
     }
 
     /**
