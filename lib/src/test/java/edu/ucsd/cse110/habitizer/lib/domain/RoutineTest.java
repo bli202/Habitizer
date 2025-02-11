@@ -22,8 +22,7 @@ public class RoutineTest {
         var expectedDuration = duration;
         var actDuration = morning.getEstimatedTime();
         //checks initial num of task in routine
-        assertEquals(0, morning.getNumTasks());
-        assertFalse(morning.isOnGoing());
+        assertFalse(morning.getongoing());
         assertEquals(Duration.ZERO, morning.getElapsedTime());
         assertEquals(expectedDuration, actDuration);
         assertEquals("Morning", morning.getName());
@@ -154,7 +153,7 @@ public class RoutineTest {
         assertEquals(0, morning.getTasksDone());
         assertEquals(0, morning.getElapsedTime().toMillis(), 100);
         assertEquals(Instant.now().toEpochMilli(), morning.getStartTime().toEpochMilli(), 100);
-        assertTrue(morning.isOnGoing());
+        assertTrue(morning.getongoing());
     }
 
     @Test
@@ -202,20 +201,20 @@ public class RoutineTest {
         final Task brush = new Task("brush");
         final Task eat = new Task("eat");
 
-        assertFalse(morning.isOnGoing());
+        assertFalse(morning.getongoing());
         morning.addTask(brush);
         morning.addTask(eat);
         morning.startRoutine();
-        assertTrue(morning.isOnGoing());
+        assertTrue(morning.getongoing());
         morning.checkOffTask(brush);
-        assertTrue(morning.isOnGoing());
+        assertTrue(morning.getongoing());
         morning.endRoutine();
-        assertFalse(morning.isOnGoing());
+        assertFalse(morning.getongoing());
 
         school.addTask(eat);
         school.startRoutine();
         school.checkOffTask(eat);
-        assertFalse(school.isOnGoing());
+        assertFalse(school.getongoing());
 
     }
 

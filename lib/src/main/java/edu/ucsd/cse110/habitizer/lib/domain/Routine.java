@@ -188,4 +188,8 @@ public class Routine {
     public Instant getStartTime() {
         return startTime;
     }
+
+    public int getNumTasks() {
+        return taskList.size();
+    }
 }
