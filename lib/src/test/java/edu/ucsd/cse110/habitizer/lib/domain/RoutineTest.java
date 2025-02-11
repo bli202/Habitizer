@@ -251,15 +251,11 @@ public class RoutineTest {
     }
 
     @Test
-    public void getStartTime() throws InterruptedException{
+    public void getStartTime(){
         final Task brush = new Task("brush");
         Instant expStartTime = Instant.now();
         morning.addTask(brush);
         morning.startRoutine();
         assertEquals(expStartTime.toEpochMilli(), morning.getStartTime().toEpochMilli(), 100);
     }
-
-
-
-
 }
