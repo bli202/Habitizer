@@ -1,39 +1,77 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
-import java.time.Duration;
+/**
+ * This class represents an individual task
+ *
+ * Responsibilities:
+ * - Storing its own name and state of completion
+ * - Tracking its own timer (Start time plus time spent)
+ *
+ */
 public class Task {
     private String name;
-    private boolean checkedOff;
+    private boolean completed;
+    private int timeSpent;
 
-    // elapsed time in minutes
-    private int elapsedTime;
-
+    /**
+     * Task instantiates name as unique identifier for task.
+     *
+     * @param name Name for task.
+     */
     public Task(String name) {
         this.name = name;
-        this.checkedOff = false;
-        this.elapsedTime = 0;
+        this.completed = false;
+        this.timeSpent = 0;
     }
 
-    public int getElapsedTime() {
-        return elapsedTime;
+    /**
+     * Complete this task.
+     */
+    public void completeTask() {
+        completed = true;
     }
 
-    public void setElapsedTime(int elapsedTime) {
-        this.elapsedTime = elapsedTime;
+    /**
+     * Returns if the task is true.
+     * 
+     * @return true if task is done, 
+     */
+    public boolean isCompleted() {
+        return completed;
     }
 
-    public boolean isCheckedOff() {
-        return checkedOff;
+    /**
+     * Returns if time spent on task.
+     * 
+     * @return timeSpent. 
+     */
+    public int getTimeSpent() {
+        return timeSpent;
     }
 
-    public void setCheckedOff(boolean checkedOff) {
-        this.checkedOff = checkedOff;
+    /**
+     * Sets timeSpent.
+     * 
+     * @param timeSpent to set timeSpent too. 
+     */
+    public void setTime(int timeSpent) {
+        this.timeSpent = timeSpent;
     }
 
+    /**
+     * Gets name.
+     * 
+     * @return name. 
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets name.
+     * 
+     * @param name New name to set too. 
+     */
     public void setName(String name) {
         this.name = name;
     }
