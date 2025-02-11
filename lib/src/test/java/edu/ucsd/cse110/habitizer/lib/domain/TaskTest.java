@@ -3,7 +3,6 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 import static org.junit.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-
 import junit.framework.AssertionFailedError;
 
 import org.junit.Assert;
@@ -58,13 +57,4 @@ public class TaskTest {
         int actAns = shower.getTimeSpent();
         assertEquals(expectedAns, actAns);
     }
-
-
-
-
-
-
-
-
-
 }
