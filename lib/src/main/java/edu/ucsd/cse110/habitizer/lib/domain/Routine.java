@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.habitizer.lib.domain;
 
+import java.lang.reflect.GenericDeclaration;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.Duration;
@@ -14,11 +15,12 @@ public class Routine {
     private boolean ongoing;
     private int tasksDone;
     private final String name;
+    private int numTasks;
 
     /**
      * Routine Constructor
      *
-     * @param name  The name of the routine (Hardcoded to morning and night)
+     * @param name  The nname of the routine (Hardcoded to monring and night)
      * @param estimatedTime the total estimated time user picks to display
      */
     public Routine(int estimatedTime, String name) {
@@ -34,7 +36,7 @@ public class Routine {
     /**
      * Adds a task to the routine
      *
-     * @param task task obj we want to add
+     * @param task
      * @return true if the task was added, false if the
      * routine is already started
      */
@@ -97,7 +99,7 @@ public class Routine {
      * - Update the cumulative task time and progress
      * - Auto end routine when all tasks are done
      *
-     * @param task Name of the task to check off
+     * @param taskName Name of the task to check off
      * @return true if task is checked off, false otherwise
      */
     public boolean checkOffTask(Task task) {
@@ -174,6 +176,13 @@ public class Routine {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Returns number of tasks in the routine
+     */
+    public int getNumTasks() {
+        return taskList.size();
     }
 
     /**
