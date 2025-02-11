@@ -13,7 +13,7 @@
         android:id="@+id/HabitizerTitle"
         android:layout_width="0dp"
         android:layout_height="52dp"
-        android:background="#837957"
+        android:background="#595244"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toTopOf="@+id/HabitizerTitle" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
+        android:id="@+id/HomeFragment"
         android:name="edu.ucsd.cse110.habitizer.app.ui.home.homeFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"

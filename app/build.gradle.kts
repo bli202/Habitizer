@@ -33,6 +33,7 @@ android {
 
 dependencies {
 
+    implementation(project(":lib"))
     implementation(libs.android.material)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
