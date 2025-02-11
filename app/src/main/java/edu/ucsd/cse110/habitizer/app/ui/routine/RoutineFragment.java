@@ -14,18 +14,18 @@ import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.RoutineViewBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
 
-public class RoutineView extends Fragment {
+public class RoutineFragment extends Fragment {
 
 
     private MainViewModel activityModel;
     private RoutineViewBinding view;
 
-    public RoutineView() {
+    public RoutineFragment() {
         // Required empty public constructor
     }
 
-    public static RoutineView newInstance() {
-        RoutineView fragment = new RoutineView();
+    public static RoutineFragment newInstance() {
+        RoutineFragment fragment = new RoutineFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
