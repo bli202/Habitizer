@@ -66,9 +66,11 @@ public class PlainMutableSubject<T> implements MutableSubject<T> {
     public Observer<? super T> observe(@NonNull Observer<? super T> observer) {
         if (!observers.contains(observer)) {
             observers.add(observer);
+            if (isInitialized()) observer.onChanged(getValue());
         }
         return observer;
     }
+
 
     @Override
     public void removeObserver(@NonNull Observer<? super T> observer) {
