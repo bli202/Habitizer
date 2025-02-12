@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Habitizer</string>
+    <string name="add_routine">Add Routine</string>
+    <string name="routine">Routine</string>
+    <string name="estimated_routine_time">Estimated Routine Time</string>
 </resources>

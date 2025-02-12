@@ -7,7 +7,7 @@
 
     <ListView
         android:id="@+id/task_list"
-        android:layout_width="412dp"
+        android:layout_width="match_parent"
         android:layout_height="659dp"
         app:layout_constraintBottom_toTopOf="@+id/end_routine_button"
         app:layout_constraintEnd_toEndOf="parent"
