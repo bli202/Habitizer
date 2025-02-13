@@ -12,6 +12,12 @@
     app:iconTint="@color/black"
     tools:context=".MainActivity">
 
+    <FrameLayout
+        android:id="@+id/fragment_routine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
     <ListView
         android:id="@+id/routine_view"
         android:layout_width="match_parent"

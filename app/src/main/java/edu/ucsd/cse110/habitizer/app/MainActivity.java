@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+import edu.ucsd.cse110.habitizer.app.ui.routine.RoutineFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,5 +59,23 @@ public class MainActivity extends AppCompatActivity {
         };
 
         routineView.setAdapter(adapter);
+
+        routineView.setOnItemClickListener((parent, view, position, id) -> {
+            Routine selectedRoutine = routineList.get(position);
+
+            RoutineFragment routineFragment = RoutineFragment.newInstance(
+                    selectedRoutine.getTitle(),
+                    String.valueOf(selectedRoutine.getDuration())
+            );
+
+            routineView.setVisibility(View.GONE);
+            findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_routine, routineFragment)
+                    .addToBackStack(null) // for back button
+                    .commit();
+        });
     }
 }

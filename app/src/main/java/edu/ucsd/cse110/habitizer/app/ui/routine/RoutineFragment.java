@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import edu.ucsd.cse110.habitizer.app.R;
 
@@ -17,14 +18,9 @@ import edu.ucsd.cse110.habitizer.app.R;
  */
 public class RoutineFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String routine_title = "param1";
+    private static final String estimate_time = "param2";
 
     public RoutineFragment() {
         // Required empty public constructor
@@ -42,8 +38,8 @@ public class RoutineFragment extends Fragment {
     public static RoutineFragment newInstance(String param1, String param2) {
         RoutineFragment fragment = new RoutineFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(routine_title, param1);
+        args.putString(estimate_time, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,15 +48,27 @@ public class RoutineFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String routineTitle = getArguments().getString(routine_title);
+            String routineDuration = getArguments().getString(estimate_time);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_routine, container, false);
+        View view = inflater.inflate(R.layout.fragment_routine, container, false);
+
+        TextView titleView = view.findViewById(R.id.routine_title);
+        TextView timeView = view.findViewById(R.id.estimated_time);
+
+        if (getArguments() != null) {
+            String routineTitle = getArguments().getString(routine_title);
+            String routineDuration = getArguments().getString(estimate_time);
+
+            titleView.setText(routineTitle);
+            timeView.setText(routineDuration + " min");
+        }
+
+        return view;
     }
 }
