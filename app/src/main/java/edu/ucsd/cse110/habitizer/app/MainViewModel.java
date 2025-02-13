@@ -48,7 +48,6 @@ public class MainViewModel extends ViewModel {
         this.completed = new PlainMutableSubject<>();
         this.taskName = new PlainMutableSubject<>();
 
-
     }
 
 

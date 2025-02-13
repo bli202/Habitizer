@@ -11,6 +11,7 @@
         android:name="edu.ucsd.cse110.habitizer.app.ui.routine.RoutineFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:theme="@style/ThemeOverlay.Material3.DynamicColors.Dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
