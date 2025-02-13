@@ -7,7 +7,9 @@ import android.util.Log;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import androidx.lifecycle.ViewModel;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
@@ -43,16 +45,32 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
+        Log.d("MainViewModel", "MainViewModel constructor");
+
         this.orderedTasks = new PlainMutableSubject<>();
         this.firstTask = new PlainMutableSubject<>();
         this.completed = new PlainMutableSubject<>();
         this.taskName = new PlainMutableSubject<>();
 
+        taskRepository.findAll().observe(tasks -> {
+            if (tasks == null) return; // not ready yet, ignore
 
+            var newOrderedTasks = tasks.stream()
+                    .collect(Collectors.toList());
+
+            orderedTasks.setValue(newOrderedTasks);
+        });
+
+
+    }
+
+    public Subject<List<Task>> getOrderedTasks() {
+        return orderedTasks;
     }
 
     public void append(Task task) {
         taskRepository.save(task);
+
     }
 
 

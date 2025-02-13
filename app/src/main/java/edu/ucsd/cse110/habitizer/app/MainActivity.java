@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.habitizer.app.databinding.RoutineViewBinding;
 
 //public class MainActivity extends AppCompatActivity {
 //    private ActivityMainBinding view;

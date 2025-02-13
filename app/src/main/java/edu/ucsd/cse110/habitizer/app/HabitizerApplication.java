@@ -14,10 +14,14 @@ public class HabitizerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d("HabitizerApplication", "HabitizerApplication onCreate being called");
+
 
         // Initialize data source and repository
         this.dataSource = InMemoryDataSource.fromDefault();
         this.taskRepository = new TaskRepository(dataSource);
+        Log.d("HabitizerApplication", "HabitizerApplication taskRepository from InMemoryDataSource");
+
     }
 
     public TaskRepository getTaskRepository() {
