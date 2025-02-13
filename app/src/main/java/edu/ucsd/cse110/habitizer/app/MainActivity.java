@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.routine_view);
+        // setContentView(R.layout.routine_view);
         setTitle(R.string.app_title);
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(view.getRoot());
