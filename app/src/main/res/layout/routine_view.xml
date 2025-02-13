@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="120dp">
 
     <!--
       No ability to edit or delete in MS1, will add in MS2
@@ -13,9 +13,9 @@
         android:id="@+id/RoutineTitle"
         android:layout_width="261dp"
         android:layout_height="66dp"
+        android:gravity="center"
         android:text="@string/routine"
         android:textSize="28sp"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/RoutineTime"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,9 +31,19 @@
         android:inputType="number"
         android:text="@string/estimated_routine_time"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/RoutineTitle"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/enter_routine_button"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:text="Enter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/RoutineTitle"
+        app:layout_constraintTop_toBottomOf="@+id/RoutineTime" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
