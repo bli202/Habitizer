@@ -2,9 +2,46 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/start_routine_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Routine Title & Time Section -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/routine_start_title"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/RoutineTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/routine"
+            android:textSize="28sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/RoutineTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/RoutineTime"
+            android:layout_width="189dp"
+            android:layout_height="41dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:text="@string/estimated_routine_time"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/RoutineTitle"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Task List -->
     <ListView
         android:id="@+id/task_list"
         android:layout_width="match_parent"
@@ -12,19 +49,17 @@
         app:layout_constraintBottom_toTopOf="@+id/buttonLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/task_view"/>
+        app:layout_constraintTop_toBottomOf="@+id/routine_start_title"
+        tools:listitem="@layout/task_view" />
 
-
-
+    <!-- Bottom Button Layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
         android:layout_height="57dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task_list">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/start_routine_button"

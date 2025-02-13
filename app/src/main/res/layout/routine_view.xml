@@ -2,28 +2,40 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/routine_view"
+    android:id="@+id/routine_start_title"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:icon="@android:drawable/ic_input_add"
-    android:orderInCategory="1"
-    android:scaleType="fitXY"
-    app:fabCustomSize="100dp"
-    android:title="Routine View"
-    app:iconTint="@color/black"
-    tools:context=".MainActivity">
+    android:layout_height="120dp">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="75dp"
-        android:layout_marginBottom="60dp"
-        android:clickable="true"
-        app:backgroundTint="#E6ACE1"
-        app:fabCustomSize="75dp"
+    <!--
+      No ability to edit or delete in MS1, will add in MS2
+      -->
+
+    <TextView
+        android:id="@+id/RoutineTitle"
+        android:layout_width="261dp"
+        android:layout_height="66dp"
+        android:gravity="center"
+        android:text="@string/routine"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/RoutineTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/RoutineTime"
+        android:layout_width="154dp"
+        android:layout_height="48dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="number"
+        android:text="@string/estimated_routine_time"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="40dp"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:layout_constraintStart_toEndOf="@+id/RoutineTitle"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
