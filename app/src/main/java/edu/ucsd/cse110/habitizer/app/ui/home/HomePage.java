@@ -1,7 +1,7 @@
-package edu.ucsd.cse110.habitizer.app.ui.home;
-
-import android.os.Bundle;
-
+package edu.ucsd.cse110.habitizer.app.ui.home;//package edu.ucsd.cse110.habitizer.app.ui.home;
+//
+//import android.os.Bundle;
+//
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.databinding.HomePageBinding;
+import edu.ucsd.cse110.habitizer.app.databinding.HomepageViewBinding;
 
 public class HomePage extends Fragment {
     private MainViewModel activityModel;
-    private HomePageBinding view;
+    private HomepageViewBinding view;
 
     public HomePage() {
         // Required empty public constructor
@@ -49,7 +49,7 @@ public class HomePage extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = HomePageBinding.inflate(inflater, container, false);
+        view = HomepageViewBinding.inflate(inflater, container, false);
         setupMvp();
         return view.getRoot();
     }

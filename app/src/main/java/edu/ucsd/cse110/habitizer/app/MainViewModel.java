@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
-import edu.ucsd.cse110.observables.PlainMediatorSubject;
 import edu.ucsd.cse110.observables.PlainMutableSubject;
 import edu.ucsd.cse110.observables.Subject;
 
@@ -70,8 +69,6 @@ public class MainViewModel extends ViewModel {
 
     public void append(Task task) {
         taskRepository.save(task);
-
     }
-
 
 }

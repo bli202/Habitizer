@@ -37,8 +37,6 @@ public class AddTaskDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentDialogAddTaskBinding.inflate(getLayoutInflater());
 
-
-
         return new AlertDialog.Builder(getActivity())
                 .setTitle("New Task")
                 .setMessage("Please provide task name")
