@@ -42,7 +42,6 @@ public class MainViewModel extends ViewModel {
 
 
     public MainViewModel(TaskRepository taskRepository) {
-        Log.d("RoutineDebug", "routinefragment constructor 6");
         this.taskRepository = taskRepository;
         this.orderedTasks = new PlainMutableSubject<>();
         this.firstTask = new PlainMutableSubject<>();

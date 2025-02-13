@@ -22,7 +22,6 @@ public class RoutineFragment extends Fragment {
     private RoutineViewBinding view;
 
     public RoutineFragment() {
-        Log.d("RoutineDebug", "routinefragment constructor 1");
         // Required empty public constructor
     }
 
@@ -35,14 +34,10 @@ public class RoutineFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d("RoutineDebug", "routinefragment constructor 2");
         super.onCreate(savedInstanceState);
-        Log.d("RoutineDebug", "routinefragment constructor 3");
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        Log.d("RoutineDebug", "routinefragment constructor 4");
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        Log.d("RoutineDebug", "routinefragment constructor 5");
         this.activityModel = modelProvider.get(MainViewModel.class);
     }
 
@@ -54,7 +49,6 @@ public class RoutineFragment extends Fragment {
         view.addTaskButton.setOnClickListener(v -> {
             var dialogFragment = AddTaskDialogFragment.newInstance();
             dialogFragment.show(getChildFragmentManager(), "AddTaskDialogFragment");
-            Log.d("DialogDebug", "Add Task button clicked");
         });
 
         return view.getRoot();

@@ -31,7 +31,6 @@ public class AddTaskDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Log.d("DialogDebug", "onCreateDialog called");
         this.view = FragmentDialogAddTaskBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
