@@ -1,8 +1,20 @@
 package edu.ucsd.cse110.habitizer.app;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 //import android.os.Bundle;
 //import android.view.Menu;
@@ -60,7 +72,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage_view);
 
+        // Initializing 2 mock routines for MS1
+        Routine routine1 = new Routine(30, "Morning Routine");
+        Routine routine2 = new Routine(45, "Exercise Routine");
+        ArrayList<Routine> routineList = new ArrayList<>();
+        routineList.add(routine1);
+        routineList.add(routine2);
 
+        ListView routineView = findViewById(R.id.routine_view);
+
+        ArrayAdapter<Routine> adapter = new ArrayAdapter<Routine>(
+                this,
+                R.layout.routine_view,
+                routineList
+        ) {
+            @NonNull
+            @SuppressLint("SetTextI18n")
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                if (convertView == null) {
+                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                    convertView = inflater.inflate(R.layout.routine_view, parent, false);
+                }
+
+                TextView titleView = convertView.findViewById(R.id.RoutineTitle);
+                TextView timeView = convertView.findViewById(R.id.RoutineTime);
+
+                Routine routine = getItem(position);
+                assert routine != null;
+                titleView.setText(routine.getTitle());
+                timeView.setText(routine.getDuration() + " min");
+                return convertView;
+            }
+        };
+
+        routineView.setAdapter(adapter);
     }
-
 }

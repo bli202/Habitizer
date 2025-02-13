@@ -14,23 +14,23 @@
         android:layout_width="261dp"
         android:layout_height="66dp"
         android:text="@string/routine"
-        android:textSize="28sp"
+        android:textSize="20sp"
         android:gravity="center"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/RoutineTime"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <TextView
         android:id="@+id/RoutineTime"
         android:layout_width="154dp"
         android:layout_height="48dp"
         android:autofillHints=""
         android:ems="10"
         android:gravity="center"
-        android:inputType="number"
         android:text="@string/estimated_routine_time"
-        android:textSize="12sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/RoutineTitle"
         app:layout_constraintTop_toTopOf="parent"
