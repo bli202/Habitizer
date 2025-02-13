@@ -7,13 +7,14 @@ import java.time.Instant;
 
 public class Routine {
     private List<Task> taskList;
-    private Instant startTime;
-    private Duration elapsedTime;
+//    private Instant startTime;
+    private long elapsedTime;
     private final int estimatedTime;
-    private Instant cumTaskTime;
+//    private Instant cumTaskTime;
     private boolean ongoing;
     private int tasksDone;
     private final String name;
+    private CustomTimer timer;
 
     /**
      * Routine Constructor
@@ -25,9 +26,10 @@ public class Routine {
         this.name = name;
         this.taskList = new ArrayList<>();
         this.estimatedTime = estimatedTime;
-        this.elapsedTime = Duration.ZERO;
-        this.cumTaskTime = Instant.now();
+//        this.elapsedTime = Duration.ZERO;
+//        this.cumTaskTime = Instant.now();
         this.ongoing = false;
+        this.timer = new CustomTimer();
         this.tasksDone = 0;
     }
 
@@ -44,6 +46,7 @@ public class Routine {
 
         for (Task t : taskList) {
             if (t.getName().equals(task.getName())) {
+                // This should display an error message on-screen
                 throw new IllegalArgumentException("Cannot have two tasks with the same name in Routine");
             }
         }
@@ -78,19 +81,22 @@ public class Routine {
         if (ongoing) return;
 
         if (taskList.isEmpty()) {
+            // This should print an error message on-screen
             throw new IllegalArgumentException("Cannot start a routine with no tasks");
         }
 
-        this.startTime = Instant.now();
-        this.elapsedTime = Duration.ZERO;
-        this.cumTaskTime = Instant.now();
+//        this.startTime = Instant.now();
+//        this.elapsedTime = Duration.ZERO;
+//        this.cumTaskTime = Instant.now();
+        this.timer.start();
         this.tasksDone = 0;
         this.ongoing = true;
     }
 
     public void endRoutine() {
         if (ongoing) {
-            elapsedTime = Duration.between(startTime, Instant.now());
+//            elapsedTime = Duration.between(startTime, Instant.now());
+            elapsedTime = timer.pause();
             ongoing = false;
         }
     }
@@ -114,9 +120,10 @@ public class Routine {
             if (t.getName().equals(task.getName()) && !t.isCompleted()) {
                 t.completeTask();
                 tasksDone++;
-                int taskTime = (int) Duration.between(cumTaskTime, Instant.now()).getSeconds() * 1000;
-                cumTaskTime = Instant.now();
-                t.setTime(taskTime);
+//                int taskTime = (int) Duration.between(cumTaskTime, Instant.now()).getSeconds() * 1000;
+                long taskTime = timer.getTaskTime();
+                long cumTaskTime = timer.getTime();
+                t.setTime((int) taskTime);
                 if (tasksDone == taskList.size()) {
                     endRoutine();
                 }
@@ -140,11 +147,12 @@ public class Routine {
      * Returns overall elapsed time of the routine
      * If the routine is ongoing, calculates the duration from start to now
      */
-    public Duration getElapsedTime() {
-        if (ongoing && startTime != null) {
-            return Duration.between(startTime, Instant.now());
-        }
-        return elapsedTime;
+    public int getElapsedTime() {
+//        if (ongoing && startTime != null) {
+//            return Duration.between(startTime, Instant.now());
+//        }
+//        return elapsedTime;
+        return (int) timer.getTime();
     }
 
     /**
@@ -154,12 +162,14 @@ public class Routine {
         return estimatedTime;
     }
 
-    /**
+    /*
+     * *** All Commented Methods Delegated to CustomTimer ***
+     *
      * Returns the cumulative time spent on all tasks
      */
-    public Instant getCumTaskTime() {
-        return cumTaskTime;
-    }
+//    public int getCumTaskTime() {
+//        return (int) timer.getTime();
+//    }
 
     /**
      * Returns if the routine is started or not
@@ -185,9 +195,9 @@ public class Routine {
     /**
      * Returns the start time
      */
-    public Instant getStartTime() {
-        return startTime;
-    }
+//    public Instant getStartTime() {
+//        return startTime;
+//    }
 
     public int getNumTasks() {
         return taskList.size();
