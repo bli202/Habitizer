@@ -51,5 +51,9 @@ public class MainViewModel extends ViewModel {
 
     }
 
+    public void append(Task task) {
+        taskRepository.save(task);
+    }
+
 
 }

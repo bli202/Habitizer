@@ -10,11 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentDialogAddTaskBinding;
+import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class AddTaskDialogFragment extends DialogFragment {
 
     private FragmentDialogAddTaskBinding view;
+    private MainViewModel activityModel;
 
 
     public AddTaskDialogFragment() {
@@ -43,6 +46,10 @@ public class AddTaskDialogFragment extends DialogFragment {
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
+        var name = view.taskNameEditText.getText().toString();
+
+        var task = new Task(name);
+        activityModel.append(task);
         dialog.dismiss();
     }
 

@@ -27,4 +27,6 @@ public class TaskRepository {
     public void save(Task task) {
         dataSource.putTask(task);
     }
+
+    //public void append(Task task) { dataSource.putTask(task); }
 }
