@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(project(":lib"))
+    implementation(project(":observables"))
 
     testImplementation(libs.junit4)
 

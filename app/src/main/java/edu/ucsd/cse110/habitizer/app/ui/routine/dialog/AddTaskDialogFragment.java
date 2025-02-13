@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +17,7 @@ public class AddTaskDialogFragment extends DialogFragment {
     private FragmentDialogAddTaskBinding view;
 
 
-    AddTaskDialogFragment() {
+    public AddTaskDialogFragment() {
 
     }
 
@@ -30,6 +31,7 @@ public class AddTaskDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Log.d("DialogDebug", "onCreateDialog called");
         this.view = FragmentDialogAddTaskBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
