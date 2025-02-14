@@ -22,6 +22,8 @@ import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.TaskViewBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import android.graphics.Paint;
+import android.widget.TextView;
 
 public class RoutineAdapter extends ArrayAdapter<Task> {
 
@@ -129,11 +131,31 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
             onDeleteClick.accept(task.getName());
         });
 
-        // Populate the view with the flashcard's data.
-        binding.TaskTitle.setText(task.getName());
+        // Populate the view with the task's data
+        binding.taskTitle.setText(task.getName());
+
+        // Set initial strike-through based on task completion state
+        updateStrikeThrough(binding.taskTitle, task.isCompleted());
+
+        // Set click listener on the entire view
+        binding.getRoot().setOnClickListener(v -> {
+            task.toggleCompletion();  // Toggle task completion state
+            Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
+            updateStrikeThrough(binding.taskTitle, task.isCompleted());
+        });
+
 
         return binding.getRoot();
     }
+
+    private void updateStrikeThrough(TextView textView, boolean isCompleted) {
+        if (isCompleted) {
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+    }
+
     // The below methods aren't strictly necessary, usually.
     // But get in the habit of defining them because they never hurt
     // (as long as you have IDs for each item) and sometimes you need them.
