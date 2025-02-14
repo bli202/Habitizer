@@ -1,3 +1,8 @@
+/* TODO
+ * Task and cumulative time rounding
+ *
+ */
+
 package edu.ucsd.cse110.habitizer.lib.domain;
 
 import java.util.ArrayList;
@@ -8,7 +13,7 @@ import java.time.Instant;
 public class Routine {
     private List<Task> taskList;
 //    private Instant startTime;
-    private long elapsedTime;
+//    private long elapsedTime;
     private final int estimatedTime;
 //    private Instant cumTaskTime;
     private boolean ongoing;
@@ -96,9 +101,26 @@ public class Routine {
     public void endRoutine() {
         if (ongoing) {
 //            elapsedTime = Duration.between(startTime, Instant.now());
-            elapsedTime = timer.pause();
+            timer.pause();
             ongoing = false;
         }
+    }
+
+    /**
+     * Pauses routine timer (switches to mock timer) for testing purposes
+     */
+    public void pauseRoutineTimer() {
+        timer.pause();
+    }
+
+    /**
+     * Manually adds time to timer for testing purposes - argument
+     * should always be 30 as per Canvas assignment description
+     *
+     * @param sec Number of seconds to add to timer
+     */
+    public void manualAddTime(long sec) {
+        timer.addTime(sec);
     }
 
     /**
@@ -122,7 +144,8 @@ public class Routine {
                 tasksDone++;
 //                int taskTime = (int) Duration.between(cumTaskTime, Instant.now()).getSeconds() * 1000;
                 long taskTime = timer.getTaskTime();
-                long cumTaskTime = timer.getTime();
+//                long cumTaskTime = timer.getTime();
+                int taskTimeMinutes = (int) Math.ceil(taskTime / 60.0);
                 t.setTime((int) taskTime);
                 if (tasksDone == taskList.size()) {
                     endRoutine();
@@ -144,7 +167,7 @@ public class Routine {
     }
 
     /**
-     * Returns overall elapsed time of the routine
+     * Returns overall elapsed time of the routine in minutes (rounded down)
      * If the routine is ongoing, calculates the duration from start to now
      */
     public int getElapsedTime() {
@@ -152,7 +175,7 @@ public class Routine {
 //            return Duration.between(startTime, Instant.now());
 //        }
 //        return elapsedTime;
-        return (int) timer.getTime();
+        return ((int) timer.getTime()) / 60;
     }
 
     /**
@@ -201,5 +224,36 @@ public class Routine {
 
     public int getNumTasks() {
         return taskList.size();
+    }
+
+    /**
+     * Edits a task name - duplicate names not allowed
+     *
+     * @param task The task to be renamed
+     * @param name The new name
+     * @return True if task was successfully renamed; false if routine is ongoing
+     */
+    public boolean editTask(Task task, String name) {
+        if (ongoing) return false;
+
+        for (Task t : taskList) {
+            if (t != task && t.getName().equals(name)) {
+                // This should display an error message on-screen
+                throw new IllegalArgumentException("Cannot have two tasks with the same name in Routine");
+            }
+        }
+
+        task.setName(name);
+        return true;
+    }
+
+    /**
+     * Get cumulative elapsed time in seconds - for testing purposes only;
+     * frontend should only ever use minutes, not seconds
+     *
+     * @return Cumulative elapsed time in seconds
+     */
+    public int getElapsedTimeSecs() {
+        return (int) timer.getTime();
     }
 }

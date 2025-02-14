@@ -23,7 +23,7 @@ public class RoutineTest {
         var actDuration = morning.getEstimatedTime();
         //checks initial num of task in routine
         assertFalse(morning.getongoing());
-        assertEquals(Duration.ZERO, morning.getElapsedTime());
+        assertEquals(0, morning.getElapsedTime());
         assertEquals(expectedDuration, actDuration);
         assertEquals("Morning", morning.getName());
         assertEquals(0, morning.getTasksDone());
@@ -126,10 +126,10 @@ public class RoutineTest {
         school.startRoutine();
         Thread.sleep(1000);
         school.checkOffTask(dinner);
-        assertEquals(1000, dinner.getTimeSpent(), 100);
+        assertEquals(1, dinner.getTimeSpent());
         Thread.sleep(3400);
         school.checkOffTask(lunch);
-        assertEquals(3000, lunch.getTimeSpent(), 100);
+        assertEquals(3, lunch.getTimeSpent());
     }
 
     @Test
@@ -151,8 +151,8 @@ public class RoutineTest {
         morning.startRoutine();
 
         assertEquals(0, morning.getTasksDone());
-        assertEquals(0, morning.getElapsedTime().toMillis(), 100);
-        assertEquals(Instant.now().toEpochMilli(), morning.getStartTime().toEpochMilli(), 100);
+        assertEquals(0, morning.getElapsedTime());
+//        assertEquals(Instant.now().toEpochMilli(), morning.getStartTime().toEpochMilli(), 100);
         assertTrue(morning.getongoing());
     }
 
@@ -176,24 +176,24 @@ public class RoutineTest {
         assertEquals(expectedAns, actualAns);
     }
 
-    @Test
-    public void testGetCumTaskTime() throws InterruptedException {
-        var morning = new Routine(duration, "Morning");
-        final Task brush = new Task("brush");
-        assertNotNull(morning.getCumTaskTime());
-
-        morning.addTask(brush);
-        morning.startRoutine();
-        //Get the cumulative task time before checking off a task, which should be 0
-        Instant beforeCheckOff = morning.getCumTaskTime();
-        Thread.sleep(1000);
-        morning.checkOffTask(brush);
-        //here we should get a time for 1 second
-        Instant afterCheckOff = morning.getCumTaskTime();
-
-        int actAns = (int) (afterCheckOff.toEpochMilli() - beforeCheckOff.toEpochMilli());
-        assertEquals(1000, actAns, 100);
-    }
+//    @Test
+//    public void testGetCumTaskTime() throws InterruptedException {
+//        var morning = new Routine(duration, "Morning");
+//        final Task brush = new Task("brush");
+////        assertNotNull(morning.getCumTaskTime());
+//
+//        morning.addTask(brush);
+//        morning.startRoutine();
+//        //Get the cumulative task time before checking off a task, which should be 0
+//        Instant beforeCheckOff = morning.getCumTaskTime();
+//        Thread.sleep(1000);
+//        morning.checkOffTask(brush);
+//        //here we should get a time for 1 second
+//        Instant afterCheckOff = morning.getCumTaskTime();
+//
+//        int actAns = (int) (afterCheckOff.toEpochMilli() - beforeCheckOff.toEpochMilli());
+//        assertEquals(1000, actAns, 100);
+//    }
 
     @Test
     public void testIsOnGoing() {
@@ -250,13 +250,83 @@ public class RoutineTest {
     }
 
     @Test
-    public void getStartTime() throws InterruptedException{
-        final Task brush = new Task("brush");
-        Instant expStartTime = Instant.now();
-        morning.addTask(brush);
-        morning.startRoutine();
-        assertEquals(expStartTime.toEpochMilli(), morning.getStartTime().toEpochMilli(), 100);
+    public void pauseRoutineTimer() throws InterruptedException {
+        Routine testRoutine = new Routine(10, "test");
+        testRoutine.addTask(new Task("test task"));
+        testRoutine.startRoutine();
+        Thread.sleep(1000);
+        testRoutine.pauseRoutineTimer();
+        Thread.sleep(2000);
+        assertEquals(1, testRoutine.getElapsedTimeSecs());
     }
+
+    @Test
+    public void manualAddTime() throws InterruptedException {
+        Routine testRoutine = new Routine(10, "test");
+        testRoutine.addTask(new Task("test task"));
+        testRoutine.startRoutine();
+        Thread.sleep(1000);
+        testRoutine.pauseRoutineTimer();
+        Thread.sleep(2000);
+        assertEquals(1, testRoutine.getElapsedTimeSecs());
+        testRoutine.manualAddTime(46);
+        assertEquals(47, testRoutine.getElapsedTimeSecs());
+    }
+
+    @Test
+    public void editTask() {
+        Routine testRoutine = new Routine(10, "test");
+        Task task1 = new Task("test task 1");
+        Task task2 = new Task("test task 2");
+        Task task3 = new Task("test task 3");
+        testRoutine.addTask(task1);
+        testRoutine.addTask(task2);
+        testRoutine.addTask(task3);
+        testRoutine.editTask(task2, "renamed task 2");
+        assertEquals("renamed task 2", testRoutine.getTaskList().get(1).getName());
+    }
+
+    @Test
+    public void editTaskDup() {
+
+        var morning = new Routine(duration, "Morning");
+        final Task shower = new Task("shower");
+        final Task dupShower = new Task("new shower");
+        String expectedErrMsg = "Cannot have two tasks with the same name in Routine";
+        morning.addTask(shower);
+
+        try {
+            morning.editTask(dupShower, "shower");
+            fail("Expected exception thrown");
+
+        } catch (IllegalArgumentException e) {
+
+            assertEquals(expectedErrMsg, e.getMessage());
+        }
+        Routine testRoutine = new Routine(10, "test");
+        Task task1 = new Task("test task 1");
+        Task task2 = new Task("test task 2");
+        Task task3 = new Task("test task 3");
+        testRoutine.addTask(task1);
+        testRoutine.addTask(task2);
+        testRoutine.addTask(task3);
+//        String expectedErrMsg = "Cannot have two tasks with the same name in Routine";
+        try {
+            testRoutine.editTask(task2, "test task 3");
+
+        } catch (IllegalArgumentException e) {
+            assertEquals(expectedErrMsg, e.getMessage());
+        }
+    }
+
+//    @Test
+//    public void getStartTime() throws InterruptedException{
+//        final Task brush = new Task("brush");
+//        Instant expStartTime = Instant.now();
+//        morning.addTask(brush);
+//        morning.startRoutine();
+//        assertEquals(expStartTime.toEpochMilli(), morning.getStartTime().toEpochMilli(), 100);
+//    }
 
 
 
