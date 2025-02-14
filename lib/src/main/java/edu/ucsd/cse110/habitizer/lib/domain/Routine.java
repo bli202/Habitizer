@@ -31,6 +31,18 @@ public class Routine {
         this.tasksDone = 0;
     }
 
+    public String toString() {
+        return name;
+    }
+
+    public String getTitle() {
+        return name;
+    }
+
+    public int getDuration() {
+        return estimatedTime;
+    }
+
     /**
      * Adds a task to the routine
      *

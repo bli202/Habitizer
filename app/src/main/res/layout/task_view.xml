@@ -7,40 +7,57 @@
 
     <TextView
         android:id="@+id/TaskTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="Sample Task"
-        android:textSize="30dp"
+        android:layout_width="124dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="6dp"
+        android:text="@string/sample_task"
+        android:textSize="18dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/TaskTime"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/deleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="25dp"
-        android:clickable="true"
-        android:contentDescription="deletes a task"
-        app:fabCustomSize="45dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:maxImageSize="35dp"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/editButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
         android:clickable="true"
-        android:contentDescription="edits a task"
-        app:fabCustomSize="45dp"
+        android:contentDescription="@string/edits_a_task"
+        app:fabCustomSize="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/deleteButton"
+        app:layout_constraintStart_toEndOf="@+id/TaskTime"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="14dp"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:contentDescription="@string/deletes_a_task"
+        app:fabCustomSize="28dp"
+        app:maxImageSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:maxImageSize="30dp"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        app:srcCompat="@android:drawable/ic_menu_delete" />
+
+    <TextView
+        android:id="@+id/TaskTime"
+        android:layout_width="64dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="12dp"
+        android:ems="10"
+        android:gravity="center"
+        android:text="@string/time_taken"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editButton"
+        app:layout_constraintStart_toEndOf="@+id/TaskTitle"
+        app:layout_constraintTop_toTopOf="parent"
+         />
 </androidx.constraintlayout.widget.ConstraintLayout>
