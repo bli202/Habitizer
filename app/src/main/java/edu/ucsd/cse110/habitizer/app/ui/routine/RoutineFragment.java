@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.habitizer.app.ui.routine;
 
+import static android.graphics.Paint.STRIKE_THRU_TEXT_FLAG;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,12 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.graphics.Paint;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
@@ -78,17 +82,24 @@ public class RoutineFragment extends Fragment {
 
         activityModel.getOrderedTasks().observe(tasks -> {
             if (tasks == null) return;
-            Log.d("RoutineFragment", "Updating adapter with " + tasks.size() + " tasks.");
-            Log.d("RoutineFragment", "Before clearing, adapter has " + adapter.getCount() + " items.");
             adapter.clear();
-            Log.d("RoutineFragment", "After clearing, adapter has " + adapter.getCount() + " items.");
             adapter.addAll(new ArrayList<>(tasks));
-            Log.d("RoutineFragment", "After adding, adapter has " + adapter.getCount() + " items.");
             adapter.notifyDataSetChanged();
         });
 
         ListView taskList = view.findViewById(R.id.task_list_view);
         taskList.setAdapter(adapter);
+
+        taskList.setOnItemClickListener((parent, clickedView, position, id) -> {
+            TextView taskTitle = clickedView.findViewById(R.id.taskTitle);
+            // Toggle strike-through
+            if ((taskTitle.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) != 0) {
+                taskTitle.setPaintFlags(taskTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            } else {
+                // Add strike-through if it doesn't exist
+                taskTitle.setPaintFlags(taskTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            }
+        });
 
         TextView titleView = view.findViewById(R.id.routine_title);
         TextView timeView = view.findViewById(R.id.estimated_time);
