@@ -57,4 +57,17 @@ public class TaskTest {
         int actAns = shower.getTimeSpent();
         assertEquals(expectedAns, actAns);
     }
+
+    @Test
+    public void testTaskToggleCompletion() {
+        Task task = new Task("Test Task");
+
+        assertFalse("New task should not be completed", task.isCompleted());
+
+        task.toggleCompletion();
+        assertTrue("Task should be completed after first toggle", task.isCompleted());
+
+        task.toggleCompletion();
+        assertFalse("Task should not be completed after second toggle", task.isCompleted());
+    }
 }

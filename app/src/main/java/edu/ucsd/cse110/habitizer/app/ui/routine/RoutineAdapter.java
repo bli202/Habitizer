@@ -101,6 +101,7 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         // Set click listener on the entire view
         binding.getRoot().setOnClickListener(v -> {
             task.toggleCompletion();  // Toggle task completion state
+            Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
             updateStrikeThrough(binding.taskTitle, task.isCompleted());
         });
 

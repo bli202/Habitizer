@@ -96,7 +96,7 @@ public class RoutineFragment extends Fragment {
             if ((taskTitle.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) != 0) {
                 taskTitle.setPaintFlags(taskTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             } else {
-                // Add strike-through if it doesn't exist
+
                 taskTitle.setPaintFlags(taskTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
         });
