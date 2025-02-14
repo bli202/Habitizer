@@ -19,6 +19,7 @@ import java.util.List;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,13 +69,21 @@ public class RoutineFragment extends Fragment {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+
+//        this.adapter = new CardListAdapter(requireContext(), List.of(), id -> {
+//            var dialogFragment = ConfirmDeleteCardDialogFragment.newInstance(id);
+//            dialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
+//        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_routine, container, false);
-        this.adapter = new RoutineAdapter(requireContext(), List.of());
+        this.adapter = new RoutineAdapter(requireContext(), List.of(),name -> {
+            var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);
+            EditTaskdialogFragment.show(getParentFragmentManager(), "EditCardDialogFragment");
+        });
 
         activityModel.getOrderedTasks().observe(tasks -> {
             if (tasks == null) return;

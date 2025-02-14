@@ -6,19 +6,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.TaskViewBinding;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class RoutineAdapter extends ArrayAdapter<Task> {
 
-    Consumer<String> onDeleteClick;
+    Consumer<String> onEditClick;
 //    public RoutineAdapter(Context context,
 //                          List<Task> tasks) {
 //        // This sets a bunch of stuff internally, which we can access
@@ -69,13 +76,15 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 
     // ^ we dc about delete button rn
 
-    public RoutineAdapter(Context context, List<Task> tasks) {
+    public RoutineAdapter(Context context, List<Task> tasks,
+                          Consumer<String> onEditClick) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem(), for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash.
         super(context, 0, new ArrayList<>(tasks));
+        this.onEditClick = onEditClick;
     }
 
     @NonNull
@@ -105,13 +114,18 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 //            var layoutInflater = LayoutInflater.from(getContext());
 //            binding = TaskViewBinding.inflate(layoutInflater, parent, false);
 //        }
+        binding.editButton.setOnClickListener(v -> {
+            var name = task.getName();
+            assert name != null;
+            onEditClick.accept(name);
+            //code breaks here
+        });
 
         // Populate the view with the flashcard's data.
         binding.TaskTitle.setText(task.getName());
 
         return binding.getRoot();
     }
-
     // The below methods aren't strictly necessary, usually.
     // But get in the habit of defining them because they never hurt
     // (as long as you have IDs for each item) and sometimes you need them.
