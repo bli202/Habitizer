@@ -31,6 +31,10 @@ public class Task {
         completed = true;
     }
 
+    public void toggleCompletion() {
+        this.completed = !this.completed;
+    }
+
     /**
      * Returns if the task is true.
      * 
@@ -75,4 +79,5 @@ public class Task {
     public void setName(String name) {
         this.name = name;
     }
+
 }

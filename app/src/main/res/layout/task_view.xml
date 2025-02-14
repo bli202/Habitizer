@@ -3,10 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="80dp"
+    android:clickable="true"
+    android:focusable="true">
 
     <TextView
-        android:id="@+id/TaskTitle"
+        android:id="@+id/taskTitle"
         android:layout_width="124dp"
         android:layout_height="38dp"
         android:layout_marginStart="6dp"
@@ -14,7 +16,7 @@
         android:textSize="18dp"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/TaskTime"
+        app:layout_constraintEnd_toStartOf="@+id/task_time"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,7 +29,7 @@
         app:fabCustomSize="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/deleteButton"
-        app:layout_constraintStart_toEndOf="@+id/TaskTime"
+        app:layout_constraintStart_toEndOf="@+id/task_time"
         app:layout_constraintTop_toTopOf="parent"
         app:maxImageSize="14dp"
         app:srcCompat="@android:drawable/ic_menu_edit" />
@@ -47,7 +49,7 @@
         app:srcCompat="@android:drawable/ic_menu_delete" />
 
     <TextView
-        android:id="@+id/TaskTime"
+        android:id="@+id/task_time"
         android:layout_width="64dp"
         android:layout_height="46dp"
         android:layout_marginStart="12dp"
@@ -57,7 +59,7 @@
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/editButton"
-        app:layout_constraintStart_toEndOf="@+id/TaskTitle"
+        app:layout_constraintStart_toEndOf="@+id/taskTitle"
         app:layout_constraintTop_toTopOf="parent"
          />
 </androidx.constraintlayout.widget.ConstraintLayout>

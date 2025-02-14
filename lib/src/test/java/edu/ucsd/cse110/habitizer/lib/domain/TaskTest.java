@@ -57,4 +57,41 @@ public class TaskTest {
         int actAns = shower.getTimeSpent();
         assertEquals(expectedAns, actAns);
     }
+
+    @Test
+    public void testTaskToggleCompletion() {
+        Task task = new Task("Test Task");
+
+        assertFalse("New task should not be completed", task.isCompleted());
+
+        task.toggleCompletion();
+        assertTrue("Task should be completed after first toggle", task.isCompleted());
+
+        task.toggleCompletion();
+        assertFalse("Task should not be completed after second toggle", task.isCompleted());
+    }
+
+    @Test
+    public void testTaskToggleCompletionMultipleTasks() {
+        Task shower = new Task("Test");
+        Task gym = new Task("Test");
+        Task night = new Task("Test");
+
+        assertFalse("New task should not be completed", shower.isCompleted());
+        assertFalse("New task should not be completed", gym.isCompleted());
+        assertFalse("New task should not be completed", night.isCompleted());
+
+
+        shower.toggleCompletion();
+        // testing complete/non complete mix
+        assertTrue("Task should be completed after first toggle", shower.isCompleted());
+        assertFalse("Gym and night should still be false", gym.isCompleted());
+        assertFalse("Gym and night should still be false", night.isCompleted());
+
+        shower.toggleCompletion();
+        gym.toggleCompletion();
+        assertFalse("Task should not be completed after second toggle", shower.isCompleted());
+        assertTrue("Gym should be complete", gym.isCompleted());
+        assertFalse("Night should be complete", night.isCompleted());
+    }
 }
