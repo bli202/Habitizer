@@ -43,11 +43,22 @@ public class InMemoryDataSource {
     }
 
     public void putTask(Task task) {
-        routine.put(task.getName(), task);
-        if (routineSubject.containsKey(task.getName())) {
-            routineSubject.get(task.getName()).setValue(task);
+        if (!routineSubject.containsKey(task.getName()) && !routine.containsKey(task.getName())) {
+            routine.put(task.getName(), task);
+            PlainMutableSubject<Task> subject = new PlainMutableSubject<>();
+            subject.setValue(getTask(task.getName()));
+            routineSubject.put(task.getName(), subject);
         }
         allRoutineSubject.setValue(getTasks());
+    }
+
+    public void editTask(Task task, String name) {
+        if (!routine.containsKey(task.getName())) {
+           task.setName(name);
+        }
+        else {
+            throw new NullPointerException("has key");
+        }
     }
 
     public final static List<Task> ROUTINE_1 = List.of(

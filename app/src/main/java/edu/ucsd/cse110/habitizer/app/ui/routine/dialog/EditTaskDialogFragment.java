@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.content.DialogInterface;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,15 +21,19 @@ public class EditTaskDialogFragment extends DialogFragment {
     private FragmentEditTaskBinding view;
     private MainViewModel activityModel;
 
+    private static final String ARG_TASK_NAME = "task_name";
+    private String taskname;
+
     public EditTaskDialogFragment() {
         // Required empty public constructor
     }
 
 
-    public static EditTaskDialogFragment newInstance(String task) {
+    public static EditTaskDialogFragment newInstance(String taskname) {
         var fragment = new EditTaskDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        args.putString(ARG_TASK_NAME, taskname);
         return fragment;
     }
 
@@ -48,9 +53,7 @@ public class EditTaskDialogFragment extends DialogFragment {
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var name = view.editTask.getText().toString();
-
-        var task = new Task(name);
-        activityModel.append(task);
+        activityModel.edit(taskname, name);
         dialog.dismiss();
     }
 
@@ -61,6 +64,8 @@ public class EditTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.taskname = requireArguments().getString(ARG_TASK_NAME);
 
         // Initialize the Model
         var modelOwner = requireActivity();

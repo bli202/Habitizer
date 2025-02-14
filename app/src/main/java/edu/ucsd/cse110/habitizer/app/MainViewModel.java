@@ -71,6 +71,6 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(task);
     }
 
-    public void edit(Task task) {}
+    public void edit(String taskname, String name) { taskRepository.edit(taskname, name);}
 
 }

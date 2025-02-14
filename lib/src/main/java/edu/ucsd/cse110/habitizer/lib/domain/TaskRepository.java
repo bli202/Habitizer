@@ -29,4 +29,12 @@ public class TaskRepository {
     }
 
     //public void append(Task task) { dataSource.putTask(task); }
+
+    public void edit(String taskname, String name) {
+        if (dataSource.getTask(taskname) != null) {
+            dataSource.editTask(dataSource.getTask(taskname), name);  // Overwrite existing task
+        } else {
+            throw new IllegalArgumentException("Task not found: " + taskname);
+        }
+    }
 }
