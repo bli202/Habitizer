@@ -1,8 +1,3 @@
-/* TODO
- * Task and cumulative time rounding
- *
- */
-
 package edu.ucsd.cse110.habitizer.lib.domain;
 
 import java.util.ArrayList;
