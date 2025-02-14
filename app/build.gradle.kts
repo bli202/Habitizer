@@ -3,6 +3,11 @@ plugins {
 }
 
 android {
+
+    buildFeatures {
+        viewBinding=true
+    }
+
     namespace = "edu.ucsd.cse110.habitizer.app"
     compileSdk = 35
 
@@ -15,6 +20,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+
 
     buildTypes {
         release {
@@ -37,9 +44,14 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(project(":lib"))
+    implementation(project(":lib"))
+    implementation(project(":observables"))
+    implementation(project(":observables"))
 
     testImplementation(libs.junit4)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.ext.espresso.core)
 }
+
