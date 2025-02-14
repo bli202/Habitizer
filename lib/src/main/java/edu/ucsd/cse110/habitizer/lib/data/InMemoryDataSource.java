@@ -55,6 +55,18 @@ public class InMemoryDataSource {
         allRoutineSubject.setValue(getTasks());
     }
 
+    public void editTask(String oldName, String newName) {
+        Task existingRoutine = routine.get(oldName);
+        if (existingRoutine != null) {
+            Task newTask = new Task(newName);
+            routine.remove(oldName);
+            routine.put(newName, newTask);
+            allRoutineSubject.setValue(getTasks());
+        }
+    }
+
+
+
     public final static List<Task> ROUTINE_1 = List.of(
             new Task("brush teeth")
     );

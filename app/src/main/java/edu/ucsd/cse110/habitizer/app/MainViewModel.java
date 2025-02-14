@@ -59,8 +59,6 @@ public class MainViewModel extends ViewModel {
 
             orderedTasks.setValue(newOrderedTasks);
         });
-
-
     }
 
     public Subject<List<Task>> getOrderedTasks() {
@@ -71,7 +69,9 @@ public class MainViewModel extends ViewModel {
         taskRepository.save(task);
     }
 
-    public void edit(Task task) {}
+    public void edit(String oldName, String newName) {
+        taskRepository.edit(oldName, newName);
+    }
 
     public void remove(String name) {
         taskRepository.remove(name);
