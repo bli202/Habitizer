@@ -19,6 +19,7 @@ import java.util.List;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 
 /**
@@ -80,9 +81,13 @@ public class RoutineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_routine, container, false);
-        this.adapter = new RoutineAdapter(requireContext(), List.of(),name -> {
+        this.adapter = new RoutineAdapter(requireContext(), List.of(), name -> {
             var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);
-            EditTaskdialogFragment.show(getParentFragmentManager(), "EditCardDialogFragment");
+            EditTaskdialogFragment.show(getParentFragmentManager(), "EditCardDialogFragment");},
+            taskName -> {
+                var DeleteTaskdialogFragment = DeleteTaskDialogFragment.newInstance(taskName);
+                DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
+
         });
 
         activityModel.getOrderedTasks().observe(tasks -> {

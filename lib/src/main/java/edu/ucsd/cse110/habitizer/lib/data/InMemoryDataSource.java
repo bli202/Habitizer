@@ -50,6 +50,10 @@ public class InMemoryDataSource {
         allRoutineSubject.setValue(getTasks());
     }
 
+    public void removeTask(String name) {
+        routine.remove(name);
+    }
+
     public final static List<Task> ROUTINE_1 = List.of(
             new Task("brush teeth"),
             new Task("shower"),

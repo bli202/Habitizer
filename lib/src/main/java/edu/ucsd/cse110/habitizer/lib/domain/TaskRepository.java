@@ -28,5 +28,7 @@ public class TaskRepository {
         dataSource.putTask(task);
     }
 
+    public void remove(String name) { dataSource.removeTask(name); }
+
     //public void append(Task task) { dataSource.putTask(task); }
 }

@@ -92,11 +92,12 @@
             android:layout_height="match_parent"
             android:layout_marginTop="126dp"
             android:layout_marginBottom="54dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="16dp"
-            tools:listitem="@layout/task_view"
-            android:visibility="visible"/>
+            tools:listitem="@layout/task_view" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

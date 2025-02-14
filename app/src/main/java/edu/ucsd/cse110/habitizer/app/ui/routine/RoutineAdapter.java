@@ -25,6 +25,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class RoutineAdapter extends ArrayAdapter<Task> {
 
+    Consumer<String> onDeleteClick;
     Consumer<String> onEditClick;
 //    public RoutineAdapter(Context context,
 //                          List<Task> tasks) {
@@ -77,7 +78,9 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
     // ^ we dc about delete button rn
 
     public RoutineAdapter(Context context, List<Task> tasks,
-                          Consumer<String> onEditClick) {
+                          Consumer<String> onEditClick,
+                          Consumer<String> onDeleteClick
+                          ) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem(), for example.
         //
@@ -85,6 +88,7 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         // or it will crash.
         super(context, 0, new ArrayList<>(tasks));
         this.onEditClick = onEditClick;
+        this.onDeleteClick = onDeleteClick;
     }
 
     @NonNull
@@ -119,6 +123,10 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
             assert name != null;
             onEditClick.accept(name);
             //code breaks here
+        });
+
+        binding.deleteButton.setOnClickListener(v -> {
+            onDeleteClick.accept(task.getName());
         });
 
         // Populate the view with the flashcard's data.

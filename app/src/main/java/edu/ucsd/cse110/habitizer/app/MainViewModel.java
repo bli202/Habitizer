@@ -73,4 +73,8 @@ public class MainViewModel extends ViewModel {
 
     public void edit(Task task) {}
 
+    public void remove(String name) {
+        taskRepository.remove(name);
+    }
+
 }
