@@ -15,6 +15,8 @@ import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.databinding.TaskViewBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import android.graphics.Paint;
+import android.widget.TextView;
 
 public class RoutineAdapter extends ArrayAdapter<Task> {
 
@@ -81,35 +83,37 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d("RoutineAdapter", "getView() called for position " + position);
-
-        // Get the flashcard for this position.
         var task = getItem(position);
         if (task == null) {
-            Log.e("RoutineAdapter", "Task is NULL at position " + position);
             return new View(getContext());
         }
-        assert task != null;
 
-        Log.d("RoutineAdapter", "Displaying task: " + task.getName());
-
-        // Check if a view is being reused...
         TaskViewBinding binding;
         var layoutInflater = LayoutInflater.from(getContext());
         binding = TaskViewBinding.inflate(layoutInflater, parent, false);
-//        if (convertView != null) {
-//            // If so, bind to it.
-//            binding = TaskViewBinding.bind(convertView);
-//        } else {
-//            // Otherwise, inflate a new view from our layout XML.
-//            var layoutInflater = LayoutInflater.from(getContext());
-//            binding = TaskViewBinding.inflate(layoutInflater, parent, false);
-//        }
 
-        // Populate the view with the flashcard's data.
-        binding.TaskTitle.setText(task.getName());
+        // Populate the view with the task's data
+        binding.taskTitle.setText(task.getName());
+
+        // Set initial strike-through based on task completion state
+        updateStrikeThrough(binding.taskTitle, task.isCompleted());
+
+        // Set click listener on the entire view
+        binding.getRoot().setOnClickListener(v -> {
+            task.toggleCompletion();  // Toggle task completion state
+            Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
+            updateStrikeThrough(binding.taskTitle, task.isCompleted());
+        });
 
         return binding.getRoot();
+    }
+
+    private void updateStrikeThrough(TextView textView, boolean isCompleted) {
+        if (isCompleted) {
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+        }
     }
 
     // The below methods aren't strictly necessary, usually.
