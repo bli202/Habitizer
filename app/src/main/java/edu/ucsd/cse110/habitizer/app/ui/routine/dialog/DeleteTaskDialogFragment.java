@@ -46,11 +46,12 @@ public class DeleteTaskDialogFragment extends DialogFragment {
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
-
-        activityModel.remove(tName);
+        String taskNameToDelete = getArguments().getString(tName);
+        if (taskNameToDelete != null) {
+            activityModel.remove(taskNameToDelete);
+        }
         dialog.dismiss();
     }
-
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
         dialog.cancel();
     }

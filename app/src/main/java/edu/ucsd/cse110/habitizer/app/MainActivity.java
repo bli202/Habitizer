@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar, menu);
-        return true;
+        return false;
     }
 
     @Override
@@ -88,8 +88,5 @@ public class MainActivity extends AppCompatActivity {
                     .addToBackStack(null) // for back button
                     .commit();
         });
-
-
     }
-
 }

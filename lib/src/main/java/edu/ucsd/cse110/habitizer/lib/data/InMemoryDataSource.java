@@ -52,20 +52,11 @@ public class InMemoryDataSource {
 
     public void removeTask(String name) {
         routine.remove(name);
+        allRoutineSubject.setValue(getTasks());
     }
 
     public final static List<Task> ROUTINE_1 = List.of(
-            new Task("brush teeth"),
-            new Task("shower"),
-            new Task("eat breakfast"),
-            new Task("skin care")
-    );
-
-    public final static List<Task> ROUTINE_2 = List.of(
-            new Task("skin care"),
-            new Task("brush teeth"),
-            new Task("floss")
-
+            new Task("brush teeth")
     );
 
     public static InMemoryDataSource fromDefault() {

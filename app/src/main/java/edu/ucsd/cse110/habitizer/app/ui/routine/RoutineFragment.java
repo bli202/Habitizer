@@ -104,18 +104,6 @@ public class RoutineFragment extends Fragment {
         ListView taskList = view.findViewById(R.id.task_list_view);
         taskList.setAdapter(adapter);
 
-//Have no idea what this is tbh
-//        taskList.setOnItemClickListener((parent, clickedView, position, id) -> {
-//            TextView taskTitle = clickedView.findViewById(R.id.taskTitle);
-//            // Toggle strike-through
-//            if ((taskTitle.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) != 0) {
-//                taskTitle.setPaintFlags(taskTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-//            } else {
-//
-//                taskTitle.setPaintFlags(taskTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-//            }
-//        });
-
         TextView titleView = view.findViewById(R.id.routine_title);
         TextView timeView = view.findViewById(R.id.estimated_time);
 
@@ -123,7 +111,6 @@ public class RoutineFragment extends Fragment {
 
         addTask.setOnClickListener(x -> {
             var dialogFragment = new AddTaskDialogFragment();
-            Log.d("Routine fragment created", "hi");
             dialogFragment.show(getChildFragmentManager(), "AddTaskDialogFragment");
         });
 
