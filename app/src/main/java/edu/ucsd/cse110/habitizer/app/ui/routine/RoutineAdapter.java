@@ -146,8 +146,8 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
             task.toggleCompletion();  // Toggle task completion state
             Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
             updateStrikeThrough(binding.taskTitle, task.isCompleted());
-            routine.checkOffTask(task);
-            binding.taskTime.setText(String.valueOf(routine.getElapsedTimeSecs()));
+//            routine.checkOffTask(task);
+            binding.taskTime.setText(String.valueOf(routine.checkOffTask(task)));
         });
 
 
