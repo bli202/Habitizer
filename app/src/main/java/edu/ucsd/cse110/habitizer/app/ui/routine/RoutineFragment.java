@@ -23,6 +23,8 @@ import android.graphics.Paint;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,13 +74,25 @@ public class RoutineFragment extends Fragment {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+
+//        this.adapter = new CardListAdapter(requireContext(), List.of(), id -> {
+//            var dialogFragment = ConfirmDeleteCardDialogFragment.newInstance(id);
+//            dialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
+//        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_routine, container, false);
-        this.adapter = new RoutineAdapter(requireContext(), List.of());
+        this.adapter = new RoutineAdapter(requireContext(), List.of(), name -> {
+            var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);
+            EditTaskdialogFragment.show(getParentFragmentManager(), "EditCardDialogFragment");},
+            taskName -> {
+                var DeleteTaskdialogFragment = DeleteTaskDialogFragment.newInstance(taskName);
+                DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
+
+        });
 
         activityModel.getOrderedTasks().observe(tasks -> {
             if (tasks == null) return;
@@ -90,17 +104,6 @@ public class RoutineFragment extends Fragment {
         ListView taskList = view.findViewById(R.id.task_list_view);
         taskList.setAdapter(adapter);
 
-        taskList.setOnItemClickListener((parent, clickedView, position, id) -> {
-            TextView taskTitle = clickedView.findViewById(R.id.taskTitle);
-            // Toggle strike-through
-            if ((taskTitle.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) != 0) {
-                taskTitle.setPaintFlags(taskTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-            } else {
-
-                taskTitle.setPaintFlags(taskTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            }
-        });
-
         TextView titleView = view.findViewById(R.id.routine_title);
         TextView timeView = view.findViewById(R.id.estimated_time);
 
@@ -108,7 +111,6 @@ public class RoutineFragment extends Fragment {
 
         addTask.setOnClickListener(x -> {
             var dialogFragment = new AddTaskDialogFragment();
-            Log.d("Routine fragment created", "hi");
             dialogFragment.show(getChildFragmentManager(), "AddTaskDialogFragment");
         });
 

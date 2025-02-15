@@ -6,14 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.TaskViewBinding;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import android.graphics.Paint;
 import android.widget.TextView;
@@ -21,6 +28,7 @@ import android.widget.TextView;
 public class RoutineAdapter extends ArrayAdapter<Task> {
 
     Consumer<String> onDeleteClick;
+    Consumer<String> onEditClick;
 //    public RoutineAdapter(Context context,
 //                          List<Task> tasks) {
 //        // This sets a bunch of stuff internally, which we can access
@@ -71,26 +79,57 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 
     // ^ we dc about delete button rn
 
-    public RoutineAdapter(Context context, List<Task> tasks) {
+    public RoutineAdapter(Context context, List<Task> tasks,
+                          Consumer<String> onEditClick,
+                          Consumer<String> onDeleteClick
+                          ) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem(), for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash.
         super(context, 0, new ArrayList<>(tasks));
+        this.onEditClick = onEditClick;
+        this.onDeleteClick = onDeleteClick;
     }
 
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d("RoutineAdapter", "getView() called for position " + position);
+
+        // Get the flashcard for this position.
         var task = getItem(position);
         if (task == null) {
+            Log.e("RoutineAdapter", "Task is NULL at position " + position);
             return new View(getContext());
         }
+        assert task != null;
 
+        Log.d("RoutineAdapter", "Displaying task: " + task.getName());
+
+        // Check if a view is being reused...
         TaskViewBinding binding;
         var layoutInflater = LayoutInflater.from(getContext());
         binding = TaskViewBinding.inflate(layoutInflater, parent, false);
+//        if (convertView != null) {
+//            // If so, bind to it.
+//            binding = TaskViewBinding.bind(convertView);
+//        } else {
+//            // Otherwise, inflate a new view from our layout XML.
+//            var layoutInflater = LayoutInflater.from(getContext());
+//            binding = TaskViewBinding.inflate(layoutInflater, parent, false);
+//        }
+        binding.editButton.setOnClickListener(v -> {
+            var name = task.getName();
+            assert name != null;
+            onEditClick.accept(name);
+            //code breaks here
+        });
+
+        binding.deleteButton.setOnClickListener(v -> {
+            onDeleteClick.accept(task.getName());
+        });
 
         // Populate the view with the task's data
         binding.taskTitle.setText(task.getName());
@@ -104,6 +143,7 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
             Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
             updateStrikeThrough(binding.taskTitle, task.isCompleted());
         });
+
 
         return binding.getRoot();
     }

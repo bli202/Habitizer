@@ -81,7 +81,6 @@ public class TaskTest {
         assertFalse("New task should not be completed", gym.isCompleted());
         assertFalse("New task should not be completed", night.isCompleted());
 
-
         shower.toggleCompletion();
         // testing complete/non complete mix
         assertTrue("Task should be completed after first toggle", shower.isCompleted());

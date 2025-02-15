@@ -2,8 +2,8 @@ package edu.ucsd.cse110.habitizer.app.ui.routine.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.content.DialogInterface;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,22 +11,25 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentDialogAddTaskBinding;
-import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
-public class AddTaskDialogFragment extends DialogFragment {
 
-    private FragmentDialogAddTaskBinding view;
+public class DeleteTaskDialogFragment extends DialogFragment {
+
     private MainViewModel activityModel;
 
+    private static final String tName = "taskName";
 
-    public AddTaskDialogFragment() {
 
+
+    public DeleteTaskDialogFragment() {
+        // Required empty public constructor
     }
 
-    public static AddTaskDialogFragment newInstance() {
-        var fragment = new AddTaskDialogFragment();
+
+    public static DeleteTaskDialogFragment newInstance(String taskName) {
+        var fragment = new DeleteTaskDialogFragment();
         Bundle args = new Bundle();
+        args.putString(tName, taskName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -34,33 +37,29 @@ public class AddTaskDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = FragmentDialogAddTaskBinding.inflate(getLayoutInflater());
-
         return new AlertDialog.Builder(getActivity())
-                .setTitle("New Task")
-                .setMessage("Please provide task name")
-                .setView(view.getRoot())
-                .setPositiveButton("Create", this::onPositiveButtonClick)
+                .setTitle("Delete Task")
+                .setMessage("Are you sure you want to delete this task?")
+                .setPositiveButton("Delete", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .create();
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
-        var name = view.taskNameEditText.getText().toString();
-
-        var task = new Task(name);
-        activityModel.append(task);
+        String taskNameToDelete = getArguments().getString(tName);
+        if (taskNameToDelete != null) {
+            activityModel.remove(taskNameToDelete);
+        }
         dialog.dismiss();
     }
-
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
         dialog.cancel();
     }
 
-
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         // Initialize the Model
         var modelOwner = requireActivity();
@@ -68,5 +67,4 @@ public class AddTaskDialogFragment extends DialogFragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
     }
-
 }
