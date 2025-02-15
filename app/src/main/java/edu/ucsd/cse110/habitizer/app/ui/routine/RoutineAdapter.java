@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.TaskViewBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import android.graphics.Paint;
 import android.widget.TextView;
@@ -79,7 +80,8 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 
     // ^ we dc about delete button rn
 
-    public RoutineAdapter(Context context, List<Task> tasks,
+    Routine routine;
+    public RoutineAdapter(Context context, Routine routine,
                           Consumer<String> onEditClick,
                           Consumer<String> onDeleteClick
                           ) {
@@ -88,9 +90,10 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash.
-        super(context, 0, new ArrayList<>(tasks));
+        super(context, 0, routine.getTaskList());
         this.onEditClick = onEditClick;
         this.onDeleteClick = onDeleteClick;
+        this.routine = routine;
     }
 
     @NonNull
@@ -139,9 +142,12 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 
         // Set click listener on the entire view
         binding.getRoot().setOnClickListener(v -> {
+            if(task.isCompleted()) return;
             task.toggleCompletion();  // Toggle task completion state
             Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
             updateStrikeThrough(binding.taskTitle, task.isCompleted());
+//            routine.checkOffTask(task);
+            binding.taskTime.setText(String.valueOf(routine.checkOffTask(task)));
         });
 
 
