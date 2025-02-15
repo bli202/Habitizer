@@ -30,7 +30,7 @@ public class MainViewModel extends ViewModel {
     private final PlainMutableSubject<Task> firstTask;
     private final PlainMutableSubject<Boolean> completed;
     private final PlainMutableSubject<String> taskName;
-    private PlainMutableSubject<Routine> curRoutine;
+    private final PlainMutableSubject<Routine> curRoutine;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -50,7 +50,7 @@ public class MainViewModel extends ViewModel {
 
         this.orderedTasks = new PlainMutableSubject<>();
         this.firstTask = new PlainMutableSubject<>();
-        this.completed = new PlainMutableSubject<>();
+        this.completed = new PlainMutableSubject<>(false);
         this.taskName = new PlainMutableSubject<>();
 
         // Observe tasks for the specified routine.
@@ -94,14 +94,24 @@ public class MainViewModel extends ViewModel {
     }
 
     public void switchRoutine(String name) {
-        curRoutine = (PlainMutableSubject<Routine>) taskRepository.findRoutine(name);
+        curRoutine.setValue(taskRepository.findRoutine(name).getValue());
     }
 
     public void startTime() {
-        Objects.requireNonNull(curRoutine.getValue()).startRoutine();
+        curRoutine.getValue().startRoutine();
+        completed.setValue(false);
     }
 
     public Subject<Routine> getCurRoutine() {
         return curRoutine;
+    }
+
+    public void endRoutine() {
+        curRoutine.getValue().endRoutine();
+        completed.setValue(true);
+    }
+
+    public Subject<Boolean> getCompleted() {
+        return completed;
     }
 }

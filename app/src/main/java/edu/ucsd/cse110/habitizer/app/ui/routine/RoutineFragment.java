@@ -86,12 +86,14 @@ public class RoutineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_routine, container, false);
-        this.adapter = new RoutineAdapter(requireContext(), List.of(), name -> {
-            var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);
-            EditTaskdialogFragment.show(getParentFragmentManager(), "EditCardDialogFragment");},
-            taskName -> {
-                var DeleteTaskdialogFragment = DeleteTaskDialogFragment.newInstance(taskName);
-                DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
+        this.adapter = new RoutineAdapter(requireContext(),
+                activityModel.getCurRoutine().getValue(),
+                name -> {
+                    var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);
+                    EditTaskdialogFragment.show(getParentFragmentManager(), "EditCardDialogFragment");},
+                taskName -> {
+                    var DeleteTaskdialogFragment = DeleteTaskDialogFragment.newInstance(taskName);
+                    DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
 
         });
 
@@ -113,6 +115,20 @@ public class RoutineFragment extends Fragment {
         Button addTask = view.findViewById(R.id.add_task_button);
         Button startRoutine = view.findViewById(R.id.start_routine_button);
 
+        activityModel.getCompleted().observe(completed -> {
+            if(completed == null) {
+                Log.d("HabitizerApplication", "COMPLETED = NULL");
+                return;
+            } else {
+                Log.d("HabitizerApplication", "COMPLETION: " + completed);
+            }
+//            Log.d("HabitizerApplication",completed.toString());
+            if(completed) {
+                addTask.setVisibility(View.VISIBLE);
+                startRoutine.setVisibility(View.VISIBLE);
+            }
+        });
+
         addTask.setOnClickListener(x -> {
             var dialogFragment = new AddTaskDialogFragment();
             dialogFragment.show(getChildFragmentManager(), "AddTaskDialogFragment");
@@ -120,7 +136,13 @@ public class RoutineFragment extends Fragment {
 
         startRoutine.setOnClickListener(x -> {
             var routine = activityModel.getCurRoutine().getValue();
-            routine.startRoutine();
+//            routine.startRoutine();
+
+            activityModel.startTime();
+            addTask.setVisibility(View.INVISIBLE);
+            startRoutine.setVisibility(View.INVISIBLE);
+
+
             new CountDownTimer(Integer.MAX_VALUE, 1000) {
 
                 @Override

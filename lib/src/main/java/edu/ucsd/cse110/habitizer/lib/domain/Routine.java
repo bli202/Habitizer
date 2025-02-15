@@ -141,12 +141,12 @@ public class Routine {
      * @param taskName Name of the task to check off
      * @return true if task is checked off, false otherwise
      */
-    public boolean checkOffTask(Task task) {
+    public boolean checkOffTask(Task t) {
         if (!ongoing) return false;
 
         // Finding task to check off
-        for (Task t : taskList) {
-            if (t.getName().equals(task.getName()) && !t.isCompleted()) {
+//        for (Task t : taskList) {
+//            if (t.getName().equals(task.getName()) && !t.isCompleted()) {
                 t.completeTask();
                 tasksDone++;
 //                int taskTime = (int) Duration.between(cumTaskTime, Instant.now()).getSeconds() * 1000;
@@ -158,9 +158,9 @@ public class Routine {
                     endRoutine();
                 }
                 return true;
-            }
-        }
-        return false;
+//            }
+//        }
+//        return false;
     }
 
 
