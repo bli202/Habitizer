@@ -33,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle(R.string.app_title);
 
-        setContentView(R.layout.homepage_view);
+        //setContentView(R.layout.homepage_view);
+        this.view = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(view.getRoot());
 
         // Initializing 2 mock routines for MS1
         Routine routine1 = new Routine(30, "Morning Routine");

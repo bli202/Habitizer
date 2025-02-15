@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,6 +95,7 @@ public class RoutineFragment extends Fragment {
 
         });
 
+
         activityModel.getOrderedTasks().observe(tasks -> {
             if (tasks == null) return;
             adapter.clear();
@@ -106,17 +108,37 @@ public class RoutineFragment extends Fragment {
 
         TextView titleView = view.findViewById(R.id.routine_title);
         TextView timeView = view.findViewById(R.id.estimated_time);
+        TextView actualTimeView = view.findViewById(R.id.actual_time);
 
         Button addTask = view.findViewById(R.id.add_task_button);
+        Button startRoutine = view.findViewById(R.id.start_routine_button);
 
         addTask.setOnClickListener(x -> {
             var dialogFragment = new AddTaskDialogFragment();
             dialogFragment.show(getChildFragmentManager(), "AddTaskDialogFragment");
         });
 
+        startRoutine.setOnClickListener(x -> {
+            var routine = activityModel.getCurRoutine().getValue();
+            routine.startRoutine();
+            new CountDownTimer(Integer.MAX_VALUE, 1000) {
+
+                @Override
+                public void onTick(long l) {
+                    actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            }.start();
+        });
+
         if (getArguments() != null) {
             String routineTitle = getArguments().getString(routine_title);
             String routineDuration = getArguments().getString(estimate_time);
+            activityModel.switchRoutine(routineTitle);
 
             titleView.setText(routineTitle);
             timeView.setText(routineDuration + " min");
