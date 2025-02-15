@@ -23,7 +23,7 @@ public class TaskRepository {
      * Retrieves an observable subject for a specific task by name.
      * Note: This assumes that task names are unique across routines.
      */
-    public Subject<Task> find(String routineName, String taskName) {
+    public Subject<Task> findTask(String routineName, String taskName) {
         // Optionally, you could verify that the task exists in the specified routine.
         List<Task> taskL = dataSource.getTasksForRoutine(routineName);
 
@@ -32,8 +32,11 @@ public class TaskRepository {
                 return dataSource.getTaskSubject(taskName);
             }
         }
-
         return null;
+    }
+
+    public Subject<Routine> findRoutine(String name) {
+        return dataSource.getRoutineSubject(name);
     }
 
     /**

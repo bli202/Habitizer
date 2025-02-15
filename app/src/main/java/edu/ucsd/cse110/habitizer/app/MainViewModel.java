@@ -10,6 +10,9 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Objects;
+
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 import edu.ucsd.cse110.observables.PlainMutableSubject;
@@ -29,6 +32,8 @@ public class MainViewModel extends ViewModel {
     private final PlainMutableSubject<Boolean> completed;
     private final PlainMutableSubject<String> taskName;
 
+    private final PlainMutableSubject<Routine> curRoutine;
+
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -42,11 +47,13 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(TaskRepository taskRepository, String routineName) {
         this.taskRepository = taskRepository;
         this.routineName = routineName;
+
+        this.curRoutine = (PlainMutableSubject<Routine>) taskRepository.findRoutine(routineName);
         Log.d(LOG_TAG, "MainViewModel constructor");
 
         this.orderedTasks = new PlainMutableSubject<>();
         this.firstTask = new PlainMutableSubject<>();
-        this.completed = new PlainMutableSubject<>();
+        this.completed = new PlainMutableSubject<>(false);
         this.taskName = new PlainMutableSubject<>();
 
         // Observe tasks for the specified routine.
@@ -87,5 +94,27 @@ public class MainViewModel extends ViewModel {
      */
     public void remove(String name) {
         taskRepository.remove(routineName, name);
+    }
+
+    public void switchRoutine(String name) {
+        curRoutine.setValue(taskRepository.findRoutine(name).getValue());
+    }
+
+    public void startTime() {
+        curRoutine.getValue().startRoutine();
+        completed.setValue(false);
+    }
+
+    public Subject<Routine> getCurRoutine() {
+        return curRoutine;
+    }
+
+    public void endRoutine() {
+        curRoutine.getValue().endRoutine();
+        completed.setValue(true);
+    }
+
+    public Subject<Boolean> getCompleted() {
+        return completed;
     }
 }

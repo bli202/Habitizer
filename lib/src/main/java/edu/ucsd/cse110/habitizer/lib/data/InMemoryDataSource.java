@@ -150,6 +150,8 @@ public class InMemoryDataSource {
         tasks.put(task.getName(), task);
         // Update the routine's task list.
         List<Task> tasksList = routineTasks.get(routineName);
+        Routine routine = routines.get(routineName);
+        routine.addTask(task);
         if (tasksList == null) {
             tasksList = new ArrayList<>();
             routineTasks.put(routineName, tasksList);
