@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -15,12 +16,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.habitizer.app.ui.home.HomePage;
 import edu.ucsd.cse110.habitizer.app.ui.routine.RoutineFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding view;
+    boolean homeScreen = true;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,6 +92,32 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragment_routine, routineFragment)
                     .addToBackStack(null) // for back button
                     .commit();
+            homeScreen = !homeScreen;
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        var itemId = item.getItemId();
+
+        if (itemId == R.id.home_menu) {
+            swapFragments();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void swapFragments() {
+        if (!homeScreen) {
+            // Hide the fragment container
+            View fragmentContainer = findViewById(R.id.fragment_routine);
+            fragmentContainer.setVisibility(View.GONE);
+
+            // Show the routine list
+            ListView routineView = findViewById(R.id.routine_view);
+            routineView.setVisibility(View.VISIBLE);
+
+            homeScreen = true;
+        }
     }
 }
