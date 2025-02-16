@@ -97,9 +97,10 @@ public class Routine {
             throw new IllegalArgumentException("Cannot start a routine with no tasks");
         }
 
-//        this.startTime = Instant.now();
-//        this.elapsedTime = Duration.ZERO;
-//        this.cumTaskTime = Instant.now();
+        for(Task t : taskList) {
+            if(t.isCompleted()) t.toggleCompletion();
+        }
+        this.timer = new CustomTimer();
         this.timer.start();
         this.tasksDone = 0;
         this.ongoing = true;
@@ -117,7 +118,14 @@ public class Routine {
      * Pauses routine timer (switches to mock timer) for testing purposes
      */
     public void pauseRoutineTimer() {
-        timer.pause();
+        if (ongoing) {
+            if (timer.getOngoing()) {
+                timer.pause();
+            }
+            else {
+                timer.start();
+            }
+        }
     }
 
     /**
@@ -141,13 +149,13 @@ public class Routine {
      * @param taskName Name of the task to check off
      * @return true if task is checked off, false otherwise
      */
-    public boolean checkOffTask(Task task) {
-        if (!ongoing) return false;
+    public int checkOffTask(Task t) {
+//        if (!ongoing) return false;
 
         // Finding task to check off
-        for (Task t : taskList) {
-            if (t.getName().equals(task.getName()) && !t.isCompleted()) {
-                t.completeTask();
+//        for (Task t : taskList) {
+//            if (t.getName().equals(task.getName()) && !t.isCompleted()) {
+        t.completeTask();
                 tasksDone++;
 //                int taskTime = (int) Duration.between(cumTaskTime, Instant.now()).getSeconds() * 1000;
                 long taskTime = timer.getTaskTime();
@@ -157,10 +165,10 @@ public class Routine {
                 if (tasksDone == taskList.size()) {
                     endRoutine();
                 }
-                return true;
-            }
-        }
-        return false;
+                return (int) taskTime;
+//            }
+//        }
+//        return false;
     }
 
 
@@ -207,6 +215,10 @@ public class Routine {
     public boolean getongoing() {
         return ongoing;
     }
+
+//    public void setOngoing(boolean b) {
+//        this.ongoing = b;
+//    }
 
     /**
      * Return the num of tasks done
@@ -262,5 +274,9 @@ public class Routine {
      */
     public int getElapsedTimeSecs() {
         return (int) timer.getTime();
+    }
+
+    public CustomTimer getTimer() {
+        return timer;
     }
 }

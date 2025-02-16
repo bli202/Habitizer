@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Habitizer</string>
+    <string name="app_name">HabitizerApp</string>
+    <string name="app_title">Habitizer</string>
     <string name="add_routine">Add Routine</string>
     <string name="routine">Routine</string>
     <string name="estimated_routine_time">Estimated Routine Time</string>
@@ -9,9 +10,11 @@
     <string name="estimated_time">estimated time</string>
     <string name="actual_time">actual time</string>
     <string name="start_routine">Start Routine</string>
+    <string name="stop_routine">Stop Routine</string>
     <string name="add_task">Add Task</string>
     <string name="sample_task">Sample Task</string>
     <string name="edits_a_task">edits a task</string>
     <string name="deletes_a_task">deletes a task</string>
     <string name="time_taken">Time Taken</string>
+    <string name="duplicate_task">Cannot have two tasks with the same name!</string>
 </resources>

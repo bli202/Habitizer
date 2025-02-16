@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,21 +13,25 @@ import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentDialogAddTaskBinding;
+import edu.ucsd.cse110.habitizer.app.databinding.FragmentDuplicateTaskBinding;
+import edu.ucsd.cse110.habitizer.app.databinding.TaskViewBinding;
+import edu.ucsd.cse110.habitizer.app.ui.routine.RoutineAdapter;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
-public class AddTaskDialogFragment extends DialogFragment {
+public class NoDuplicateDialogFragment extends DialogFragment {
 
-    private FragmentDialogAddTaskBinding view;
+    private FragmentDuplicateTaskBinding view;
     private MainViewModel activityModel;
 
 
-    public AddTaskDialogFragment() {
+    public NoDuplicateDialogFragment() {
 
     }
 
-    public static AddTaskDialogFragment newInstance() {
-        var fragment = new AddTaskDialogFragment();
+    public static NoDuplicateDialogFragment newInstance(String oldTaskName) {
+        var fragment = new NoDuplicateDialogFragment();
         Bundle args = new Bundle();
+        args.putString("oldTaskName", oldTaskName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -35,39 +39,30 @@ public class AddTaskDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = FragmentDialogAddTaskBinding.inflate(getLayoutInflater());
+        this.view = FragmentDuplicateTaskBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("New Task")
-                .setMessage("Please provide task name")
+                .setTitle("Task name is the same as another task")
+                .setMessage("Please provide a new task name")
                 .setView(view.getRoot())
-                .setPositiveButton("Create", this::onPositiveButtonClick)
-                .setNegativeButton("Cancel", this::onNegativeButtonClick)
+                .setPositiveButton("Continue", this::onPositiveButtonClick)
                 .create();
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
-        var name = view.taskNameEditText.getText().toString();
-
-        var task = new Task(name);
-        try {
-            for (Task t : activityModel.getCurRoutine().getValue().getTaskList()) {
-                if (t.getName().equals(name)) {
-                    var dialogFragment = NoDuplicateDialogFragment.newInstance("");
-                    dialogFragment.show(getParentFragmentManager(), "NoDuplicateDialogFragment");
-                    dialog.dismiss();
-                    return;
-                }
-            }
-        } catch (Exception e) {
-            Log.e("EditTaskDialogFragment", "Exception while checking task list", e);
+        String oldTaskName = "";
+        if (getArguments() != null) {
+            oldTaskName = getArguments().getString("oldTaskName", "");
         }
-        activityModel.append(task);
+        if (oldTaskName.equals("")) {
+            var dialogFragment = new AddTaskDialogFragment();
+            dialogFragment.show(getParentFragmentManager(), "AddTaskDialogFragment");
+        }
+        else {
+            var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(oldTaskName);
+            EditTaskdialogFragment.show(getParentFragmentManager(), "EditCardDialogFragment");
+        }
         dialog.dismiss();
-    }
-
-    private void onNegativeButtonClick(DialogInterface dialog, int which) {
-        dialog.cancel();
     }
 
 

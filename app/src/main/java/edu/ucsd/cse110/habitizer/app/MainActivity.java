@@ -4,37 +4,51 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-
+import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.RoutineFragment;
+import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ActivityMainBinding view;
+    boolean homeScreen = true;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar, menu);
+        return false;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.homepage_view);
+        setTitle(R.string.app_title);
 
-        // Initializing 2 mock routines for MS1
-        Routine routine1 = new Routine(30, "Morning Routine");
-        Routine routine2 = new Routine(45, "Exercise Routine");
+        //setContentView(R.layout.homepage_view);
+        this.view = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(view.getRoot());
+
         ArrayList<Routine> routineList = new ArrayList<>();
-        routineList.add(routine1);
-        routineList.add(routine2);
+
+        routineList.add(InMemoryDataSource.MORNING_ROUTINE);
+        routineList.add(InMemoryDataSource.EVENING_ROUTINE);
 
         ListView routineView = findViewById(R.id.routine_view);
 
-        ArrayAdapter<Routine> adapter = new ArrayAdapter<Routine>(
+        ArrayAdapter<Routine> adapter = new ArrayAdapter<>(
                 this,
                 R.layout.routine_view,
                 routineList
@@ -63,11 +77,12 @@ public class MainActivity extends AppCompatActivity {
 
         routineView.setOnItemClickListener((parent, view, position, id) -> {
             Routine selectedRoutine = routineList.get(position);
+            Log.d("MainActivity", "Selected Routine: " + selectedRoutine);
 
-            RoutineFragment routineFragment = RoutineFragment.newInstance(
-                    selectedRoutine.getTitle(),
-                    String.valueOf(selectedRoutine.getDuration())
-            );
+            // FIRST ROUTINE CLICKED SETS THE TASK VIEW
+            MainViewModel.switchRoutine(selectedRoutine);
+
+            RoutineFragment routineFragment = RoutineFragment.newInstance();
 
             routineView.setVisibility(View.GONE);
             findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);
@@ -77,6 +92,37 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragment_routine, routineFragment)
                     .addToBackStack(null) // for back button
                     .commit();
+            homeScreen = !homeScreen;
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        var itemId = item.getItemId();
+
+        if (itemId == R.id.home_menu) {
+            swapFragments();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void swapFragments() {
+        if (!homeScreen) {
+            // Hide the fragment container
+            View fragmentContainer = findViewById(R.id.fragment_routine);
+            Button stop = findViewById(R.id.stop_routine_button);
+            if (stop.getVisibility() == View.VISIBLE) {
+                return;
+            }
+            fragmentContainer.setVisibility(View.GONE);
+
+
+            // Show the routine list
+            ListView routineView = findViewById(R.id.routine_view);
+            routineView.setVisibility(View.VISIBLE);
+
+            homeScreen = true;
+        }
     }
 }

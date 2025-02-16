@@ -1,28 +1,27 @@
 package edu.ucsd.cse110.habitizer.app.ui.routine;
 
-import static android.graphics.Paint.STRIKE_THRU_TEXT_FLAG;
-
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-import android.graphics.Paint;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,31 +30,25 @@ import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
  */
 public class RoutineFragment extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String routine_title = "param1";
-    private static final String estimate_time = "param2";
-
     private MainViewModel activityModel;
     private RoutineAdapter adapter;
+
+    private CountDownTimer timer;
 
     public RoutineFragment() {
         // Required empty public constructor
     }
+    private static final boolean[] timerRunning = {false};
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment RoutineFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static RoutineFragment newInstance(String param1, String param2) {
+    public static RoutineFragment newInstance() {
         RoutineFragment fragment = new RoutineFragment();
         Bundle args = new Bundle();
-        args.putString(routine_title, param1);
-        args.putString(estimate_time, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,10 +56,6 @@ public class RoutineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String routineTitle = getArguments().getString(routine_title);
-            String routineDuration = getArguments().getString(estimate_time);
-        }
 
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
@@ -74,50 +63,164 @@ public class RoutineFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_routine, container, false);
-        this.adapter = new RoutineAdapter(requireContext(), List.of());
+        Log.d("Routine Fragment", "onCreateView called and adapter made with " + activityModel.getCurRoutine().getValue());
+        Log.d("RoutineFragment", "Current Routine: " + activityModel.getCurRoutine().getValue().getName());
+        this.adapter = new RoutineAdapter(requireContext(),
+                activityModel.getCurRoutine().getValue(),
+                name -> {
+                    var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);
+                    EditTaskdialogFragment.show(getParentFragmentManager(), "EditCardDialogFragment");},
+                taskName -> {
+                    var DeleteTaskdialogFragment = DeleteTaskDialogFragment.newInstance(taskName);
+                    DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
+        });
 
-        activityModel.getOrderedTasks().observe(tasks -> {
+
+        activityModel.getMorningTasks().observe(tasks -> {
             if (tasks == null) return;
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(tasks));
+            Log.d("RoutineFragment", "Notified Data Set 1");
+            Log.d("RoutineFragment", "Number of tasks: " + activityModel.getMorningTasks().getValue().size());
+            adapter.notifyDataSetChanged();
+        });
+
+        activityModel.getEveningTasks().observe(tasks -> {
+            if (tasks == null) return;
+            Log.d("RoutineFragment", "Notified Data Set 2");
             adapter.notifyDataSetChanged();
         });
 
         ListView taskList = view.findViewById(R.id.task_list_view);
         taskList.setAdapter(adapter);
 
-        taskList.setOnItemClickListener((parent, clickedView, position, id) -> {
-            TextView taskTitle = clickedView.findViewById(R.id.taskTitle);
-            // Toggle strike-through
-            if ((taskTitle.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) != 0) {
-                taskTitle.setPaintFlags(taskTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-            } else {
+        TextView titleView = view.findViewById(R.id.routine_title);
+        TextView timeView = view.findViewById(R.id.estimated_time);
+        TextView actualTimeView = view.findViewById(R.id.actual_time);
 
-                taskTitle.setPaintFlags(taskTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        Button addTask = view.findViewById(R.id.add_task_button);
+        Button startRoutine = view.findViewById(R.id.start_routine_button);
+        Button stopRoutine = view.findViewById(R.id.stop_routine_button);
+
+        FloatingActionButton ffButton = view.findViewById(R.id.fast_forward_timer_button);
+        FloatingActionButton pauseTimerButton = view.findViewById(R.id.pause_timer_button);
+        FloatingActionButton restartTimerButton = view.findViewById(R.id.restart_timer_button);
+
+        activityModel.getCompleted().observe(completed -> {
+            Log.d("RoutineFragment", "COMPLETED OSVEVSIUDUDSIXOJH!!!");
+            if(completed == null) {
+                Log.d("RoutineFragment", "COMPLETED = NULL");
+                return;
+            } else {
+                Log.d("RoutineFragment", "COMPLETION: " + completed);
+            }
+//            Log.d("HabitizerApplication",completed.toString());
+            if(completed) {
+                adapter.notifyDataSetChanged();
+//                activityModel.getCurRoutine().getValue().setOngoing(false);
+                stopRoutine.setVisibility(View.INVISIBLE);
+                addTask.setVisibility(View.VISIBLE);
+                startRoutine.setVisibility(View.VISIBLE);
+
+                if (timer != null) {
+                    timer.cancel();
+                }
             }
         });
 
-        TextView titleView = view.findViewById(R.id.routine_title);
-        TextView timeView = view.findViewById(R.id.estimated_time);
-
-        Button addTask = view.findViewById(R.id.add_task_button);
-
         addTask.setOnClickListener(x -> {
+            Log.d("RoutineFragment", "Notified Data Set");
+            adapter.notifyDataSetChanged();
             var dialogFragment = new AddTaskDialogFragment();
-            Log.d("Routine fragment created", "hi");
             dialogFragment.show(getChildFragmentManager(), "AddTaskDialogFragment");
+            adapter.notifyDataSetChanged();
+
         });
 
-        if (getArguments() != null) {
-            String routineTitle = getArguments().getString(routine_title);
-            String routineDuration = getArguments().getString(estimate_time);
+//        final boolean[] timerRunning = {false};
 
-            titleView.setText(routineTitle);
-            timeView.setText(routineDuration + " min");
+        startRoutine.setOnClickListener(x -> {
+            Log.d("RoutineFragment", "Notified Data Set");
+            adapter.notifyDataSetChanged();
+            var routine = activityModel.getCurRoutine().getValue();
+//            routine.startRoutine();
+
+            activityModel.startTime();
+            Log.d("RoutineFragment", "ROUTINE SHOULD BE ONGOING: " + activityModel.getCurRoutine().getValue().getongoing());
+            Log.d("RoutineFragment", "COMPLETION: " + activityModel.getCompleted().getValue());
+            addTask.setVisibility(View.INVISIBLE);
+            startRoutine.setVisibility(View.INVISIBLE);
+            stopRoutine.setVisibility(View.VISIBLE);
+
+
+
+            if(true) {
+
+                timerRunning[0] = true;
+                timer = new CountDownTimer(Integer.MAX_VALUE, 1000) {
+
+                    @Override
+                    public void onTick(long l) {
+                        Log.d("HabitizerApplication", "ROUTINE TIME: " + routine.getElapsedTimeSecs());
+                        Log.d("HabitizerApplication", "ROUTINE ONGOING: " + routine.getongoing());
+                        Log.d("HabitizerApplication", "TIMER ONGOING: " + routine.getTimer().getOngoing());
+                        actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
+                        if (!routine.getongoing()) {
+                            adapter.notifyDataSetChanged();
+                            stopRoutine.setVisibility(View.INVISIBLE);
+                            addTask.setVisibility(View.VISIBLE);
+                            startRoutine.setVisibility(View.VISIBLE);
+                            if (timer != null) {
+                                timer.cancel();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                }.start();
+            }
+            Log.d("RoutineFragment", "Notified Data Set");
+            adapter.notifyDataSetChanged();
+
+        });
+
+        ffButton.setOnClickListener(x -> {
+            if(!activityModel.getCurRoutine().getValue().getongoing()) return;
+            activityModel.getCurRoutine().getValue().manualAddTime(30);
+        });
+
+        pauseTimerButton.setOnClickListener(x -> {
+            if(!activityModel.getCurRoutine().getValue().getTimer().getOngoing()) return;
+            activityModel.getCurRoutine().getValue().pauseRoutineTimer();
+            pauseTimerButton.setVisibility(View.GONE);
+            restartTimerButton.setVisibility(View.VISIBLE);
+        });
+
+        restartTimerButton.setOnClickListener(v -> {
+            if(activityModel.getCurRoutine().getValue().getTimer().getOngoing()) return;
+            activityModel.getCurRoutine().getValue().pauseRoutineTimer();
+            restartTimerButton.setVisibility(View.GONE);
+            pauseTimerButton.setVisibility(View.VISIBLE);
+        });
+
+        stopRoutine.setOnClickListener(v -> {
+            if(!activityModel.getCurRoutine().getValue().getongoing()) return;
+            activityModel.endRoutine();
+            Log.d("RoutineFragment", "ROUTINE SHOULD NOT BE ONGOING: " + activityModel.getCurRoutine().getValue().getongoing());
+            Log.d("RoutineFragment", "COMPLETION: " + activityModel.getCompleted().getValue());
+        });
+
+
+        if (getArguments() != null) {
+            titleView.setText(activityModel.getCurRoutine().getValue().getName());
+            timeView.setText(activityModel.getCurRoutine().getValue().getEstimatedTime() + " min");
         }
 
         return view;

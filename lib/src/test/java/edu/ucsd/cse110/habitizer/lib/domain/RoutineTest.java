@@ -328,7 +328,26 @@ public class RoutineTest {
 //        assertEquals(expStartTime.toEpochMilli(), morning.getStartTime().toEpochMilli(), 100);
 //    }
 
+    @Test
+    public void pauseRestartRoutine() throws InterruptedException {
+        var morning = new Routine(duration, "Morning");
+        Task task1 = new Task("test task 1");
+        Task task2 = new Task("test task 2");
+        Task task3 = new Task("test task 3");
+        morning.addTask(task1);
+        morning.addTask(task2);
+        morning.addTask(task3);
 
+        morning.startRoutine();
+        Thread.sleep(2000);
+        assertEquals(2, morning.getElapsedTimeSecs());
+        morning.endRoutine();
+        assertEquals(2, morning.getElapsedTimeSecs());
+        morning.startRoutine();
+        assertEquals(0, morning.getElapsedTimeSecs());
+        Thread.sleep(1000);
+        assertEquals(1, morning.getElapsedTimeSecs());
+    }
 
 
 }
