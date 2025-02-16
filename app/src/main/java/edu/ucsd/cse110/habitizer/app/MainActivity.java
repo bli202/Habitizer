@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.app.ui.home.HomePage;
 import edu.ucsd.cse110.habitizer.app.ui.routine.RoutineFragment;
+import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view.getRoot());
 
         ArrayList<Routine> routineList = new ArrayList<>();
+
+        routineList.add(InMemoryDataSource.DEFAULT_ROUTINE_MORNING);
+        routineList.add(InMemoryDataSource.DEFAULT_ROUTINE_EXERCISE);
 
         ListView routineView = findViewById(R.id.routine_view);
 
