@@ -42,6 +42,9 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash.
         super(context, 0, routine.getTaskList());
+        Log.d("RoutineAdapter Constructor", "Routine " + routine + "'s first task: " + routine.getTaskList().get(0).getName());
+        this.clear();
+        this.addAll(routine.getTaskList());
         this.onEditClick = onEditClick;
         this.onDeleteClick = onDeleteClick;
         this.routine = routine;

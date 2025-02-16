@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
@@ -84,13 +85,13 @@ public class MainActivity extends AppCompatActivity {
             Routine selectedRoutine = routineList.get(position);
             Log.d("MainActivity", "Selected Routine: " + selectedRoutine);
 
+            // FIRST ROUTINE CLICKED SETS THE TASK VIEW
             MainViewModel.switchRoutine(selectedRoutine);
 
             RoutineFragment routineFragment = RoutineFragment.newInstance(
                     selectedRoutine.getTitle(),
                     String.valueOf(selectedRoutine.getDuration())
             );
-
 
             routineView.setVisibility(View.GONE);
             findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);
@@ -99,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
                     .beginTransaction()
                     .replace(R.id.fragment_routine, routineFragment)
                     .commit();
-            Log.d("MainActivity", "routineView : " + routineView);
             homeScreen = !homeScreen;
         });
     }
@@ -120,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
             // Hide the fragment container
             View fragmentContainer = findViewById(R.id.fragment_routine);
             fragmentContainer.setVisibility(View.GONE);
+
+//            getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .replace(fragmentContainer, R.id.fragment_routine, )
+//                    .commit();
 
             // Show the routine list
             ListView routineView = findViewById(R.id.routine_view);
