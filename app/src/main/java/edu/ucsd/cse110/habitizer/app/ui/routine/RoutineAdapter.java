@@ -71,6 +71,15 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         var layoutInflater = LayoutInflater.from(getContext());
         binding = TaskViewBinding.inflate(layoutInflater, parent, false);
 
+        if (routine.getongoing()) {
+            binding.editButton.setVisibility(View.INVISIBLE);
+            binding.deleteButton.setVisibility(View.INVISIBLE);
+        }
+        else {
+            binding.editButton.setVisibility(View.VISIBLE);
+            binding.deleteButton.setVisibility(View.VISIBLE);
+        }
+
         binding.editButton.setOnClickListener(v -> {
             var name = task.getName();
             assert name != null;

@@ -70,6 +70,7 @@ public class RoutineFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_routine, container, false);
         Log.d("Routine Fragment", "onCreateView called and adapter made with " + activityModel.getCurRoutine().getValue());
+        Log.d("RoutineFragment", "Current Routine: " + activityModel.getCurRoutine().getValue().getName());
         this.adapter = new RoutineAdapter(requireContext(),
                 activityModel.getCurRoutine().getValue(),
                 name -> {
@@ -84,6 +85,7 @@ public class RoutineFragment extends Fragment {
         activityModel.getMorningTasks().observe(tasks -> {
             if (tasks == null) return;
             Log.d("RoutineFragment", "Notified Data Set 1");
+            Log.d("RoutineFragment", "Number of tasks: " + activityModel.getMorningTasks().getValue().size());
             adapter.notifyDataSetChanged();
         });
 
@@ -103,24 +105,27 @@ public class RoutineFragment extends Fragment {
         Button addTask = view.findViewById(R.id.add_task_button);
         Button startRoutine = view.findViewById(R.id.start_routine_button);
         Button stopRoutine = view.findViewById(R.id.stop_routine_button);
+
         FloatingActionButton ffButton = view.findViewById(R.id.fast_forward_timer_button);
         FloatingActionButton pauseTimerButton = view.findViewById(R.id.pause_timer_button);
         FloatingActionButton restartTimerButton = view.findViewById(R.id.restart_timer_button);
 
         activityModel.getCompleted().observe(completed -> {
-            Log.d("HabitizerApplication", "COMPLETED OSVEVSIUDUDSIXOJH!!!");
+            Log.d("RoutineFragment", "COMPLETED OSVEVSIUDUDSIXOJH!!!");
             if(completed == null) {
-                Log.d("HabitizerApplication", "COMPLETED = NULL");
+                Log.d("RoutineFragment", "COMPLETED = NULL");
                 return;
             } else {
-                Log.d("HabitizerApplication", "COMPLETION: " + completed);
+                Log.d("RoutineFragment", "COMPLETION: " + completed);
             }
 //            Log.d("HabitizerApplication",completed.toString());
             if(completed) {
+                adapter.notifyDataSetChanged();
 //                activityModel.getCurRoutine().getValue().setOngoing(false);
                 stopRoutine.setVisibility(View.INVISIBLE);
                 addTask.setVisibility(View.VISIBLE);
                 startRoutine.setVisibility(View.VISIBLE);
+
                 if (timer != null) {
                     timer.cancel();
                 }
@@ -165,6 +170,7 @@ public class RoutineFragment extends Fragment {
                         Log.d("HabitizerApplication", "TIMER ONGOING: " + routine.getTimer().getOngoing());
                         actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
                         if (!routine.getongoing()) {
+                            adapter.notifyDataSetChanged();
                             stopRoutine.setVisibility(View.INVISIBLE);
                             addTask.setVisibility(View.VISIBLE);
                             startRoutine.setVisibility(View.VISIBLE);

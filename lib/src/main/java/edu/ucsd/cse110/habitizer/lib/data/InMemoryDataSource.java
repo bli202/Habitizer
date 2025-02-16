@@ -178,11 +178,16 @@ public class InMemoryDataSource {
      */
     public void removeTask(String routineName, String taskName) {
         // Remove from global mapping.
+        List<Task> tasksList = routineTasks.get(routineName);
+        Routine routine = routines.get(routineName);
+        routine.removeTask(tasks.get(taskName));
+
         tasks.remove(taskName);
         // Remove from the routine's task list.
-        List<Task> tasksList = routineTasks.get(routineName);
+
         if (tasksList != null) {
             tasksList.removeIf(t -> t.getName().equals(taskName));
+            //tasksList.remove(getTaskSubject(taskName));
         }
         // Update observable subject.
         if (routineTasksSubjects.containsKey(routineName)) {
