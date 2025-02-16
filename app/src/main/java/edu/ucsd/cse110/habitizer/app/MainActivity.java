@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Routine> routineList = new ArrayList<>();
 
-        routineList.add(InMemoryDataSource.MORNING_ROUTINE);
-        routineList.add(InMemoryDataSource.EVENING_ROUTINE);
+        routineList.add(InMemoryDataSource.DEFAULT_ROUTINE_MORNING);
+        routineList.add(InMemoryDataSource.DEFAULT_ROUTINE_EXERCISE);
 
         ListView routineView = findViewById(R.id.routine_view);
 
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_routine, routineFragment)
+                    .addToBackStack(null) // for back button
                     .commit();
             homeScreen = !homeScreen;
         });

@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import android.graphics.Paint;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
@@ -49,6 +51,8 @@ public class RoutineFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
      * @return A new instance of fragment RoutineFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -72,6 +76,10 @@ public class RoutineFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
+//        this.adapter = new CardListAdapter(requireContext(), List.of(), id -> {
+//            var dialogFragment = ConfirmDeleteCardDialogFragment.newInstance(id);
+//            dialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
+//        });
     }
 
     @Override
@@ -106,6 +114,8 @@ public class RoutineFragment extends Fragment {
 
         Button addTask = view.findViewById(R.id.add_task_button);
         Button startRoutine = view.findViewById(R.id.start_routine_button);
+        FloatingActionButton ffButton = view.findViewById(R.id.fast_forward_timer_button);
+        FloatingActionButton pauseTimerButton = view.findViewById(R.id.pause_timer_button);
 
         activityModel.getCompleted().observe(completed -> {
             Log.d("HabitizerApplication", "COMPLETED OSVEVSIUDUDSIXOJH!!!");
@@ -152,6 +162,16 @@ public class RoutineFragment extends Fragment {
 
                 }
             }.start();
+        });
+
+        ffButton.setOnClickListener(x -> {
+            if(!activityModel.getCurRoutine().getValue().getongoing()) return;
+            activityModel.getCurRoutine().getValue().manualAddTime(30);
+        });
+
+        pauseTimerButton.setOnClickListener(x -> {
+            if(!activityModel.getCurRoutine().getValue().getongoing()) return;
+            activityModel.getCurRoutine().getValue().pauseRoutineTimer();
         });
 
         if (getArguments() != null) {
