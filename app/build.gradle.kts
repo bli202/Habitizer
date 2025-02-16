@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation(project(":lib"))
     implementation(project(":lib"))
     implementation(project(":observables"))
