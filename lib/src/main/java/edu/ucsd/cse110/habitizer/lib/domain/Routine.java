@@ -121,7 +121,14 @@ public class Routine {
      * Pauses routine timer (switches to mock timer) for testing purposes
      */
     public void pauseRoutineTimer() {
-        timer.pause();
+        if (ongoing) {
+            if (timer.getOngoing()) {
+                timer.pause();
+            }
+            else {
+                timer.start();
+            }
+        }
     }
 
     /**

@@ -101,6 +101,7 @@ public class RoutineFragment extends Fragment {
         Button startRoutine = view.findViewById(R.id.start_routine_button);
         FloatingActionButton ffButton = view.findViewById(R.id.fast_forward_timer_button);
         FloatingActionButton pauseTimerButton = view.findViewById(R.id.pause_timer_button);
+        FloatingActionButton restartTimerButton = view.findViewById(R.id.restart_timer_button);
 
         activityModel.getCompleted().observe(completed -> {
             Log.d("HabitizerApplication", "COMPLETED OSVEVSIUDUDSIXOJH!!!");
@@ -173,9 +174,19 @@ public class RoutineFragment extends Fragment {
         });
 
         pauseTimerButton.setOnClickListener(x -> {
-            if(!activityModel.getCurRoutine().getValue().getongoing()) return;
+            if(!activityModel.getCurRoutine().getValue().getTimer().getOngoing()) return;
             activityModel.getCurRoutine().getValue().pauseRoutineTimer();
+            pauseTimerButton.setVisibility(View.GONE);
+            restartTimerButton.setVisibility(View.VISIBLE);
         });
+
+        restartTimerButton.setOnClickListener(v -> {
+            if(activityModel.getCurRoutine().getValue().getTimer().getOngoing()) return;
+            activityModel.getCurRoutine().getValue().pauseRoutineTimer();
+            restartTimerButton.setVisibility(View.GONE);
+            pauseTimerButton.setVisibility(View.VISIBLE);
+        });
+
 
         if (getArguments() != null) {
             titleView.setText(activityModel.getCurRoutine().getValue().getName());
