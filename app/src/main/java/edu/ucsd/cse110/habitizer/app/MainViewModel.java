@@ -27,7 +27,9 @@ public class MainViewModel extends ViewModel {
     private final TaskRepository taskRepository;
 
     // UI state observables.
-    private final PlainMutableSubject<List<Task>> orderedTasks;
+    private final PlainMutableSubject<List<Task>> morningTasks;
+    private final PlainMutableSubject<List<Task>> eveningTasks;
+
     private final PlainMutableSubject<Task> firstTask;
     private final PlainMutableSubject<Boolean> completed;
     private final PlainMutableSubject<String> taskName;
@@ -49,28 +51,47 @@ public class MainViewModel extends ViewModel {
 
         Log.d(LOG_TAG, "MainViewModel constructor");
 
-        this.orderedTasks = new PlainMutableSubject<>();
+        this.morningTasks = new PlainMutableSubject<>();
         this.firstTask = new PlainMutableSubject<>();
         this.completed = new PlainMutableSubject<>(false);
         this.taskName = new PlainMutableSubject<>();
+        this.eveningTasks = new PlainMutableSubject<>();
 
         // Observe tasks for the specified routine.
-        taskRepository.findAll(curRoutine.getValue().getName()).observe(tasks -> {
+        taskRepository.findAll(InMemoryDataSource.DEFAULT_ROUTINE_MORNING.getName())
+                .observe(tasks -> {
             if (tasks == null) return; // Not ready yet, ignore.
 
             // Create a new ordered list (you can add a Comparator if needed).
-            List<Task> newOrderedTasks = new ArrayList<>(tasks);
-            orderedTasks.setValue(newOrderedTasks);
+            List<Task> morningTasks = new ArrayList<>(tasks);
+            this.morningTasks.setValue(morningTasks);
+
+            Log.d("MainViewModel", Objects.requireNonNull(this.morningTasks.getValue()).get(0).getName());
 
             // Optionally update firstTask observable.
-            if (!newOrderedTasks.isEmpty()) {
-                firstTask.setValue(newOrderedTasks.get(0));
+            if (!morningTasks.isEmpty()) {
+                firstTask.setValue(morningTasks.get(0));
+            }
+        });
+        taskRepository.findAll(InMemoryDataSource.DEFAULT_ROUTINE_EXERCISE.getName()).observe(tasks -> {
+            if (tasks == null) return;
+
+            List<Task> eveningTasks = new ArrayList<>(tasks);
+            this.eveningTasks.setValue(eveningTasks);
+            Log.d("MainViewModel", Objects.requireNonNull(this.eveningTasks.getValue()).get(0).getName());
+
+            if (!eveningTasks.isEmpty()) {
+                firstTask.setValue(eveningTasks.get(0));
             }
         });
     }
 
-    public Subject<List<Task>> getOrderedTasks() {
-        return orderedTasks;
+    public Subject<List<Task>> getMorningTasks() {
+        return morningTasks;
+    }
+
+    public Subject<List<Task>> getEveningTasks() {
+        return eveningTasks;
     }
 
     /**

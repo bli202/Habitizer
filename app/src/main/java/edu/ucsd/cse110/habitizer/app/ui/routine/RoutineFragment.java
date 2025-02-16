@@ -1,7 +1,5 @@
 package edu.ucsd.cse110.habitizer.app.ui.routine;
 
-import static android.graphics.Paint.STRIKE_THRU_TEXT_FLAG;
-
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,14 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-import android.graphics.Paint;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -36,10 +29,6 @@ import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
  */
 public class RoutineFragment extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String routine_title = "param1";
-//    private static final String estimate_time = "param2";
-
     private MainViewModel activityModel;
     private RoutineAdapter adapter;
 
@@ -53,8 +42,7 @@ public class RoutineFragment extends Fragment {
      *
      * @return A new instance of fragment RoutineFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public RoutineFragment newInstance() {
+    public static RoutineFragment newInstance() {
         RoutineFragment fragment = new RoutineFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -64,20 +52,11 @@ public class RoutineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            String routineTitle = getArguments().getString(routine_title);
-//            String routineDuration = getArguments().getString(estimate_time);
-        }
 
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
-
-//        this.adapter = new CardListAdapter(requireContext(), List.of(), id -> {
-//            var dialogFragment = ConfirmDeleteCardDialogFragment.newInstance(id);
-//            dialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
-//        });
     }
 
     @Override
@@ -98,10 +77,15 @@ public class RoutineFragment extends Fragment {
         });
 
 
-        activityModel.getOrderedTasks().observe(tasks -> {
-            Log.d("RoutineFragment", "Observed");
+        activityModel.getMorningTasks().observe(tasks -> {
             if (tasks == null) return;
-            Log.d("RoutineFragment", "Notified Data Set");
+            Log.d("RoutineFragment", "Notified Data Set 1");
+            adapter.notifyDataSetChanged();
+        });
+
+        activityModel.getEveningTasks().observe(tasks -> {
+            if (tasks == null) return;
+            Log.d("RoutineFragment", "Notified Data Set 2");
             adapter.notifyDataSetChanged();
         });
 
@@ -133,11 +117,17 @@ public class RoutineFragment extends Fragment {
         });
 
         addTask.setOnClickListener(x -> {
+            Log.d("RoutineFragment", "Notified Data Set");
+            adapter.notifyDataSetChanged();
             var dialogFragment = new AddTaskDialogFragment();
             dialogFragment.show(getChildFragmentManager(), "AddTaskDialogFragment");
+            adapter.notifyDataSetChanged();
+
         });
 
         startRoutine.setOnClickListener(x -> {
+            Log.d("RoutineFragment", "Notified Data Set");
+            adapter.notifyDataSetChanged();
             var routine = activityModel.getCurRoutine().getValue();
 //            routine.startRoutine();
 
@@ -162,6 +152,9 @@ public class RoutineFragment extends Fragment {
 
                 }
             }.start();
+            Log.d("RoutineFragment", "Notified Data Set");
+            adapter.notifyDataSetChanged();
+
         });
 
         ffButton.setOnClickListener(x -> {
@@ -175,12 +168,8 @@ public class RoutineFragment extends Fragment {
         });
 
         if (getArguments() != null) {
-//            String routineTitle = getArguments().getString(routine_title);
-//            String routineDuration = getArguments().getString(estimate_time);
-//            activityModel.switchRoutine(routineTitle);
-
             titleView.setText(activityModel.getCurRoutine().getValue().getName());
-            timeView.setText(activityModel.getCurRoutine().getValue().getEstimatedTime() + "min");
+            timeView.setText(activityModel.getCurRoutine().getValue().getEstimatedTime() + " min");
         }
 
         return view;
