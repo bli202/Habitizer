@@ -92,12 +92,10 @@ public class RoutineFragment extends Fragment {
         });
 
 
-//        activityModel.getOrderedTasks().observe(tasks -> {
-//            if (tasks == null) return;
-//            adapter.clear();
-//            adapter.addAll(new ArrayList<>(tasks));
-//            adapter.notifyDataSetChanged();
-//        });
+        activityModel.getOrderedTasks().observe(tasks -> {
+            if (tasks == null) return;
+            adapter.notifyDataSetChanged();
+        });
 
         ListView taskList = view.findViewById(R.id.task_list_view);
         taskList.setAdapter(adapter);
@@ -110,6 +108,7 @@ public class RoutineFragment extends Fragment {
         Button startRoutine = view.findViewById(R.id.start_routine_button);
 
         activityModel.getCompleted().observe(completed -> {
+            Log.d("HabitizerApplication", "COMPLETED OSVEVSIUDUDSIXOJH!!!");
             if(completed == null) {
                 Log.d("HabitizerApplication", "COMPLETED = NULL");
                 return;
@@ -142,6 +141,10 @@ public class RoutineFragment extends Fragment {
                 @Override
                 public void onTick(long l) {
                     actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
+                    if(!routine.getongoing()) {
+                        addTask.setVisibility(View.VISIBLE);
+                        startRoutine.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 @Override
