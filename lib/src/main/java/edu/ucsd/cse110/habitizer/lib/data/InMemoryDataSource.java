@@ -264,8 +264,10 @@ public class InMemoryDataSource {
     /**
      * Default routine and task for bootstrapping.
      */
-    public static final Routine DEFAULT_ROUTINE = new Routine(30, "Morning Routine");
-    public static final Task DEFAULT_TASK = new Task("brush teeth");
+    public static final Routine DEFAULT_ROUTINE_MORNING = new Routine(30, "Morning Routine");
+    public static final Task DEFAULT_TASK_MORNING = new Task("brush teeth");
+    public static final Routine DEFAULT_ROUTINE_EXERCISE = new Routine(45, "Exercise Routine");
+    public static final Task DEFAULT_TASK_EXERCISE = new Task("work out");
 
     /**
      * Factory method to create a data source preloaded with default routines and tasks.
@@ -273,9 +275,11 @@ public class InMemoryDataSource {
     public static InMemoryDataSource fromDefault() {
         InMemoryDataSource data = new InMemoryDataSource();
         // Add default routine.
-        data.putRoutine(DEFAULT_ROUTINE);
+        data.putRoutine(DEFAULT_ROUTINE_MORNING);
+        data.putRoutine(DEFAULT_ROUTINE_EXERCISE);
         // Add default task to the default routine.
-        data.putTask(DEFAULT_ROUTINE.getTitle(), DEFAULT_TASK);
+        data.putTask(DEFAULT_ROUTINE_MORNING.getTitle(), DEFAULT_TASK_MORNING);
+        data.putTask(DEFAULT_ROUTINE_EXERCISE.getTitle(), DEFAULT_TASK_EXERCISE);
         return data;
     }
 }
