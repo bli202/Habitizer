@@ -34,8 +34,7 @@ public class MainViewModel extends ViewModel {
 
     private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.DEFAULT_ROUTINE_MORNING);
 
-    public static final ViewModelInitializer<MainViewModel> initializer =
-            new ViewModelInitializer<>(
+    public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
                     MainViewModel.class,
                     creationExtras -> {
                         var app = (HabitizerApplication) creationExtras.get(APPLICATION_KEY);
