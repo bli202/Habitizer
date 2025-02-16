@@ -31,6 +31,8 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
     Consumer<String> onDeleteClick;
     Consumer<String> onEditClick;
 
+    Consumer<String> onAddClick;
+
     Routine routine;
     public RoutineAdapter(Context context, Routine routine,
                           Consumer<String> onEditClick,
