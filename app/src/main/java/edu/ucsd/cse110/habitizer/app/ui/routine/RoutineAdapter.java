@@ -56,9 +56,10 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         Log.d("RoutineAdapter", "getView() called for position " + position);
 
-        // Get the flashcard for this position.
+        // Get the task for this position.
         var task = getItem(position);
         if (task == null) {
             Log.e("RoutineAdapter", "Task is NULL at position " + position);
@@ -94,8 +95,12 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
             onDeleteClick.accept(task.getName());
         });
 
-        // Populate the view with the task's data
         binding.taskTitle.setText(task.getName());
+
+        // If the task is already completed, display its stored time.
+        if (task.isCompleted()){
+            binding.taskTime.setText(String.valueOf(task.getTimeSpent()));
+        }
 
         // Set initial strike-through based on task completion state
         updateStrikeThrough(binding.taskTitle, task.isCompleted(), false);
