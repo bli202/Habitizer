@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.TaskViewBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
@@ -30,8 +32,8 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 
     Consumer<String> onDeleteClick;
     Consumer<String> onEditClick;
+    MainViewModel activityModel;
 
-    Consumer<String> onAddClick;
 
     Routine routine;
     public RoutineAdapter(Context context, Routine routine,
@@ -78,7 +80,9 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         else {
             binding.editButton.setVisibility(View.VISIBLE);
             binding.deleteButton.setVisibility(View.VISIBLE);
+            //return binding.getRoot();
         }
+
 
         binding.editButton.setOnClickListener(v -> {
             var name = task.getName();
@@ -140,6 +144,7 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         this.clear();
         this.addAll(routine.getTaskList());
     }
+
 
 
 }

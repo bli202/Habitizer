@@ -52,8 +52,8 @@ public class AddTaskDialogFragment extends DialogFragment {
         var task = new Task(name);
         try {
             for (Task t : activityModel.getCurRoutine().getValue().getTaskList()) {
-                if (t.getName().equals(name)) {
-                    var dialogFragment = NoDuplicateDialogFragment.newInstance("");
+                if (t.getName().equals(name) || name.isEmpty()) {
+                    var dialogFragment = InvalidTaskDialogFragment.newInstance("");
                     dialogFragment.show(getParentFragmentManager(), "NoDuplicateDialogFragment");
                     dialog.dismiss();
                     return;
