@@ -88,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
             // FIRST ROUTINE CLICKED SETS THE TASK VIEW
             MainViewModel.switchRoutine(selectedRoutine);
 
-            RoutineFragment routineFragment = RoutineFragment.newInstance(
-                    selectedRoutine.getTitle(),
-                    String.valueOf(selectedRoutine.getDuration())
+            RoutineFragment routineFragment = new RoutineFragment().newInstance(
+//                    selectedRoutine.getTitle(),
+//                    String.valueOf(selectedRoutine.getDuration())
             );
 
             routineView.setVisibility(View.GONE);

@@ -35,8 +35,8 @@ import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 public class RoutineFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String routine_title = "param1";
-    private static final String estimate_time = "param2";
+//    private static final String routine_title = "param1";
+//    private static final String estimate_time = "param2";
 
     private MainViewModel activityModel;
     private RoutineAdapter adapter;
@@ -52,11 +52,9 @@ public class RoutineFragment extends Fragment {
      * @return A new instance of fragment RoutineFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RoutineFragment newInstance(String param1, String param2) {
+    public RoutineFragment newInstance() {
         RoutineFragment fragment = new RoutineFragment();
         Bundle args = new Bundle();
-        args.putString(routine_title, param1);
-        args.putString(estimate_time, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,8 +63,8 @@ public class RoutineFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            String routineTitle = getArguments().getString(routine_title);
-            String routineDuration = getArguments().getString(estimate_time);
+//            String routineTitle = getArguments().getString(routine_title);
+//            String routineDuration = getArguments().getString(estimate_time);
         }
 
         var modelOwner = requireActivity();
@@ -78,7 +76,8 @@ public class RoutineFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_routine, container, false);
         Log.d("Routine Fragment", "onCreateView called and adapter made with " + activityModel.getCurRoutine().getValue());
         this.adapter = new RoutineAdapter(requireContext(),
@@ -93,12 +92,12 @@ public class RoutineFragment extends Fragment {
         });
 
 
-        activityModel.getOrderedTasks().observe(tasks -> {
-            if (tasks == null) return;
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(tasks));
-            adapter.notifyDataSetChanged();
-        });
+//        activityModel.getOrderedTasks().observe(tasks -> {
+//            if (tasks == null) return;
+//            adapter.clear();
+//            adapter.addAll(new ArrayList<>(tasks));
+//            adapter.notifyDataSetChanged();
+//        });
 
         ListView taskList = view.findViewById(R.id.task_list_view);
         taskList.setAdapter(adapter);
@@ -153,12 +152,12 @@ public class RoutineFragment extends Fragment {
         });
 
         if (getArguments() != null) {
-            String routineTitle = getArguments().getString(routine_title);
-            String routineDuration = getArguments().getString(estimate_time);
+//            String routineTitle = getArguments().getString(routine_title);
+//            String routineDuration = getArguments().getString(estimate_time);
 //            activityModel.switchRoutine(routineTitle);
 
-            titleView.setText(routineTitle);
-            timeView.setText(routineDuration + " min");
+            titleView.setText(activityModel.getCurRoutine().getValue().getName());
+            timeView.setText(activityModel.getCurRoutine().getValue().getEstimatedTime() + "min");
         }
 
         return view;
