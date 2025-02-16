@@ -121,7 +121,9 @@ public class RoutineFragment extends Fragment {
                 stopRoutine.setVisibility(View.INVISIBLE);
                 addTask.setVisibility(View.VISIBLE);
                 startRoutine.setVisibility(View.VISIBLE);
-                timer.cancel();
+                if (timer != null) {
+                    timer.cancel();
+                }
             }
         });
 
@@ -166,7 +168,9 @@ public class RoutineFragment extends Fragment {
                             stopRoutine.setVisibility(View.INVISIBLE);
                             addTask.setVisibility(View.VISIBLE);
                             startRoutine.setVisibility(View.VISIBLE);
-                            timer.cancel();
+                            if (timer != null) {
+                                timer.cancel();
+                            }
                         }
                     }
 

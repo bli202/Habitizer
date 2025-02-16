@@ -112,7 +112,9 @@ public class MainViewModel extends ViewModel {
      * Removes a task from the current routine.
      */
     public void remove(String name) {
+        Log.d("MainViewModel", "Task being removed: " + name);
         taskRepository.remove(getCurRoutine().getValue().getName(), name);
+        Log.d("MainViewModel", "Number of Tasks: " + getCurRoutine().getValue().getNumTasks());
     }
 
     public static void switchRoutine(Routine routine) {
