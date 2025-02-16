@@ -17,4 +17,6 @@
     <string name="deletes_a_task">deletes a task</string>
     <string name="time_taken">Time Taken</string>
     <string name="duplicate_task">Cannot have two tasks with the same name!</string>
+    <string name="restart">Restart</string>
+    <string name="pause">Pause</string>
 </resources>
