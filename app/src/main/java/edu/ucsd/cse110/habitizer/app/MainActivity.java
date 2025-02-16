@@ -40,12 +40,7 @@ public class MainActivity extends AppCompatActivity {
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(view.getRoot());
 
-        // Initializing 2 mock routines for MS1
-        Routine routine1 = new Routine(30, "Morning Routine");
-        Routine routine2 = new Routine(45, "Exercise Routine");
         ArrayList<Routine> routineList = new ArrayList<>();
-        routineList.add(routine1);
-        routineList.add(routine2);
 
         ListView routineView = findViewById(R.id.routine_view);
 
