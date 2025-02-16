@@ -59,6 +59,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/routine_title"
                 app:layout_constraintTop_toBottomOf="@id/estimated_time" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Task List Section -->
@@ -102,6 +103,24 @@
                 android:layout_marginStart="8dp"
                 android:textColor="@android:color/white"
                 android:text="@string/add_task" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fast_forward_timer_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:src="@drawable/ic_ff_timer"
+                app:fabCustomSize="35dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/pause_timer_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:src="@android:drawable/ic_media_pause"
+                app:fabCustomSize="35dp" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
