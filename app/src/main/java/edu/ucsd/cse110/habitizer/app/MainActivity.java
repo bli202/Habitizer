@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.app.ui.home.HomePage;
 import edu.ucsd.cse110.habitizer.app.ui.routine.RoutineFragment;
+import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,12 +41,15 @@ public class MainActivity extends AppCompatActivity {
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(view.getRoot());
 
-        // Initializing 2 mock routines for MS1
-        Routine routine1 = new Routine(30, "Morning Routine");
-        Routine routine2 = new Routine(45, "Exercise Routine");
+//        Initializing 2 mock routines for MS1
+//        Routine routine1 = new Routine(30, "Morning Routine");
+//        Routine routine2 = new Routine(45, "Exercise Routine");
         ArrayList<Routine> routineList = new ArrayList<>();
-        routineList.add(routine1);
-        routineList.add(routine2);
+//        routineList.add(routine1);
+//        routineList.add(routine2);
+
+        routineList.add(InMemoryDataSource.MORNING_ROUTINE);
+        routineList.add(InMemoryDataSource.EVENING_ROUTINE);
 
         ListView routineView = findViewById(R.id.routine_view);
 
@@ -90,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_routine, routineFragment)
-                    .addToBackStack(null) // for back button
                     .commit();
             homeScreen = !homeScreen;
         });
