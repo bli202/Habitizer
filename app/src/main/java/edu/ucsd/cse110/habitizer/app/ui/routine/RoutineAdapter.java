@@ -30,55 +30,6 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 
     Consumer<String> onDeleteClick;
     Consumer<String> onEditClick;
-//    public RoutineAdapter(Context context,
-//                          List<Task> tasks) {
-//        // This sets a bunch of stuff internally, which we can access
-//        // with getContext() and getItem() for example.
-//        //
-//        // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
-//        // or it will crash!
-//        super(context, 0, new ArrayList<>(tasks));
-//        this.onDeleteClick = onDeleteClick;
-//    }
-//
-//    @NonNull
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        // Get the flashcard for this position.
-//        var task = getItem(position);
-//
-//        if (task == null) {
-//            Log.e("RoutineAdapter", "Task is NULL at position " + position);
-//            return new View(getContext());
-//        }
-//        assert task != null;
-//
-//        Log.d("RoutineAdapter", "Displaying task: " + task.getName());
-//
-//        // Check if a view is being reused...
-//        TaskViewBinding binding;
-//        if (convertView != null) {
-//            // if so, bind to it
-//            binding = TaskViewBinding.bind(convertView);
-//        } else {
-//            // otherwise inflate a new view from our layout XML.
-//            var layoutInflater = LayoutInflater.from(getContext());
-//            binding = TaskViewBinding.inflate(layoutInflater, parent, false);
-//        }
-//
-//        // Populate the view with the flashcard's data.
-//        binding.TaskTitle.setText(task.getName());
-//
-//        binding.deleteButton.setOnClickListener(v -> {
-//            var name = task.getName();
-//            assert name != null;
-//            onDeleteClick.accept(name);
-//        });
-//
-//        return binding.getRoot();
-//    }
-
-    // ^ we dc about delete button rn
 
     Routine routine;
     public RoutineAdapter(Context context, Routine routine,
@@ -91,6 +42,8 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash.
         super(context, 0, routine.getTaskList());
+        this.notifyDataSetChanged();
+        Log.d("RoutineAdapter Constructor", "Routine " + routine + "'s first task: " + routine.getTaskList().get(0).getName());
         this.onEditClick = onEditClick;
         this.onDeleteClick = onDeleteClick;
         this.routine = routine;
@@ -115,19 +68,11 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         TaskViewBinding binding;
         var layoutInflater = LayoutInflater.from(getContext());
         binding = TaskViewBinding.inflate(layoutInflater, parent, false);
-//        if (convertView != null) {
-//            // If so, bind to it.
-//            binding = TaskViewBinding.bind(convertView);
-//        } else {
-//            // Otherwise, inflate a new view from our layout XML.
-//            var layoutInflater = LayoutInflater.from(getContext());
-//            binding = TaskViewBinding.inflate(layoutInflater, parent, false);
-//        }
+
         binding.editButton.setOnClickListener(v -> {
             var name = task.getName();
             assert name != null;
             onEditClick.accept(name);
-            //code breaks here
         });
 
         binding.deleteButton.setOnClickListener(v -> {
@@ -174,9 +119,15 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 
     @Override
     public Task getItem(int position) {
+        super.getItem(position);
         Task task = super.getItem(position);
         Log.d("RoutineAdapter", "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
         return task;
+    }
+
+    public void switchRoutine(Routine routine) {
+        this.clear();
+        this.addAll(routine.getTaskList());
     }
 
 

@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.habitizer.app.ui.home.HomePage;
 import edu.ucsd.cse110.habitizer.app.ui.routine.RoutineFragment;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -43,12 +42,12 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Routine> routineList = new ArrayList<>();
 
-        routineList.add(InMemoryDataSource.DEFAULT_ROUTINE_MORNING);
-        routineList.add(InMemoryDataSource.DEFAULT_ROUTINE_EXERCISE);
+        routineList.add(InMemoryDataSource.MORNING_ROUTINE);
+        routineList.add(InMemoryDataSource.EVENING_ROUTINE);
 
         ListView routineView = findViewById(R.id.routine_view);
 
-        ArrayAdapter<Routine> adapter = new ArrayAdapter<Routine>(
+        ArrayAdapter<Routine> adapter = new ArrayAdapter<>(
                 this,
                 R.layout.routine_view,
                 routineList
@@ -77,11 +76,12 @@ public class MainActivity extends AppCompatActivity {
 
         routineView.setOnItemClickListener((parent, view, position, id) -> {
             Routine selectedRoutine = routineList.get(position);
+            Log.d("MainActivity", "Selected Routine: " + selectedRoutine);
 
-            RoutineFragment routineFragment = RoutineFragment.newInstance(
-                    selectedRoutine.getTitle(),
-                    String.valueOf(selectedRoutine.getDuration())
-            );
+            // FIRST ROUTINE CLICKED SETS THE TASK VIEW
+            MainViewModel.switchRoutine(selectedRoutine);
+
+            RoutineFragment routineFragment = RoutineFragment.newInstance();
 
             routineView.setVisibility(View.GONE);
             findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);

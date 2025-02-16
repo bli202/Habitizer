@@ -50,16 +50,7 @@ public class HomePage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = HomepageViewBinding.inflate(inflater, container, false);
-        setupMvp();
         return view.getRoot();
     }
 
-    private void setupMvp() {
-//        activityModel.getDisplayedText().observe(text -> view.cardText.setText(text));
-//
-//        view.start.setOnClickListener(v -> activityModel.flipTopCard());
-//        view.nextButton.setOnClickListener(v -> activityModel.stepForward());
-//        view.prevButton.setOnClickListener(v -> activityModel.stepBackward());
-//        view.shuffleButton.setOnClickListener(v -> activityModel.shuffle());
-    }
 }
