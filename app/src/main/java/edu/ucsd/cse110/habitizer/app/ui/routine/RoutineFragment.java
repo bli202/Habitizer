@@ -51,8 +51,6 @@ public class RoutineFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment RoutineFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -101,7 +99,9 @@ public class RoutineFragment extends Fragment {
 
 
         activityModel.getOrderedTasks().observe(tasks -> {
+            Log.d("RoutineFragment", "Observed");
             if (tasks == null) return;
+            Log.d("RoutineFragment", "Notified Data Set");
             adapter.notifyDataSetChanged();
         });
 

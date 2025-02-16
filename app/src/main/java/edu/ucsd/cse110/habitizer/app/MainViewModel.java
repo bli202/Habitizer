@@ -32,7 +32,7 @@ public class MainViewModel extends ViewModel {
     private final PlainMutableSubject<Boolean> completed;
     private final PlainMutableSubject<String> taskName;
 
-    private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.MORNING_ROUTINE);
+    private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.DEFAULT_ROUTINE_MORNING);
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(

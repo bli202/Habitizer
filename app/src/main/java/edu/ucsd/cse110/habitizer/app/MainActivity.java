@@ -88,10 +88,7 @@ public class MainActivity extends AppCompatActivity {
             // FIRST ROUTINE CLICKED SETS THE TASK VIEW
             MainViewModel.switchRoutine(selectedRoutine);
 
-            RoutineFragment routineFragment = new RoutineFragment().newInstance(
-//                    selectedRoutine.getTitle(),
-//                    String.valueOf(selectedRoutine.getDuration())
-            );
+            RoutineFragment routineFragment = new RoutineFragment().newInstance();
 
             routineView.setVisibility(View.GONE);
             findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);
@@ -121,11 +118,6 @@ public class MainActivity extends AppCompatActivity {
             // Hide the fragment container
             View fragmentContainer = findViewById(R.id.fragment_routine);
             fragmentContainer.setVisibility(View.GONE);
-
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(fragmentContainer, R.id.fragment_routine, )
-//                    .commit();
 
             // Show the routine list
             ListView routineView = findViewById(R.id.routine_view);
