@@ -3,6 +3,7 @@ package edu.ucsd.cse110.habitizer.app;
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
 import android.util.Log;
+import android.view.View;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
@@ -68,8 +69,6 @@ public class MainViewModel extends ViewModel {
             Log.d("MainViewModel", "Number of Tasks in morningTasks: " + this.morningTasks.getValue().size());
 
             Log.d("MainViewModel", "Number of Tasks in curRoutine: " + getCurRoutine().getValue().getNumTasks());
-
-            Log.d("MainViewModel", Objects.requireNonNull(this.morningTasks.getValue()).get(0).getName());
 
             // Optionally update firstTask observable.
             if (!morningTasks.isEmpty()) {

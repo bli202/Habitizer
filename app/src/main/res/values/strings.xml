@@ -16,4 +16,5 @@
     <string name="deletes_a_task">deletes a task</string>
     <string name="time_taken">Time Taken</string>
     <string name="invalid_task">Invalid task name, please change it!</string>
+    <string name="invalid_start">Please add a task to start your routine!</string>
 </resources>
