@@ -58,7 +58,6 @@ public class RoutineFragment extends Fragment {
         args.putString(routine_title, param1);
         args.putString(estimate_time, param2);
         fragment.setArguments(args);
-        adapter.switchRoutine(param1);
         return fragment;
     }
 
@@ -81,6 +80,7 @@ public class RoutineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_routine, container, false);
+        Log.d("Routine Fragment", "onCreateView called and adapter made with " + activityModel.getCurRoutine().getValue());
         this.adapter = new RoutineAdapter(requireContext(),
                 activityModel.getCurRoutine().getValue(),
                 name -> {

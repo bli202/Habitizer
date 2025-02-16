@@ -84,12 +84,13 @@ public class MainActivity extends AppCompatActivity {
             Routine selectedRoutine = routineList.get(position);
             Log.d("MainActivity", "Selected Routine: " + selectedRoutine);
 
+            MainViewModel.switchRoutine(selectedRoutine);
+
             RoutineFragment routineFragment = RoutineFragment.newInstance(
                     selectedRoutine.getTitle(),
                     String.valueOf(selectedRoutine.getDuration())
             );
 
-            routineView.getAdapter().;
 
             routineView.setVisibility(View.GONE);
             findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);

@@ -95,8 +95,8 @@ public class MainViewModel extends ViewModel {
         taskRepository.remove(getCurRoutine().getValue().getName(), name);
     }
 
-    public void switchRoutine(String name) {
-        curRoutine.setValue(taskRepository.findRoutine(name).getValue());
+    public static void switchRoutine(Routine routine) {
+        curRoutine.setValue(routine);
     }
 
     public void startTime() {
