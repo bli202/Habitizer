@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.content.DialogInterface;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,11 +66,36 @@ public class EditTaskDialogFragment extends DialogFragment {
             dialog.dismiss();
             return;
         }
-
+//        Log.d("EditTaskDialogFragment", "Current Routine: " + activityModel.getCurRoutine().getValue().getTaskList());
+//        for (Task t : activityModel.getCurRoutine().getValue().getTaskList()) {
+//            Log.d("EditTaskDialogFragment", "Task Name: " + t.getName());
+//            if (t.getName().equals(newName)) {
+//                var dialogFragment = new NoDuplicateDialogFragment();
+//                dialogFragment.show(getChildFragmentManager(), "NoDuplicateDialogFragment");
+//                dialog.dismiss();
+//                return;
+//            }
+//        }
         // Retrieve the old task name from the arguments.
         String oldTaskName = "";
         if (getArguments() != null) {
             oldTaskName = getArguments().getString("oldTaskName", "");
+        }
+
+        try {
+            Log.d("EditTaskDialogFragment", "About to check task list");
+            for (Task t : activityModel.getCurRoutine().getValue().getTaskList()) {
+                Log.d("EditTaskDialogFragment", "Task Name: " + t.getName());
+                if (t.getName().equals(newName)) {
+                    Log.d("EditTaskDialogFragment", "they r equal");
+                    var dialogFragment = NoDuplicateDialogFragment.newInstance(oldTaskName);
+                    dialogFragment.show(getParentFragmentManager(), "NoDuplicateDialogFragment");
+                    dialog.dismiss();
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            Log.e("EditTaskDialogFragment", "Exception while checking task list", e);
         }
         if (oldTaskName.isEmpty()) {
             // Should not occur if this dialog was invoked for an existing task.

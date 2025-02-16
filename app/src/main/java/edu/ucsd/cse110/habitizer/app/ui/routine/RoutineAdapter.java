@@ -31,6 +31,8 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
     Consumer<String> onDeleteClick;
     Consumer<String> onEditClick;
 
+    Consumer<String> onAddClick;
+
     Routine routine;
     public RoutineAdapter(Context context, Routine routine,
                           Consumer<String> onEditClick,
@@ -68,6 +70,15 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         TaskViewBinding binding;
         var layoutInflater = LayoutInflater.from(getContext());
         binding = TaskViewBinding.inflate(layoutInflater, parent, false);
+
+        if (routine.getongoing()) {
+            binding.editButton.setVisibility(View.INVISIBLE);
+            binding.deleteButton.setVisibility(View.INVISIBLE);
+        }
+        else {
+            binding.editButton.setVisibility(View.VISIBLE);
+            binding.deleteButton.setVisibility(View.VISIBLE);
+        }
 
         binding.editButton.setOnClickListener(v -> {
             var name = task.getName();

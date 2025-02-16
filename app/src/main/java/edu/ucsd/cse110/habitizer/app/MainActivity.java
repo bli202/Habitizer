@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -110,6 +111,10 @@ public class MainActivity extends AppCompatActivity {
         if (!homeScreen) {
             // Hide the fragment container
             View fragmentContainer = findViewById(R.id.fragment_routine);
+            Button stop = findViewById(R.id.stop_routine_button);
+            if (stop.getVisibility() == View.VISIBLE) {
+                return;
+            }
             fragmentContainer.setVisibility(View.GONE);
 
 

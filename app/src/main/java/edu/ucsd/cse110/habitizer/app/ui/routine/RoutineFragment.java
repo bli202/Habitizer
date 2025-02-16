@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.habitizer.app.ui.routine;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -32,6 +33,8 @@ public class RoutineFragment extends Fragment {
     private MainViewModel activityModel;
     private RoutineAdapter adapter;
 
+    private CountDownTimer timer;
+
     public RoutineFragment() {
         // Required empty public constructor
     }
@@ -60,12 +63,14 @@ public class RoutineFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_routine, container, false);
         Log.d("Routine Fragment", "onCreateView called and adapter made with " + activityModel.getCurRoutine().getValue());
+        Log.d("RoutineFragment", "Current Routine: " + activityModel.getCurRoutine().getValue().getName());
         this.adapter = new RoutineAdapter(requireContext(),
                 activityModel.getCurRoutine().getValue(),
                 name -> {
@@ -74,13 +79,13 @@ public class RoutineFragment extends Fragment {
                 taskName -> {
                     var DeleteTaskdialogFragment = DeleteTaskDialogFragment.newInstance(taskName);
                     DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
-
         });
 
 
         activityModel.getMorningTasks().observe(tasks -> {
             if (tasks == null) return;
             Log.d("RoutineFragment", "Notified Data Set 1");
+            Log.d("RoutineFragment", "Number of tasks: " + activityModel.getMorningTasks().getValue().size());
             adapter.notifyDataSetChanged();
         });
 
@@ -99,22 +104,31 @@ public class RoutineFragment extends Fragment {
 
         Button addTask = view.findViewById(R.id.add_task_button);
         Button startRoutine = view.findViewById(R.id.start_routine_button);
+        Button stopRoutine = view.findViewById(R.id.stop_routine_button);
+
         FloatingActionButton ffButton = view.findViewById(R.id.fast_forward_timer_button);
         FloatingActionButton pauseTimerButton = view.findViewById(R.id.pause_timer_button);
+        FloatingActionButton restartTimerButton = view.findViewById(R.id.restart_timer_button);
 
         activityModel.getCompleted().observe(completed -> {
-            Log.d("HabitizerApplication", "COMPLETED OSVEVSIUDUDSIXOJH!!!");
+            Log.d("RoutineFragment", "COMPLETED OSVEVSIUDUDSIXOJH!!!");
             if(completed == null) {
-                Log.d("HabitizerApplication", "COMPLETED = NULL");
+                Log.d("RoutineFragment", "COMPLETED = NULL");
                 return;
             } else {
-                Log.d("HabitizerApplication", "COMPLETION: " + completed);
+                Log.d("RoutineFragment", "COMPLETION: " + completed);
             }
 //            Log.d("HabitizerApplication",completed.toString());
             if(completed) {
+                adapter.notifyDataSetChanged();
 //                activityModel.getCurRoutine().getValue().setOngoing(false);
+                stopRoutine.setVisibility(View.INVISIBLE);
                 addTask.setVisibility(View.VISIBLE);
                 startRoutine.setVisibility(View.VISIBLE);
+
+                if (timer != null) {
+                    timer.cancel();
+                }
             }
         });
 
@@ -136,13 +150,18 @@ public class RoutineFragment extends Fragment {
 //            routine.startRoutine();
 
             activityModel.startTime();
+            Log.d("RoutineFragment", "ROUTINE SHOULD BE ONGOING: " + activityModel.getCurRoutine().getValue().getongoing());
+            Log.d("RoutineFragment", "COMPLETION: " + activityModel.getCompleted().getValue());
             addTask.setVisibility(View.INVISIBLE);
             startRoutine.setVisibility(View.INVISIBLE);
+            stopRoutine.setVisibility(View.VISIBLE);
+
 
 
             if(true) {
+
                 timerRunning[0] = true;
-                new CountDownTimer(Integer.MAX_VALUE, 1000) {
+                timer = new CountDownTimer(Integer.MAX_VALUE, 1000) {
 
                     @Override
                     public void onTick(long l) {
@@ -151,8 +170,13 @@ public class RoutineFragment extends Fragment {
                         Log.d("HabitizerApplication", "TIMER ONGOING: " + routine.getTimer().getOngoing());
                         actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
                         if (!routine.getongoing()) {
+                            adapter.notifyDataSetChanged();
+                            stopRoutine.setVisibility(View.INVISIBLE);
                             addTask.setVisibility(View.VISIBLE);
                             startRoutine.setVisibility(View.VISIBLE);
+                            if (timer != null) {
+                                timer.cancel();
+                            }
                         }
                     }
 
@@ -173,9 +197,26 @@ public class RoutineFragment extends Fragment {
         });
 
         pauseTimerButton.setOnClickListener(x -> {
-            if(!activityModel.getCurRoutine().getValue().getongoing()) return;
+            if(!activityModel.getCurRoutine().getValue().getTimer().getOngoing()) return;
             activityModel.getCurRoutine().getValue().pauseRoutineTimer();
+            pauseTimerButton.setVisibility(View.GONE);
+            restartTimerButton.setVisibility(View.VISIBLE);
         });
+
+        restartTimerButton.setOnClickListener(v -> {
+            if(activityModel.getCurRoutine().getValue().getTimer().getOngoing()) return;
+            activityModel.getCurRoutine().getValue().pauseRoutineTimer();
+            restartTimerButton.setVisibility(View.GONE);
+            pauseTimerButton.setVisibility(View.VISIBLE);
+        });
+
+        stopRoutine.setOnClickListener(v -> {
+            if(!activityModel.getCurRoutine().getValue().getongoing()) return;
+            activityModel.endRoutine();
+            Log.d("RoutineFragment", "ROUTINE SHOULD NOT BE ONGOING: " + activityModel.getCurRoutine().getValue().getongoing());
+            Log.d("RoutineFragment", "COMPLETION: " + activityModel.getCompleted().getValue());
+        });
+
 
         if (getArguments() != null) {
             titleView.setText(activityModel.getCurRoutine().getValue().getName());

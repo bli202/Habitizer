@@ -33,7 +33,6 @@ public class MainViewModel extends ViewModel {
     private final PlainMutableSubject<Task> firstTask;
     private final PlainMutableSubject<Boolean> completed;
     private final PlainMutableSubject<String> taskName;
-
     private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.MORNING_ROUTINE);
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
@@ -58,13 +57,17 @@ public class MainViewModel extends ViewModel {
         this.eveningTasks = new PlainMutableSubject<>();
 
         // Observe tasks for the specified routine.
+
+
         taskRepository.findAll(InMemoryDataSource.MORNING_ROUTINE.getName())
                 .observe(tasks -> {
             if (tasks == null) return; // Not ready yet, ignore.
-
             // Create a new ordered list (you can add a Comparator if needed).
             List<Task> morningTasks = new ArrayList<>(tasks);
             this.morningTasks.setValue(morningTasks);
+            Log.d("MainViewModel", "Number of Tasks in morningTasks: " + this.morningTasks.getValue().size());
+
+            Log.d("MainViewModel", "Number of Tasks in curRoutine: " + getCurRoutine().getValue().getNumTasks());
 
             Log.d("MainViewModel", Objects.requireNonNull(this.morningTasks.getValue()).get(0).getName());
 
@@ -72,9 +75,10 @@ public class MainViewModel extends ViewModel {
             if (!morningTasks.isEmpty()) {
                 firstTask.setValue(morningTasks.get(0));
             }
-        });
+                });
         taskRepository.findAll(InMemoryDataSource.EVENING_ROUTINE.getName()).observe(tasks -> {
             if (tasks == null) return;
+
 
             List<Task> eveningTasks = new ArrayList<>(tasks);
             this.eveningTasks.setValue(eveningTasks);
@@ -112,7 +116,10 @@ public class MainViewModel extends ViewModel {
      * Removes a task from the current routine.
      */
     public void remove(String name) {
+        Log.d("MainViewModel", "Task being removed: " + name);
         taskRepository.remove(getCurRoutine().getValue().getName(), name);
+        curRoutine.setValue(getCurRoutine().getValue());
+        Log.d("MainViewModel", "Number of Tasks: " + getCurRoutine().getValue().getNumTasks());
     }
 
     public static void switchRoutine(Routine routine) {

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.content.DialogInterface;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,6 +49,7 @@ public class DeleteTaskDialogFragment extends DialogFragment {
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         String taskNameToDelete = getArguments().getString(tName);
         if (taskNameToDelete != null) {
+            Log.d("DeleteTaskDialogFragment", "Task being deleted: " + getArguments().getString(tName));
             activityModel.remove(taskNameToDelete);
         }
         dialog.dismiss();
