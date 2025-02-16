@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.habitizer.app;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.app.ui.home.HomePage;
+import edu.ucsd.cse110.habitizer.app.ui.routine.RoutineAdapter;
 import edu.ucsd.cse110.habitizer.app.ui.routine.RoutineFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
@@ -41,19 +46,14 @@ public class MainActivity extends AppCompatActivity {
         this.view = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(view.getRoot());
 
-//        Initializing 2 mock routines for MS1
-//        Routine routine1 = new Routine(30, "Morning Routine");
-//        Routine routine2 = new Routine(45, "Exercise Routine");
         ArrayList<Routine> routineList = new ArrayList<>();
-//        routineList.add(routine1);
-//        routineList.add(routine2);
 
         routineList.add(InMemoryDataSource.MORNING_ROUTINE);
         routineList.add(InMemoryDataSource.EVENING_ROUTINE);
 
         ListView routineView = findViewById(R.id.routine_view);
 
-        ArrayAdapter<Routine> adapter = new ArrayAdapter<Routine>(
+        ArrayAdapter<Routine> adapter = new ArrayAdapter<>(
                 this,
                 R.layout.routine_view,
                 routineList
@@ -82,11 +82,14 @@ public class MainActivity extends AppCompatActivity {
 
         routineView.setOnItemClickListener((parent, view, position, id) -> {
             Routine selectedRoutine = routineList.get(position);
+            Log.d("MainActivity", "Selected Routine: " + selectedRoutine);
 
             RoutineFragment routineFragment = RoutineFragment.newInstance(
                     selectedRoutine.getTitle(),
                     String.valueOf(selectedRoutine.getDuration())
             );
+
+            routineView.getAdapter().;
 
             routineView.setVisibility(View.GONE);
             findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     .beginTransaction()
                     .replace(R.id.fragment_routine, routineFragment)
                     .commit();
+            Log.d("MainActivity", "routineView : " + routineView);
             homeScreen = !homeScreen;
         });
     }

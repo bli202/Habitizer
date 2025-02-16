@@ -279,9 +279,10 @@ public class InMemoryDataSource {
         data.putRoutine(MORNING_ROUTINE);
         // Add default task to the default routine.
         data.putTask(MORNING_ROUTINE.getTitle(), BRUSH_TEETH);
-        data.putRoutine(EVENING_ROUTINE);
 
+        data.putRoutine(EVENING_ROUTINE);
         data.putTask(EVENING_ROUTINE.getTitle(), SHOWER_TASK);
+
         return data;
     }
 }

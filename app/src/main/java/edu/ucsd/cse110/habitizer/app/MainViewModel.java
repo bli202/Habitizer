@@ -12,6 +12,7 @@ import java.util.List;
 
 import java.util.Objects;
 
+import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
@@ -24,7 +25,6 @@ public class MainViewModel extends ViewModel {
 
     // Domain state (Model) and current routine context.
     private final TaskRepository taskRepository;
-    private final String routineName;
 
     // UI state observables.
     private final PlainMutableSubject<List<Task>> orderedTasks;
@@ -32,7 +32,7 @@ public class MainViewModel extends ViewModel {
     private final PlainMutableSubject<Boolean> completed;
     private final PlainMutableSubject<String> taskName;
 
-    private final PlainMutableSubject<Routine> curRoutine;
+    private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.MORNING_ROUTINE);
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -41,14 +41,13 @@ public class MainViewModel extends ViewModel {
                         var app = (HabitizerApplication) creationExtras.get(APPLICATION_KEY);
                         assert app != null;
                         // Here we are initializing the view model for a specific routine.
-                        return new MainViewModel(app.getTaskRepository(), "Morning Routine");
+                        return new MainViewModel(app.getTaskRepository());
                     });
 
-    public MainViewModel(TaskRepository taskRepository, String routineName) {
+    public MainViewModel(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
-        this.routineName = routineName;
+        //this.routineName = routineName;
 
-        this.curRoutine = (PlainMutableSubject<Routine>) taskRepository.findRoutine(routineName);
         Log.d(LOG_TAG, "MainViewModel constructor");
 
         this.orderedTasks = new PlainMutableSubject<>();
@@ -57,7 +56,7 @@ public class MainViewModel extends ViewModel {
         this.taskName = new PlainMutableSubject<>();
 
         // Observe tasks for the specified routine.
-        taskRepository.findAll(routineName).observe(tasks -> {
+        taskRepository.findAll(curRoutine.getValue().getName()).observe(tasks -> {
             if (tasks == null) return; // Not ready yet, ignore.
 
             // Create a new ordered list (you can add a Comparator if needed).
@@ -79,21 +78,21 @@ public class MainViewModel extends ViewModel {
      * Adds a task to the current routine.
      */
     public void append(Task task) {
-        taskRepository.save(routineName, task);
+        taskRepository.save(getCurRoutine().getValue().getName(), task);
     }
 
     /**
      * Edits an existing task in the current routine.
      */
     public void edit(String oldName, String newName) {
-        taskRepository.edit(routineName, oldName, newName);
+        taskRepository.edit(getCurRoutine().getValue().getName(), oldName, newName);
     }
 
     /**
      * Removes a task from the current routine.
      */
     public void remove(String name) {
-        taskRepository.remove(routineName, name);
+        taskRepository.remove(getCurRoutine().getValue().getName(), name);
     }
 
     public void switchRoutine(String name) {

@@ -58,6 +58,7 @@ public class RoutineFragment extends Fragment {
         args.putString(routine_title, param1);
         args.putString(estimate_time, param2);
         fragment.setArguments(args);
+        adapter.switchRoutine(param1);
         return fragment;
     }
 
@@ -154,7 +155,7 @@ public class RoutineFragment extends Fragment {
         if (getArguments() != null) {
             String routineTitle = getArguments().getString(routine_title);
             String routineDuration = getArguments().getString(estimate_time);
-            activityModel.switchRoutine(routineTitle);
+//            activityModel.switchRoutine(routineTitle);
 
             titleView.setText(routineTitle);
             timeView.setText(routineDuration + " min");
