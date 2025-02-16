@@ -100,6 +100,10 @@ public class Routine {
 //        this.startTime = Instant.now();
 //        this.elapsedTime = Duration.ZERO;
 //        this.cumTaskTime = Instant.now();
+        for(Task t : taskList) {
+            if(t.isCompleted()) t.toggleCompletion();
+        }
+        this.timer = new CustomTimer();
         this.timer.start();
         this.tasksDone = 0;
         this.ongoing = true;
@@ -208,6 +212,10 @@ public class Routine {
         return ongoing;
     }
 
+//    public void setOngoing(boolean b) {
+//        this.ongoing = b;
+//    }
+
     /**
      * Return the num of tasks done
      */
@@ -262,5 +270,9 @@ public class Routine {
      */
     public int getElapsedTimeSecs() {
         return (int) timer.getTime();
+    }
+
+    public CustomTimer getTimer() {
+        return timer;
     }
 }

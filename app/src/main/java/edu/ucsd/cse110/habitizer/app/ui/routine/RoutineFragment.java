@@ -35,6 +35,7 @@ public class RoutineFragment extends Fragment {
     public RoutineFragment() {
         // Required empty public constructor
     }
+    private static final boolean[] timerRunning = {false};
 
     /**
      * Use this factory method to create a new instance of
@@ -111,6 +112,7 @@ public class RoutineFragment extends Fragment {
             }
 //            Log.d("HabitizerApplication",completed.toString());
             if(completed) {
+//                activityModel.getCurRoutine().getValue().setOngoing(false);
                 addTask.setVisibility(View.VISIBLE);
                 startRoutine.setVisibility(View.VISIBLE);
             }
@@ -125,6 +127,8 @@ public class RoutineFragment extends Fragment {
 
         });
 
+//        final boolean[] timerRunning = {false};
+
         startRoutine.setOnClickListener(x -> {
             Log.d("RoutineFragment", "Notified Data Set");
             adapter.notifyDataSetChanged();
@@ -136,22 +140,28 @@ public class RoutineFragment extends Fragment {
             startRoutine.setVisibility(View.INVISIBLE);
 
 
-            new CountDownTimer(Integer.MAX_VALUE, 1000) {
+            if(true) {
+                timerRunning[0] = true;
+                new CountDownTimer(Integer.MAX_VALUE, 1000) {
 
-                @Override
-                public void onTick(long l) {
-                    actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
-                    if(!routine.getongoing()) {
-                        addTask.setVisibility(View.VISIBLE);
-                        startRoutine.setVisibility(View.VISIBLE);
+                    @Override
+                    public void onTick(long l) {
+                        Log.d("HabitizerApplication", "ROUTINE TIME: " + routine.getElapsedTimeSecs());
+                        Log.d("HabitizerApplication", "ROUTINE ONGOING: " + routine.getongoing());
+                        Log.d("HabitizerApplication", "TIMER ONGOING: " + routine.getTimer().getOngoing());
+                        actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
+                        if (!routine.getongoing()) {
+                            addTask.setVisibility(View.VISIBLE);
+                            startRoutine.setVisibility(View.VISIBLE);
+                        }
                     }
-                }
 
-                @Override
-                public void onFinish() {
+                    @Override
+                    public void onFinish() {
 
-                }
-            }.start();
+                    }
+                }.start();
+            }
             Log.d("RoutineFragment", "Notified Data Set");
             adapter.notifyDataSetChanged();
 

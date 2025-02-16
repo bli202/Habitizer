@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
             View fragmentContainer = findViewById(R.id.fragment_routine);
             fragmentContainer.setVisibility(View.GONE);
 
+
             // Show the routine list
             ListView routineView = findViewById(R.id.routine_view);
             routineView.setVisibility(View.VISIBLE);

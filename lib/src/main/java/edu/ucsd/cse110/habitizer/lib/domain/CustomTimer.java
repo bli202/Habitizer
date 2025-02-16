@@ -96,8 +96,14 @@ public class CustomTimer {
     private void update() {
         if(!ongoing) return;
         cumTime += Duration.between(startTime, Instant.now()).toSeconds();
-        taskTime += Duration.between(taskStartTime, Instant.now()).toSeconds();
         startTime = Instant.now();
+//        System.out.println("STARTTIME: " + startTime);
+//        System.out.println("CUMTIME: " + cumTime);
+        taskTime += Duration.between(taskStartTime, Instant.now()).toSeconds();
         taskStartTime = Instant.now();
+    }
+
+    public boolean getOngoing() {
+        return ongoing;
     }
 }
