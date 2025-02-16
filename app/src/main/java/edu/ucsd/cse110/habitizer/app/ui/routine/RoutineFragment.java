@@ -49,8 +49,6 @@ public class RoutineFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment RoutineFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -76,10 +74,6 @@ public class RoutineFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-//        this.adapter = new CardListAdapter(requireContext(), List.of(), id -> {
-//            var dialogFragment = ConfirmDeleteCardDialogFragment.newInstance(id);
-//            dialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
-//        });
     }
 
     @Override
