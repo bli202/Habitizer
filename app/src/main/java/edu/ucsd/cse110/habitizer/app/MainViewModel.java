@@ -34,7 +34,7 @@ public class MainViewModel extends ViewModel {
     private final PlainMutableSubject<Boolean> completed;
     private final PlainMutableSubject<String> taskName;
 
-    private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.DEFAULT_ROUTINE_MORNING);
+    private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.MORNING_ROUTINE);
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -58,7 +58,7 @@ public class MainViewModel extends ViewModel {
         this.eveningTasks = new PlainMutableSubject<>();
 
         // Observe tasks for the specified routine.
-        taskRepository.findAll(InMemoryDataSource.DEFAULT_ROUTINE_MORNING.getName())
+        taskRepository.findAll(InMemoryDataSource.MORNING_ROUTINE.getName())
                 .observe(tasks -> {
             if (tasks == null) return; // Not ready yet, ignore.
 
@@ -73,7 +73,7 @@ public class MainViewModel extends ViewModel {
                 firstTask.setValue(morningTasks.get(0));
             }
         });
-        taskRepository.findAll(InMemoryDataSource.DEFAULT_ROUTINE_EXERCISE.getName()).observe(tasks -> {
+        taskRepository.findAll(InMemoryDataSource.EVENING_ROUTINE.getName()).observe(tasks -> {
             if (tasks == null) return;
 
             List<Task> eveningTasks = new ArrayList<>(tasks);
