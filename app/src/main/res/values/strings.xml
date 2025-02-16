@@ -10,6 +10,7 @@
     <string name="estimated_time">estimated time</string>
     <string name="actual_time">actual time</string>
     <string name="start_routine">Start Routine</string>
+    <string name="stop_routine">Stop Routine</string>
     <string name="add_task">Add Task</string>
     <string name="sample_task">Sample Task</string>
     <string name="edits_a_task">edits a task</string>

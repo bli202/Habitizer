@@ -97,9 +97,6 @@ public class Routine {
             throw new IllegalArgumentException("Cannot start a routine with no tasks");
         }
 
-//        this.startTime = Instant.now();
-//        this.elapsedTime = Duration.ZERO;
-//        this.cumTaskTime = Instant.now();
         for(Task t : taskList) {
             if(t.isCompleted()) t.toggleCompletion();
         }

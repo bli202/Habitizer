@@ -85,13 +85,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <Button
-                android:id="@+id/start_routine_button"
+            <!-- FrameLayout to Stack Start and Stop Routine Buttons -->
+            <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:textColor="@android:color/white"
-                android:text="@string/start_routine" />
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/start_routine_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:textColor="@android:color/white"
+                    android:text="@string/start_routine" />
+
+                <Button
+                    android:id="@+id/stop_routine_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:textColor="@android:color/white"
+                    android:text="@string/stop_routine"
+                    android:visibility="invisible"/>
+
+            </FrameLayout>
 
             <Button
                 android:id="@+id/add_task_button"
@@ -132,7 +148,7 @@
                     android:contentDescription="Restart"
                     android:src="@android:drawable/ic_media_play"
                     app:fabCustomSize="35dp"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     android:layout_gravity="center" />
 
             </FrameLayout>

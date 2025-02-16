@@ -32,6 +32,8 @@ public class RoutineFragment extends Fragment {
     private MainViewModel activityModel;
     private RoutineAdapter adapter;
 
+    private CountDownTimer timer;
+
     public RoutineFragment() {
         // Required empty public constructor
     }
@@ -99,6 +101,7 @@ public class RoutineFragment extends Fragment {
 
         Button addTask = view.findViewById(R.id.add_task_button);
         Button startRoutine = view.findViewById(R.id.start_routine_button);
+        Button stopRoutine = view.findViewById(R.id.stop_routine_button);
         FloatingActionButton ffButton = view.findViewById(R.id.fast_forward_timer_button);
         FloatingActionButton pauseTimerButton = view.findViewById(R.id.pause_timer_button);
         FloatingActionButton restartTimerButton = view.findViewById(R.id.restart_timer_button);
@@ -114,8 +117,10 @@ public class RoutineFragment extends Fragment {
 //            Log.d("HabitizerApplication",completed.toString());
             if(completed) {
 //                activityModel.getCurRoutine().getValue().setOngoing(false);
+                stopRoutine.setVisibility(View.INVISIBLE);
                 addTask.setVisibility(View.VISIBLE);
                 startRoutine.setVisibility(View.VISIBLE);
+                timer.cancel();
             }
         });
 
@@ -137,13 +142,18 @@ public class RoutineFragment extends Fragment {
 //            routine.startRoutine();
 
             activityModel.startTime();
+            Log.d("RoutineFragment", "ROUTINE SHOULD BE ONGOING: " + activityModel.getCurRoutine().getValue().getongoing());
+            Log.d("RoutineFragment", "COMPLETION: " + activityModel.getCompleted().getValue());
             addTask.setVisibility(View.INVISIBLE);
             startRoutine.setVisibility(View.INVISIBLE);
+            stopRoutine.setVisibility(View.VISIBLE);
+
 
 
             if(true) {
+
                 timerRunning[0] = true;
-                new CountDownTimer(Integer.MAX_VALUE, 1000) {
+                timer = new CountDownTimer(Integer.MAX_VALUE, 1000) {
 
                     @Override
                     public void onTick(long l) {
@@ -152,8 +162,10 @@ public class RoutineFragment extends Fragment {
                         Log.d("HabitizerApplication", "TIMER ONGOING: " + routine.getTimer().getOngoing());
                         actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
                         if (!routine.getongoing()) {
+                            stopRoutine.setVisibility(View.INVISIBLE);
                             addTask.setVisibility(View.VISIBLE);
                             startRoutine.setVisibility(View.VISIBLE);
+                            timer.cancel();
                         }
                     }
 
@@ -185,6 +197,13 @@ public class RoutineFragment extends Fragment {
             activityModel.getCurRoutine().getValue().pauseRoutineTimer();
             restartTimerButton.setVisibility(View.GONE);
             pauseTimerButton.setVisibility(View.VISIBLE);
+        });
+
+        stopRoutine.setOnClickListener(v -> {
+            if(!activityModel.getCurRoutine().getValue().getongoing()) return;
+            activityModel.endRoutine();
+            Log.d("RoutineFragment", "ROUTINE SHOULD NOT BE ONGOING: " + activityModel.getCurRoutine().getValue().getongoing());
+            Log.d("RoutineFragment", "COMPLETION: " + activityModel.getCompleted().getValue());
         });
 
 
