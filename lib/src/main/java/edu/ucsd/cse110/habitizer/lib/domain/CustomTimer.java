@@ -48,7 +48,7 @@ public class CustomTimer {
         if (!ongoing) return 0;
         update();
         ongoing = false;
-        return cumTime;
+        return cumTime / 1000;
     }
 
     /**
@@ -58,7 +58,7 @@ public class CustomTimer {
      */
     public long getTime() {
         update();
-        return cumTime;
+        return cumTime / 1000;
     }
 
     /**
@@ -73,7 +73,7 @@ public class CustomTimer {
     public long getTaskTime() {
         update();
         taskStartTime = Instant.now();
-        long returnVal = taskTime;
+        long returnVal = taskTime / 1000;
         taskTime = 0;
         return returnVal;
     }
@@ -85,8 +85,8 @@ public class CustomTimer {
      */
     public void addTime(long seconds) {
         update();
-        cumTime += seconds;
-        taskTime += seconds;
+        cumTime += seconds * 1000;
+        taskTime += seconds * 1000;
     }
 
     /**
@@ -95,11 +95,11 @@ public class CustomTimer {
      */
     private void update() {
         if(!ongoing) return;
-        cumTime += Duration.between(startTime, Instant.now()).toSeconds();
+        cumTime += Duration.between(startTime, Instant.now()).toMillis();
         startTime = Instant.now();
 //        System.out.println("STARTTIME: " + startTime);
 //        System.out.println("CUMTIME: " + cumTime);
-        taskTime += Duration.between(taskStartTime, Instant.now()).toSeconds();
+        taskTime += Duration.between(taskStartTime, Instant.now()).toMillis();
         taskStartTime = Instant.now();
     }
 

@@ -125,10 +125,6 @@ public class RoutineFragment extends Fragment {
                 stopRoutine.setVisibility(View.INVISIBLE);
                 addTask.setVisibility(View.VISIBLE);
                 startRoutine.setVisibility(View.VISIBLE);
-
-                if (timer != null) {
-                    timer.cancel();
-                }
             }
         });
 
@@ -161,22 +157,22 @@ public class RoutineFragment extends Fragment {
             if(true) {
 
                 timerRunning[0] = true;
-                timer = new CountDownTimer(Integer.MAX_VALUE, 1000) {
+                if (timer != null) {
+                    timer.cancel();
+                }
+                timer = new CountDownTimer(Integer.MAX_VALUE, 10) {
 
                     @Override
                     public void onTick(long l) {
-                        Log.d("HabitizerApplication", "ROUTINE TIME: " + routine.getElapsedTimeSecs());
-                        Log.d("HabitizerApplication", "ROUTINE ONGOING: " + routine.getongoing());
-                        Log.d("HabitizerApplication", "TIMER ONGOING: " + routine.getTimer().getOngoing());
+//                        Log.d("HabitizerApplication", "ROUTINE TIME: " + routine.getElapsedTimeSecs());
+//                        Log.d("HabitizerApplication", "ROUTINE ONGOING: " + routine.getongoing());
+//                        Log.d("HabitizerApplication", "TIMER ONGOING: " + routine.getTimer().getOngoing());
                         actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
                         if (!routine.getongoing()) {
                             adapter.notifyDataSetChanged();
                             stopRoutine.setVisibility(View.INVISIBLE);
                             addTask.setVisibility(View.VISIBLE);
                             startRoutine.setVisibility(View.VISIBLE);
-                            if (timer != null) {
-                                timer.cancel();
-                            }
                         }
                     }
 

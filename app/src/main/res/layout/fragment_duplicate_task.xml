@@ -12,7 +12,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:ems="10"
-        android:text="@string/duplicate_task"
+        android:text="@string/invalid_task"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

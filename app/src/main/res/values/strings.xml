@@ -5,7 +5,6 @@
     <string name="routine">Routine</string>
     <string name="estimated_routine_time">Estimated Routine Time</string>
     <string name="routine_view">Routine View</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="estimated_time">estimated time</string>
     <string name="actual_time">actual time</string>
@@ -16,5 +15,5 @@
     <string name="edits_a_task">edits a task</string>
     <string name="deletes_a_task">deletes a task</string>
     <string name="time_taken">Time Taken</string>
-    <string name="duplicate_task">Cannot have two tasks with the same name!</string>
+    <string name="invalid_task">Invalid task name, please change it!</string>
 </resources>
