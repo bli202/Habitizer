@@ -75,22 +75,24 @@
 
 
         <!-- Bottom Button Bar -->
-        <LinearLayout
+        <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/button_bar"
             style="?android:attr/buttonBarStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:flexWrap="wrap"
+            app:justifyContent="center"
+            app:alignItems="center">
 
             <!-- FrameLayout to Stack Start and Stop Routine Buttons -->
             <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <Button
                     android:id="@+id/start_routine_button"
@@ -115,6 +117,7 @@
                 android:id="@+id/add_task_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dp"
                 android:layout_marginStart="8dp"
                 android:textColor="@android:color/white"
                 android:text="@string/add_task" />
@@ -123,6 +126,7 @@
                 android:id="@+id/fast_forward_timer_button"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
+                android:layout_margin="4dp"
                 android:clickable="true"
                 android:src="@drawable/ic_ff_timer"
                 app:fabCustomSize="35dp" />
@@ -130,14 +134,15 @@
             <!-- FrameLayout to Stack Pause and Restart Buttons -->
             <FrameLayout
                 android:layout_width="35dp"
-                android:layout_height="35dp">
+                android:layout_height="35dp"
+                android:layout_margin="4dp">
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/pause_timer_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clickable="true"
-                    android:contentDescription="Pause"
+                    android:contentDescription="@string/pause"
                     android:src="@android:drawable/ic_media_pause"
                     app:fabCustomSize="35dp"
                     android:layout_gravity="center" />
@@ -147,7 +152,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clickable="true"
-                    android:contentDescription="Restart"
+                    android:contentDescription="@string/restart"
                     android:src="@android:drawable/ic_media_play"
                     app:fabCustomSize="35dp"
                     android:visibility="invisible"
@@ -155,6 +160,6 @@
 
             </FrameLayout>
 
-        </LinearLayout>
+        </com.google.android.flexbox.FlexboxLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
