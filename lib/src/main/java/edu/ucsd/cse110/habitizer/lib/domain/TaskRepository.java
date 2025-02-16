@@ -32,7 +32,6 @@ public class TaskRepository {
                 return dataSource.getTaskSubject(taskName);
             }
         }
-
         return null;
     }
 

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -30,6 +31,7 @@ public class MainViewModel extends ViewModel {
     private final PlainMutableSubject<Task> firstTask;
     private final PlainMutableSubject<Boolean> completed;
     private final PlainMutableSubject<String> taskName;
+
     private final PlainMutableSubject<Routine> curRoutine;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -45,6 +47,7 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(TaskRepository taskRepository, String routineName) {
         this.taskRepository = taskRepository;
         this.routineName = routineName;
+
         this.curRoutine = (PlainMutableSubject<Routine>) taskRepository.findRoutine(routineName);
         Log.d(LOG_TAG, "MainViewModel constructor");
 
