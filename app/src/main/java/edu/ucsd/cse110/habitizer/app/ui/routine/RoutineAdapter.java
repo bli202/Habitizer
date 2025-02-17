@@ -6,27 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.TaskViewBinding;
-import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import android.graphics.Paint;
-import android.widget.TextView;
 
 public class RoutineAdapter extends ArrayAdapter<Task> {
 
@@ -64,7 +55,6 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
             Log.e("RoutineAdapter", "Task is NULL at position " + position);
             return new View(getContext());
         }
-        assert task != null;
 
         Log.d("RoutineAdapter", "Displaying task: " + task.getName());
 
@@ -80,7 +70,6 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         else {
             binding.editButton.setVisibility(View.VISIBLE);
             binding.deleteButton.setVisibility(View.VISIBLE);
-            //return binding.getRoot();
         }
 
 
@@ -144,12 +133,4 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         Log.d("RoutineAdapter", "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
         return task;
     }
-
-    public void switchRoutine(Routine routine) {
-        this.clear();
-        this.addAll(routine.getTaskList());
-    }
-
-
-
 }
