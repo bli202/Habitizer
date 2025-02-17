@@ -7,16 +7,9 @@ import org.junit.Test;
 
 public class CustomTimerTest {
 
-    CustomTimer t;
-
     /**
-     * Initializes
+     * Timer starts counting when started
      */
-    @Before
-    public void setup() {
-        CustomTimer t = new CustomTimer();
-    }
-
     @Test
     public void start() throws InterruptedException {
         CustomTimer t = new CustomTimer();
@@ -27,6 +20,9 @@ public class CustomTimerTest {
         assertEquals(1, t.getTime());
     }
 
+    /**
+     * Timer does not count natural time while paused
+     */
     @Test
     public void pause() throws InterruptedException {
         CustomTimer t = new CustomTimer();
@@ -38,6 +34,9 @@ public class CustomTimerTest {
         assertEquals(1, t.getTime());
     }
 
+    /**
+     * Correct number of seconds is returned
+     */
     @Test
     public void getTime() throws InterruptedException {
         CustomTimer t = new CustomTimer();
@@ -47,7 +46,8 @@ public class CustomTimerTest {
     }
 
     /**
-     * Tests taskTime.
+     * Correct task time is returned for each task; each call should return
+     * the number of seconds between now and the previous call
      */
     @Test
     public void getTaskTime() throws InterruptedException {
@@ -61,7 +61,7 @@ public class CustomTimerTest {
     }
 
     /**
-     * Tests add time.
+     * Manually adding time works properly
      */
     @Test
     public void addTime() throws InterruptedException {

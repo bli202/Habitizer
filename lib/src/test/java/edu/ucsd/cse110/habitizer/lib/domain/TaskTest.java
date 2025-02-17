@@ -12,9 +12,10 @@ import java.time.*;
 public class TaskTest {
 
     private final Task shower = new Task("Take shower");
-    private final Task lunch = new Task("Make lunch");
-    private final Task dinner = new Task("Make dinner");
 
+    /**
+     * Task is properly instantiated with name and 0 time spent
+     */
     @Test
     public void testStartState() {
 
@@ -48,7 +49,6 @@ public class TaskTest {
                 expectedName, actName);
     }
 
-    //Testing getTime and setTime getter/setter
     @Test
     public void testSetGetTaskTime() {
         var shower = new Task("Take shower");

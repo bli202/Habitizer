@@ -3,8 +3,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.*;
 
 public class RoutineTest {
@@ -16,13 +14,15 @@ public class RoutineTest {
     private final Routine night = new Routine(duration_2, "Night");
     private final Routine school = new Routine(duration_3, "School");
 
+    /**
+     * Routine is properly initialized with duration and name
+     */
     @Test
     public void testRoutineInitialState() {
         var morning = new Routine(duration, "Morning");
         var expectedDuration = duration;
         var actDuration = morning.getEstimatedTime();
-        //checks initial num of task in routine
-        assertFalse(morning.getongoing());
+        assertFalse(morning.getOngoing());
         assertEquals(0, morning.getElapsedTime());
         assertEquals(expectedDuration, actDuration);
         assertEquals("Morning", morning.getName());
@@ -30,6 +30,9 @@ public class RoutineTest {
 
     }
 
+    /**
+     * Tasks are added properly
+     */
     @Test
     public void testAddTask() {
 
@@ -49,6 +52,10 @@ public class RoutineTest {
 
     }
 
+    /**
+     * Attempting to add a task with the same name as an existing task
+     * throws an error
+     */
     @Test
     public void testAddTaskDup() {
 
@@ -68,6 +75,9 @@ public class RoutineTest {
         }
     }
 
+    /**
+     * Cannot add task while routine is ongoing
+     */
     @Test
     public void testAddTaskOngoingRoutine() {
 
@@ -78,6 +88,9 @@ public class RoutineTest {
         assertFalse(morning.addTask(brush));
     }
 
+    /**
+     * Cannot remove task while routine is ongoing
+     */
     @Test
     public void testRemoveTaskOngoing() {
 
@@ -87,6 +100,9 @@ public class RoutineTest {
         assertFalse(morning.removeTask(shower));
     }
 
+    /**
+     * Properly remove tasks (while routine not ongoing)
+     */
     @Test
     public void testRemoveTask() {
 
@@ -97,6 +113,9 @@ public class RoutineTest {
       assertEquals(night.getTaskList().size(), 0);
     }
 
+    /**
+     * Properly check off task
+     */
     @Test
     public void testCheckOffTask() {
 
@@ -111,7 +130,9 @@ public class RoutineTest {
       assertFalse(lunch.isCompleted());
     }
 
-
+    /**
+     * Task times are correct after checking off
+     */
     @Test
     public void testTaskTimer() throws InterruptedException {
         final Task lunch = new Task("lunch");
@@ -132,6 +153,9 @@ public class RoutineTest {
         assertEquals(3, lunch.getTimeSpent());
     }
 
+    /**
+     * Cannot start an empty routine
+     */
     @Test
     public void testStartRoutineNoTask() {
 
@@ -143,6 +167,9 @@ public class RoutineTest {
         }
     }
 
+    /**
+     * Routine should have no tasks done and have no elapsed time right after starting
+     */
     @Test
     public void testStartRoutineState() {
 
@@ -152,10 +179,12 @@ public class RoutineTest {
 
         assertEquals(0, morning.getTasksDone());
         assertEquals(0, morning.getElapsedTime());
-//        assertEquals(Instant.now().toEpochMilli(), morning.getStartTime().toEpochMilli(), 100);
-        assertTrue(morning.getongoing());
+        assertTrue(morning.getOngoing());
     }
 
+    /**
+     * Properly retrieve task list from routine
+     */
     @Test
     public void testGetTaskList() {
         final Task lunch = new Task("lunch");
@@ -176,48 +205,37 @@ public class RoutineTest {
         assertEquals(expectedAns, actualAns);
     }
 
-//    @Test
-//    public void testGetCumTaskTime() throws InterruptedException {
-//        var morning = new Routine(duration, "Morning");
-//        final Task brush = new Task("brush");
-////        assertNotNull(morning.getCumTaskTime());
-//
-//        morning.addTask(brush);
-//        morning.startRoutine();
-//        //Get the cumulative task time before checking off a task, which should be 0
-//        Instant beforeCheckOff = morning.getCumTaskTime();
-//        Thread.sleep(1000);
-//        morning.checkOffTask(brush);
-//        //here we should get a time for 1 second
-//        Instant afterCheckOff = morning.getCumTaskTime();
-//
-//        int actAns = (int) (afterCheckOff.toEpochMilli() - beforeCheckOff.toEpochMilli());
-//        assertEquals(1000, actAns, 100);
-//    }
-
+    /**
+     * Ongoing boolean is properly updated when routine is
+     * started (true) and manually or automatically ended (false)
+     */
     @Test
     public void testIsOnGoing() {
 
         final Task brush = new Task("brush");
         final Task eat = new Task("eat");
 
-        assertFalse(morning.getongoing());
+        assertFalse(morning.getOngoing());
         morning.addTask(brush);
         morning.addTask(eat);
         morning.startRoutine();
-        assertTrue(morning.getongoing());
+        assertTrue(morning.getOngoing());
         morning.checkOffTask(brush);
-        assertTrue(morning.getongoing());
+        assertTrue(morning.getOngoing());
         morning.endRoutine();
-        assertFalse(morning.getongoing());
+        assertFalse(morning.getOngoing());
 
         school.addTask(eat);
         school.startRoutine();
         school.checkOffTask(eat);
-        assertFalse(school.getongoing());
+        assertFalse(school.getOngoing());
 
     }
 
+    /**
+     * Number of tasks properly updates with adding and removing tasks;
+     * number of completed tasks properly updates when tasks are checked off
+     */
     @Test
     public void testGetTasksDoneGetNumTask() {
 
@@ -240,8 +258,11 @@ public class RoutineTest {
         assertEquals(2, morning.getTasksDone());
     }
 
+    /**
+     * Routine name and expected time properly instantiated
+     */
     @Test
-    public void getNameandEstimatedTime() {
+    public void getNameAndEstimatedTime() {
         String name = "New Routine";
         int expectedTime = 1000;
         final Routine testRoutine = new Routine(expectedTime, name);
@@ -249,6 +270,9 @@ public class RoutineTest {
         assertEquals(name, testRoutine.getName());
     }
 
+    /**
+     * Routine timer stops counting when routine is paused
+     */
     @Test
     public void pauseRoutineTimer() throws InterruptedException {
         Routine testRoutine = new Routine(10, "test");
@@ -260,6 +284,9 @@ public class RoutineTest {
         assertEquals(1, testRoutine.getElapsedTimeSecs());
     }
 
+    /**
+     * Routine timer can manually add time even when paused
+     */
     @Test
     public void manualAddTime() throws InterruptedException {
         Routine testRoutine = new Routine(10, "test");
@@ -273,6 +300,9 @@ public class RoutineTest {
         assertEquals(47, testRoutine.getElapsedTimeSecs());
     }
 
+    /**
+     * Tasks are properly renamed when edited
+     */
     @Test
     public void editTask() {
         Routine testRoutine = new Routine(10, "test");
@@ -286,6 +316,9 @@ public class RoutineTest {
         assertEquals("renamed task 2", testRoutine.getTaskList().get(1).getName());
     }
 
+    /**
+     * Cannot edit a task name to the name of another existing task
+     */
     @Test
     public void editTaskDup() {
 
@@ -310,7 +343,6 @@ public class RoutineTest {
         testRoutine.addTask(task1);
         testRoutine.addTask(task2);
         testRoutine.addTask(task3);
-//        String expectedErrMsg = "Cannot have two tasks with the same name in Routine";
         try {
             testRoutine.editTask(task2, "test task 3");
 
@@ -319,15 +351,9 @@ public class RoutineTest {
         }
     }
 
-//    @Test
-//    public void getStartTime() throws InterruptedException{
-//        final Task brush = new Task("brush");
-//        Instant expStartTime = Instant.now();
-//        morning.addTask(brush);
-//        morning.startRoutine();
-//        assertEquals(expStartTime.toEpochMilli(), morning.getStartTime().toEpochMilli(), 100);
-//    }
-
+    /**
+     * Ending and restarting routine properly resets timer
+     */
     @Test
     public void pauseRestartRoutine() throws InterruptedException {
         var morning = new Routine(duration, "Morning");
