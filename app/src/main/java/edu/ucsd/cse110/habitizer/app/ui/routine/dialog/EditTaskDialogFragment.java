@@ -61,21 +61,7 @@ public class EditTaskDialogFragment extends DialogFragment {
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         // Get the new task name from the EditText.
         String newName = binding.editTask.getText().toString().trim();
-//        if (newName.isEmpty()) {
-//            // Optionally, display an error message if the new name is empty.
-//            dialog.dismiss();
-//            return;
-//        }
-//        Log.d("EditTaskDialogFragment", "Current Routine: " + activityModel.getCurRoutine().getValue().getTaskList());
-//        for (Task t : activityModel.getCurRoutine().getValue().getTaskList()) {
-//            Log.d("EditTaskDialogFragment", "Task Name: " + t.getName());
-//            if (t.getName().equals(newName)) {
-//                var dialogFragment = new NoDuplicateDialogFragment();
-//                dialogFragment.show(getChildFragmentManager(), "NoDuplicateDialogFragment");
-//                dialog.dismiss();
-//                return;
-//            }
-//        }
+
         // Retrieve the old task name from the arguments.
         String oldTaskName = "";
         if (getArguments() != null) {
