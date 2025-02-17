@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
+import edu.ucsd.cse110.habitizer.app.R;
 
 
 public class DeleteTaskDialogFragment extends DialogFragment {
