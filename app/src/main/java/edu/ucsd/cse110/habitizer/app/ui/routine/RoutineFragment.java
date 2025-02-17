@@ -141,9 +141,11 @@ public class RoutineFragment extends Fragment {
         });
 
         timeView.setOnClickListener(v -> {
-            var dialogFragment = new EditTimeDialogFragment();
-            dialogFragment.show(getChildFragmentManager(), "EditTimeDialogFragment");
-            Log.d("RoutineFragment", "getTime: " + activityModel.getCurRoutine().getValue().getEstimatedTime());
+            if (!activityModel.getCurRoutine().getValue().getongoing()) {
+                var dialogFragment = new EditTimeDialogFragment();
+                dialogFragment.show(getChildFragmentManager(), "EditTimeDialogFragment");
+                Log.d("RoutineFragment", "getTime: " + activityModel.getCurRoutine().getValue().getEstimatedTime());
+            }
         });
         
         activityModel.getCurRoutine().observe(routine -> {
