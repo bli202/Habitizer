@@ -161,36 +161,31 @@ public class RoutineFragment extends Fragment {
             stopRoutine.setVisibility(View.VISIBLE);
 
 
-
-
-            if(true) {
-
-                timerRunning[0] = true;
-                if (timer != null) {
-                    timer.cancel();
-                }
-                timer = new CountDownTimer(Integer.MAX_VALUE, 10) {
-
-                    @Override
-                    public void onTick(long l) {
-//                        Log.d("HabitizerApplication", "ROUTINE TIME: " + routine.getElapsedTimeSecs());
-//                        Log.d("HabitizerApplication", "ROUTINE ONGOING: " + routine.getongoing());
-//                        Log.d("HabitizerApplication", "TIMER ONGOING: " + routine.getTimer().getOngoing());
-                        actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
-                        if (!routine.getongoing()) {
-                            adapter.notifyDataSetChanged();
-                            stopRoutine.setVisibility(View.INVISIBLE);
-                            addTask.setVisibility(View.VISIBLE);
-                            startRoutine.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onFinish() {
-
-                    }
-                }.start();
+            timerRunning[0] = true;
+            if (timer != null) {
+                timer.cancel();
             }
+
+            timer = new CountDownTimer(Integer.MAX_VALUE, 1000) {
+
+
+                @Override
+                public void onTick(long l) {
+
+                    actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
+                    if (!routine.getongoing()) {
+                        adapter.notifyDataSetChanged();
+                        stopRoutine.setVisibility(View.INVISIBLE);
+                        addTask.setVisibility(View.VISIBLE);
+                        startRoutine.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            }.start();
             Log.d("RoutineFragment", "Notified Data Set");
             adapter.notifyDataSetChanged();
 
