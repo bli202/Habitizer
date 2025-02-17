@@ -18,4 +18,5 @@
     <string name="restart">Restart</string>
     <string name="pause">Pause</string>
     <string name="invalid_task">Invalid task name, please change it!</string>
+    <string name="invalid_start">Please add a task to start your routine!</string>
 </resources>

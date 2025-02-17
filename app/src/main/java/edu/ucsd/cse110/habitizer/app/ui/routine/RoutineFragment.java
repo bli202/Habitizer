@@ -22,6 +22,8 @@ import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidStartDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidTaskDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -145,12 +147,19 @@ public class RoutineFragment extends Fragment {
             var routine = activityModel.getCurRoutine().getValue();
 //            routine.startRoutine();
 
+            if (routine.getNumTasks() == 0) {
+                var dialogFragment = InvalidStartDialogFragment.newInstance();
+                dialogFragment.show(getParentFragmentManager(), "InvalidStartDialogFragment");
+                return;
+            }
+
             activityModel.startTime();
             Log.d("RoutineFragment", "ROUTINE SHOULD BE ONGOING: " + activityModel.getCurRoutine().getValue().getongoing());
             Log.d("RoutineFragment", "COMPLETION: " + activityModel.getCompleted().getValue());
             addTask.setVisibility(View.INVISIBLE);
             startRoutine.setVisibility(View.INVISIBLE);
             stopRoutine.setVisibility(View.VISIBLE);
+
 
 
 
