@@ -14,7 +14,9 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentDialogAddTaskBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentEditTimeBinding;
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.observables.PlainMutableSubject;
 
 public class EditTimeDialogFragment extends DialogFragment {
 
@@ -50,18 +52,20 @@ public class EditTimeDialogFragment extends DialogFragment {
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var time = view.editTime.getText().toString();
         try {
-            try {
-                int t = Integer.parseInt(time);
-                activityModel.getCurRoutine().getValue().setEstimatedTime(t);
-                Log.d("EditTimeDialogFragment", "Estimated Time: " + activityModel.getCurRoutine().getValue().getEstimatedTime());
-            } catch (Exception e) {
-                    var dialogFragment = new InvalidTimeDialogFragment();
-                    dialogFragment.show(getParentFragmentManager(), "InvalidTimeDialogFragment");
-                    dialog.dismiss();
-                    return;
-            }
+            int t = Integer.parseInt(time);
+            // Get current routine
+            Routine currentRoutine = activityModel.getCurRoutine().getValue();
+            // Update the time
+            currentRoutine.setEstimatedTime(t);
+            // Update the Subject with the modified routine
+            ((PlainMutableSubject<Routine>) activityModel.getCurRoutine()).setValue(currentRoutine);
+
+            Log.d("EditTimeDialogFragment", "Estimated Time: " + currentRoutine.getEstimatedTime());
         } catch (Exception e) {
-            Log.e("EditTaskDialogFragment", "Exception while checking task list", e);
+            var dialogFragment = new InvalidTimeDialogFragment();
+            dialogFragment.show(getParentFragmentManager(), "InvalidTimeDialogFragment");
+            dialog.dismiss();
+            return;
         }
         dialog.dismiss();
     }

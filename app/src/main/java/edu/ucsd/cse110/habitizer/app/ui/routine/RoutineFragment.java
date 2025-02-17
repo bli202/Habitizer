@@ -145,12 +145,10 @@ public class RoutineFragment extends Fragment {
             dialogFragment.show(getChildFragmentManager(), "EditTimeDialogFragment");
             Log.d("RoutineFragment", "getTime: " + activityModel.getCurRoutine().getValue().getEstimatedTime());
         });
-
-        activityModel.getEstimatedTime().observe(time -> {
-            timeView.setText(activityModel.getCurRoutine().getValue().getEstimatedTime() + " min");
-            //adapter.notifyDataSetChanged();
+        
+        activityModel.getCurRoutine().observe(routine -> {
+            timeView.setText(routine.getEstimatedTime() + " min");
         });
-
 
 //        final boolean[] timerRunning = {false};
 
