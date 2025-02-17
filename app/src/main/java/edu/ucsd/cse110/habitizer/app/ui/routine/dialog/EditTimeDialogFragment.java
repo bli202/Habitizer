@@ -13,20 +13,21 @@ import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentDialogAddTaskBinding;
+import edu.ucsd.cse110.habitizer.app.databinding.FragmentEditTimeBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
-public class AddTaskDialogFragment extends DialogFragment {
+public class EditTimeDialogFragment extends DialogFragment {
 
-    private FragmentDialogAddTaskBinding view;
+    private FragmentEditTimeBinding view;
     private MainViewModel activityModel;
 
 
-    public AddTaskDialogFragment() {
+    public EditTimeDialogFragment() {
 
     }
 
-    public static AddTaskDialogFragment newInstance() {
-        var fragment = new AddTaskDialogFragment();
+    public static EditTimeDialogFragment newInstance() {
+        var fragment = new EditTimeDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -35,34 +36,33 @@ public class AddTaskDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = FragmentDialogAddTaskBinding.inflate(getLayoutInflater());
+        this.view = FragmentEditTimeBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("New Task")
-                .setMessage("Please provide task name")
+                .setTitle("Edit Estimated Routine Time")
+                .setMessage("Please enter the estimated time for this routine!")
                 .setView(view.getRoot())
-                .setPositiveButton("Create", this::onPositiveButtonClick)
+                .setPositiveButton("Confirm", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .create();
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
-        var name = view.taskNameEditText.getText().toString();
-
-        var task = new Task(name);
+        var time = view.editTime.getText().toString();
         try {
-            for (Task t : activityModel.getCurRoutine().getValue().getTaskList()) {
-                if (t.getName().equals(name) || name.isEmpty()) {
-                    var dialogFragment = InvalidTaskDialogFragment.newInstance("");
-                    dialogFragment.show(getParentFragmentManager(), "InvalidTaskDialogFragment");
+            try {
+                int t = Integer.parseInt(time);
+                activityModel.getCurRoutine().getValue().setEstimatedTime(t);
+                Log.d("EditTimeDialogFragment", "Estimated Time: " + activityModel.getCurRoutine().getValue().getEstimatedTime());
+            } catch (Exception e) {
+                    var dialogFragment = new InvalidTimeDialogFragment();
+                    dialogFragment.show(getParentFragmentManager(), "InvalidTimeDialogFragment");
                     dialog.dismiss();
                     return;
-                }
             }
         } catch (Exception e) {
             Log.e("EditTaskDialogFragment", "Exception while checking task list", e);
         }
-        activityModel.append(task);
         dialog.dismiss();
     }
 

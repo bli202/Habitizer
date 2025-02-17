@@ -22,6 +22,7 @@ import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidStartDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidTaskDialogFragment;
 
@@ -138,6 +139,18 @@ public class RoutineFragment extends Fragment {
             adapter.notifyDataSetChanged();
 
         });
+
+        timeView.setOnClickListener(v -> {
+            var dialogFragment = new EditTimeDialogFragment();
+            dialogFragment.show(getChildFragmentManager(), "EditTimeDialogFragment");
+            Log.d("RoutineFragment", "getTime: " + activityModel.getCurRoutine().getValue().getEstimatedTime());
+        });
+
+        activityModel.getEstimatedTime().observe(time -> {
+            timeView.setText(activityModel.getCurRoutine().getValue().getEstimatedTime() + " min");
+            //adapter.notifyDataSetChanged();
+        });
+
 
 //        final boolean[] timerRunning = {false};
 

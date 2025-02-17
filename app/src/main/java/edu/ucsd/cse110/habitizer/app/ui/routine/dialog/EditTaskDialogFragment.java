@@ -89,7 +89,7 @@ public class EditTaskDialogFragment extends DialogFragment {
                 if (t.getName().equals(newName) || newName.isEmpty()) {
                     Log.d("EditTaskDialogFragment", "they r equal");
                     var dialogFragment = InvalidTaskDialogFragment.newInstance(oldTaskName);
-                    dialogFragment.show(getParentFragmentManager(), "NoDuplicateDialogFragment");
+                    dialogFragment.show(getParentFragmentManager(), "InvalidTaskDialogFragment");
                     dialog.dismiss();
                     return;
                 }
