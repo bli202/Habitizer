@@ -34,8 +34,6 @@ public class InMemoryDataSource {
         allRoutinesSubject.setValue(new ArrayList<>());
     }
 
-    // =================== Routine CRUD ===================
-
     /**
      * Returns a copy of all routines.
      */
@@ -89,35 +87,6 @@ public class InMemoryDataSource {
     }
 
     /**
-     * Removes a routine and all its associated tasks.
-     */
-    public void removeRoutine(String routineName) {
-        routines.remove(routineName);
-        // Remove all tasks associated with this routine.
-        List<Task> removedTasks = routineTasks.remove(routineName);
-        if (removedTasks != null) {
-            for (Task task : removedTasks) {
-                tasks.remove(task.getName());
-                taskSubjects.remove(task.getName());
-            }
-        }
-        routineSubjects.remove(routineName);
-        routineTasksSubjects.remove(routineName);
-        allRoutinesSubject.setValue(getRoutines());
-    }
-
-    /**
-     * Edits a routine by replacing the old routine with the new one.
-     * (You could also update properties directly on the Routine.)
-     */
-    public void editRoutine(String oldRoutineName, Routine newRoutine) {
-        removeRoutine(oldRoutineName);
-        putRoutine(newRoutine);
-    }
-
-    // =================== Task CRUD within a Routine ===================
-
-    /**
      * Returns a copy of the tasks in the specified routine.
      */
     public List<Task> getTasksForRoutine(String routineName) {
@@ -146,6 +115,7 @@ public class InMemoryDataSource {
      * Updates both the global tasks mapping and the routine's task list.
      */
     public void putTask(String routineName, Task task) {
+
         // Update global mapping.
         tasks.put(task.getName(), task);
         // Update the routine's task list.
@@ -167,6 +137,7 @@ public class InMemoryDataSource {
         if (!updated) {
             tasksList.add(task);
         }
+
         // Update observable subject for this routine's tasks.
         if (routineTasksSubjects.containsKey(routineName)) {
             routineTasksSubjects.get(routineName).setValue(getTasksForRoutine(routineName));
@@ -177,18 +148,16 @@ public class InMemoryDataSource {
      * Removes a task from a specific routine.
      */
     public void removeTask(String routineName, String taskName) {
-        // Remove from global mapping.
         List<Task> tasksList = routineTasks.get(routineName);
         Routine routine = routines.get(routineName);
         routine.removeTask(tasks.get(taskName));
 
         tasks.remove(taskName);
-        // Remove from the routine's task list.
 
         if (tasksList != null) {
             tasksList.removeIf(t -> t.getName().equals(taskName));
-            //tasksList.remove(getTaskSubject(taskName));
         }
+
         // Update observable subject.
         if (routineTasksSubjects.containsKey(routineName)) {
             routineTasksSubjects.get(routineName).setValue(getTasksForRoutine(routineName));
@@ -198,10 +167,6 @@ public class InMemoryDataSource {
     }
 
     /**
-     * Edits a task within a routine by changing its name.
-     * Removes the old task and inserts a new one with the updated name.
-     */
-    /**
      * Edits a task within a routine by delegating to the Routine's own editTask method.
      * Updates the global task mapping and observable subjects accordingly.
      *
@@ -210,21 +175,15 @@ public class InMemoryDataSource {
      * @param newTaskName the new name to set for the task.
      */
     public void editTask(String routineName, String oldTaskName, String newTaskName) {
-        // Retrieve the routine object from the routines mapping.
         Routine routine = routines.get(routineName);
         if (routine == null) {
-            // Optionally handle the error (e.g., routine not found)
             return;
         }
-
-        // Get the list of tasks for this routine.
         List<Task> tasksList = routineTasks.get(routineName);
         if (tasksList == null) {
-            // No tasks for this routine; nothing to edit.
             return;
         }
 
-        // Find the task that matches the old task name.
         Task taskToEdit = null;
         for (Task t : tasksList) {
             if (t.getName().equals(oldTaskName)) {
@@ -233,19 +192,14 @@ public class InMemoryDataSource {
             }
         }
         if (taskToEdit == null) {
-            // Task not found in the routine.
             return;
         }
 
-        // Delegate the editing to the Routine object's own method.
-        // This method will handle validation (e.g., duplicates, routine status).
         boolean edited = routine.editTask(taskToEdit, newTaskName);
         if (!edited) {
-            // Editing failed (e.g., routine is ongoing); handle as needed.
             return;
         }
 
-        // Update the global tasks mapping: remove the old entry and add the updated task.
         tasks.remove(oldTaskName);
         tasks.put(newTaskName, taskToEdit);
 
@@ -254,8 +208,7 @@ public class InMemoryDataSource {
             routineTasksSubjects.get(routineName).setValue(getTasksForRoutine(routineName));
         }
 
-        // Update the individual task observable: if a subject exists for the old task name,
-        // update its key and value.
+        // Update the individual task observable:
         PlainMutableSubject<Task> subject = taskSubjects.remove(oldTaskName);
         if (subject != null) {
             subject.setValue(taskToEdit);
@@ -275,7 +228,7 @@ public class InMemoryDataSource {
     public static final Task WORK_OUT = new Task("Work out");
 
     /**
-     * Factory method to create a data source preloaded with default routines and tasks.
+     * Factory method to create a data source with default routines and tasks.
      */
     public static InMemoryDataSource fromDefault() {
         InMemoryDataSource data = new InMemoryDataSource();
@@ -286,7 +239,7 @@ public class InMemoryDataSource {
 
         data.putTask(MORNING_ROUTINE.getTitle(), BRUSH_TEETH);
         data.putTask(EVENING_ROUTINE.getTitle(), WORK_OUT);
-      
+
         return data;
     }
 }

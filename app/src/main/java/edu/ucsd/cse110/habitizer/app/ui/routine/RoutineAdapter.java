@@ -96,10 +96,10 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 
         binding.taskTitle.setText(task.getName());
 
-        // Set initial strike-through based on task completion state
+        // Set initial strike-through
         updateStrikeThrough(binding.taskTitle, task.isCompleted());
 
-        // If the task is already completed, display its stored time.
+        // If the task is already completed, display its set time.
         if (task.isCompleted()){
             binding.taskTime.setText(String.valueOf(task.getTimeSpent()));
         }
@@ -109,9 +109,8 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         binding.getRoot().setOnClickListener(v -> {
             if(task.isCompleted() || !routine.getongoing()) return;
             task.toggleCompletion();  // Toggle task completion state
-            Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
+//          Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
             updateStrikeThrough(binding.taskTitle, task.isCompleted());
-//            routine.checkOffTask(task);
             binding.taskTime.setText(String.valueOf(routine.checkOffTask(task)));
         });
 

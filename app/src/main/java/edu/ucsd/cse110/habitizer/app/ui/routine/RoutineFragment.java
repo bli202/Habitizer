@@ -113,21 +113,20 @@ public class RoutineFragment extends Fragment {
         FloatingActionButton restartTimerButton = view.findViewById(R.id.restart_timer_button);
 
         activityModel.getCompleted().observe(completed -> {
-            Log.d("RoutineFragment", "COMPLETED OSVEVSIUDUDSIXOJH!!!");
             if(completed == null) {
                 Log.d("RoutineFragment", "COMPLETED = NULL");
                 return;
             } else {
                 Log.d("RoutineFragment", "COMPLETION: " + completed);
             }
-//            Log.d("HabitizerApplication",completed.toString());
+
             if(completed) {
                 adapter.notifyDataSetChanged();
-//                activityModel.getCurRoutine().getValue().setOngoing(false);
                 stopRoutine.setVisibility(View.INVISIBLE);
                 addTask.setVisibility(View.VISIBLE);
                 startRoutine.setVisibility(View.VISIBLE);
             }
+
         });
 
         addTask.setOnClickListener(x -> {
@@ -139,13 +138,12 @@ public class RoutineFragment extends Fragment {
 
         });
 
-//        final boolean[] timerRunning = {false};
 
         startRoutine.setOnClickListener(x -> {
             Log.d("RoutineFragment", "Notified Data Set");
             adapter.notifyDataSetChanged();
             var routine = activityModel.getCurRoutine().getValue();
-//            routine.startRoutine();
+
 
             if (routine.getNumTasks() == 0) {
                 var dialogFragment = InvalidStartDialogFragment.newInstance();
@@ -159,8 +157,6 @@ public class RoutineFragment extends Fragment {
             addTask.setVisibility(View.INVISIBLE);
             startRoutine.setVisibility(View.INVISIBLE);
             stopRoutine.setVisibility(View.VISIBLE);
-
-
 
 
             if(true) {
