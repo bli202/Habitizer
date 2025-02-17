@@ -55,9 +55,10 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         Log.d("RoutineAdapter", "getView() called for position " + position);
 
-        // Get the flashcard for this position.
+        // Get the task for this position.
         var task = getItem(position);
         if (task == null) {
             Log.e("RoutineAdapter", "Task is NULL at position " + position);
@@ -93,18 +94,23 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
             onDeleteClick.accept(task.getName());
         });
 
-        // Populate the view with the task's data
         binding.taskTitle.setText(task.getName());
 
         // Set initial strike-through based on task completion state
-        updateStrikeThrough(binding.taskTitle, task.isCompleted(), false);
+        updateStrikeThrough(binding.taskTitle, task.isCompleted());
+
+        // If the task is already completed, display its stored time.
+        if (task.isCompleted()){
+            binding.taskTime.setText(String.valueOf(task.getTimeSpent()));
+        }
+
 
         // Set click listener on the entire view
         binding.getRoot().setOnClickListener(v -> {
             if(task.isCompleted() || !routine.getongoing()) return;
             task.toggleCompletion();  // Toggle task completion state
             Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
-            updateStrikeThrough(binding.taskTitle, task.isCompleted(), routine.getongoing());
+            updateStrikeThrough(binding.taskTitle, task.isCompleted());
 //            routine.checkOffTask(task);
             binding.taskTime.setText(String.valueOf(routine.checkOffTask(task)));
         });
@@ -113,8 +119,8 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         return binding.getRoot();
     }
 
-    private void updateStrikeThrough(TextView textView, boolean isCompleted, boolean routineStarted) {
-        if (isCompleted && routineStarted) {
+    private void updateStrikeThrough(TextView textView, boolean isCompleted) {
+        if (isCompleted) {
             textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
