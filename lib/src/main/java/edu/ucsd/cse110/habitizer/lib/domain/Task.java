@@ -53,6 +53,10 @@ public class Task {
         return timeSpent;
     }
 
+    public int getTimeSpentMinutes() {
+        return (int) Math.ceil(timeSpent / 60.0);
+    }
+
     /**
      * Sets timeSpent.
      * 

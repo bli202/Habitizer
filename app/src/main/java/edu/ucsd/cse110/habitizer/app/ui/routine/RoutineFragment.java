@@ -184,7 +184,7 @@ public class RoutineFragment extends Fragment {
                 @Override
                 public void onTick(long l) {
 
-                    actualTimeView.setText(String.valueOf(routine.getElapsedTimeSecs()));
+                    actualTimeView.setText(routine.getElapsedTime() + "m");
                     if (!routine.getongoing()) {
                         adapter.notifyDataSetChanged();
                         stopRoutine.setVisibility(View.INVISIBLE);
