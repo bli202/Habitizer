@@ -30,6 +30,7 @@ public class MainViewModel extends ViewModel {
     // UI state observables.
     private final PlainMutableSubject<List<Task>> morningTasks;
     private final PlainMutableSubject<List<Task>> eveningTasks;
+    private final PlainMutableSubject<Integer> estimatedTime;
 
     private final PlainMutableSubject<Task> firstTask;
     private final PlainMutableSubject<Boolean> completed;
@@ -56,6 +57,7 @@ public class MainViewModel extends ViewModel {
         this.completed = new PlainMutableSubject<>(false);
         this.taskName = new PlainMutableSubject<>();
         this.eveningTasks = new PlainMutableSubject<>();
+        this.estimatedTime = new PlainMutableSubject<>();
 
         // Observe tasks for the specified routine.
 
@@ -81,7 +83,6 @@ public class MainViewModel extends ViewModel {
 
             List<Task> eveningTasks = new ArrayList<>(tasks);
             this.eveningTasks.setValue(eveningTasks);
-            Log.d("MainViewModel", Objects.requireNonNull(this.eveningTasks.getValue()).get(0).getName());
 
             if (!eveningTasks.isEmpty()) {
                 firstTask.setValue(eveningTasks.get(0));
@@ -95,6 +96,10 @@ public class MainViewModel extends ViewModel {
 
     public Subject<List<Task>> getEveningTasks() {
         return eveningTasks;
+    }
+
+    public Subject<Integer> getEstimatedTime() {
+        return estimatedTime;
     }
 
     /**

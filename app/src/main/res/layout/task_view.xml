@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="true">
 
@@ -12,9 +12,9 @@
         android:layout_width="124dp"
         android:layout_height="38dp"
         android:layout_marginStart="6dp"
+        android:gravity="center"
         android:text="@string/sample_task"
         android:textSize="18dp"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/task_time"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,10 +42,10 @@
         android:clickable="true"
         android:contentDescription="@string/deletes_a_task"
         app:fabCustomSize="28dp"
-        app:maxImageSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="14dp"
         app:srcCompat="@android:drawable/ic_menu_delete" />
 
     <TextView
@@ -60,6 +60,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/editButton"
         app:layout_constraintStart_toEndOf="@+id/taskTitle"
-        app:layout_constraintTop_toTopOf="parent"
-         />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

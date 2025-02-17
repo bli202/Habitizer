@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
@@ -72,6 +73,22 @@ public class MainActivity extends AppCompatActivity {
                 return convertView;
             }
         };
+
+        // Keep track of routine time changes
+        var modelOwner = this;
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        var activityModel = modelProvider.get(MainViewModel.class);
+
+        activityModel.getCurRoutine().observe(routine -> {
+            for (int i = 0; i < routineList.size(); i++) {
+                if (routineList.get(i).getName().equals(routine.getName())) {
+                    routineList.set(i, routine);
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+        });
 
         routineView.setAdapter(adapter);
 
