@@ -84,7 +84,6 @@ public class RoutineFragment extends Fragment {
                     DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
         });
 
-
         activityModel.getMorningTasks().observe(tasks -> {
             if (tasks == null) return;
             Log.d("RoutineFragment", "Notified Data Set 1");

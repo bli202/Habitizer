@@ -83,7 +83,6 @@ public class MainViewModel extends ViewModel {
 
             List<Task> eveningTasks = new ArrayList<>(tasks);
             this.eveningTasks.setValue(eveningTasks);
-            Log.d("MainViewModel", Objects.requireNonNull(this.eveningTasks.getValue()).get(0).getName());
 
             if (!eveningTasks.isEmpty()) {
                 firstTask.setValue(eveningTasks.get(0));
