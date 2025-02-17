@@ -18,15 +18,24 @@ public class CustomTimerTest {
     }
 
     @Test
-    public void start() {
-
+    public void start() throws InterruptedException {
+        CustomTimer t = new CustomTimer();
+        assertEquals(0, t.getTime());
+        assertFalse(t.getOngoing());
+        t.start();
+        Thread.sleep(1000);
+        assertEquals(1, t.getTime());
     }
 
     @Test
     public void pause() throws InterruptedException {
-//        t.start();
-//        Thread.sleep(3000);
-//        t.
+        CustomTimer t = new CustomTimer();
+        t.start();
+        Thread.sleep(1000);
+        assertEquals(1, t.getTime());
+        t.pause();
+        Thread.sleep(1000);
+        assertEquals(1, t.getTime());
     }
 
     @Test
@@ -41,8 +50,14 @@ public class CustomTimerTest {
      * Tests taskTime.
      */
     @Test
-    public void getTaskTime() {
-
+    public void getTaskTime() throws InterruptedException {
+        CustomTimer t = new CustomTimer();
+        t.start();
+        assertEquals(0, t.getTaskTime());
+        Thread.sleep(1000);
+        assertEquals(1, t.getTaskTime());
+        Thread.sleep(2000);
+        assertEquals(2, t.getTaskTime());
     }
 
     /**
