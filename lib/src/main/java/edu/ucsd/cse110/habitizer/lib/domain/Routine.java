@@ -9,7 +9,7 @@ public class Routine {
     private List<Task> taskList;
 //    private Instant startTime;
 //    private long elapsedTime;
-    private final int estimatedTime;
+    private int estimatedTime;
 //    private Instant cumTaskTime;
     private boolean ongoing;
     private int tasksDone;
@@ -198,6 +198,14 @@ public class Routine {
      */
     public int getEstimatedTime() {
         return estimatedTime;
+    }
+
+    /**
+     * Sets the estimated time on the duration
+     */
+    public void setEstimatedTime(int time) {
+        estimatedTime = time;
+        System.out.println(estimatedTime);
     }
 
     /*

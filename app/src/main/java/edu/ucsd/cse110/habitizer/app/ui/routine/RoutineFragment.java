@@ -22,6 +22,7 @@ import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidStartDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidTaskDialogFragment;
 
@@ -83,7 +84,6 @@ public class RoutineFragment extends Fragment {
                     DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
         });
 
-
         activityModel.getMorningTasks().observe(tasks -> {
             if (tasks == null) return;
             Log.d("RoutineFragment", "Notified Data Set 1");
@@ -137,6 +137,18 @@ public class RoutineFragment extends Fragment {
             dialogFragment.show(getChildFragmentManager(), "AddTaskDialogFragment");
             adapter.notifyDataSetChanged();
 
+        });
+
+        timeView.setOnClickListener(v -> {
+            if (!activityModel.getCurRoutine().getValue().getongoing()) {
+                var dialogFragment = new EditTimeDialogFragment();
+                dialogFragment.show(getChildFragmentManager(), "EditTimeDialogFragment");
+                Log.d("RoutineFragment", "getTime: " + activityModel.getCurRoutine().getValue().getEstimatedTime());
+            }
+        });
+        
+        activityModel.getCurRoutine().observe(routine -> {
+            timeView.setText(routine.getEstimatedTime() + " min");
         });
 
 //        final boolean[] timerRunning = {false};
