@@ -90,6 +90,15 @@ public class CustomTimer {
     }
 
     /**
+     * Return whether or not the timer is ongoing.
+     *
+     * @return timer status
+     */
+    public boolean getOngoing() {
+        return ongoing;
+    }
+
+    /**
      * Helper method to update the timer.
      * Method is called whenever a value needs to be accessed.
      */
@@ -97,13 +106,7 @@ public class CustomTimer {
         if(!ongoing) return;
         cumTime += Duration.between(startTime, Instant.now()).toMillis();
         startTime = Instant.now();
-//        System.out.println("STARTTIME: " + startTime);
-//        System.out.println("CUMTIME: " + cumTime);
         taskTime += Duration.between(taskStartTime, Instant.now()).toMillis();
         taskStartTime = Instant.now();
-    }
-
-    public boolean getOngoing() {
-        return ongoing;
     }
 }

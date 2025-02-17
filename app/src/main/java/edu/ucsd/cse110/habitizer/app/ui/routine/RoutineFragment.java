@@ -24,7 +24,6 @@ import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidStartDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidTaskDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -120,10 +119,8 @@ public class RoutineFragment extends Fragment {
             } else {
                 Log.d("RoutineFragment", "COMPLETION: " + completed);
             }
-//            Log.d("HabitizerApplication",completed.toString());
             if(completed) {
                 adapter.notifyDataSetChanged();
-//                activityModel.getCurRoutine().getValue().setOngoing(false);
                 stopRoutine.setVisibility(View.INVISIBLE);
                 addTask.setVisibility(View.VISIBLE);
                 startRoutine.setVisibility(View.VISIBLE);
@@ -140,7 +137,7 @@ public class RoutineFragment extends Fragment {
         });
 
         timeView.setOnClickListener(v -> {
-            if (!activityModel.getCurRoutine().getValue().getongoing()) {
+            if (!activityModel.getCurRoutine().getValue().getOngoing()) {
                 var dialogFragment = new EditTimeDialogFragment();
                 dialogFragment.show(getChildFragmentManager(), "EditTimeDialogFragment");
                 Log.d("RoutineFragment", "getTime: " + activityModel.getCurRoutine().getValue().getEstimatedTime());
@@ -151,13 +148,10 @@ public class RoutineFragment extends Fragment {
             timeView.setText(routine.getEstimatedTime() + " min");
         });
 
-//        final boolean[] timerRunning = {false};
-
         startRoutine.setOnClickListener(x -> {
             Log.d("RoutineFragment", "Notified Data Set");
             adapter.notifyDataSetChanged();
             var routine = activityModel.getCurRoutine().getValue();
-//            routine.startRoutine();
 
             if (routine.getNumTasks() == 0) {
                 var dialogFragment = InvalidStartDialogFragment.newInstance();
@@ -166,7 +160,7 @@ public class RoutineFragment extends Fragment {
             }
 
             activityModel.startTime();
-            Log.d("RoutineFragment", "ROUTINE SHOULD BE ONGOING: " + activityModel.getCurRoutine().getValue().getongoing());
+            Log.d("RoutineFragment", "ROUTINE SHOULD BE ONGOING: " + activityModel.getCurRoutine().getValue().getOngoing());
             Log.d("RoutineFragment", "COMPLETION: " + activityModel.getCompleted().getValue());
             addTask.setVisibility(View.INVISIBLE);
             startRoutine.setVisibility(View.INVISIBLE);
@@ -185,7 +179,7 @@ public class RoutineFragment extends Fragment {
                 public void onTick(long l) {
 
                     actualTimeView.setText(routine.getElapsedTime() + "m");
-                    if (!routine.getongoing()) {
+                    if (!routine.getOngoing()) {
                         adapter.notifyDataSetChanged();
                         stopRoutine.setVisibility(View.INVISIBLE);
                         addTask.setVisibility(View.VISIBLE);
@@ -204,7 +198,7 @@ public class RoutineFragment extends Fragment {
         });
 
         ffButton.setOnClickListener(x -> {
-            if(!activityModel.getCurRoutine().getValue().getongoing()) return;
+            if(!activityModel.getCurRoutine().getValue().getOngoing()) return;
             activityModel.getCurRoutine().getValue().manualAddTime(30);
         });
 
@@ -223,9 +217,9 @@ public class RoutineFragment extends Fragment {
         });
 
         stopRoutine.setOnClickListener(v -> {
-            if(!activityModel.getCurRoutine().getValue().getongoing()) return;
+            if(!activityModel.getCurRoutine().getValue().getOngoing()) return;
             activityModel.endRoutine();
-            Log.d("RoutineFragment", "ROUTINE SHOULD NOT BE ONGOING: " + activityModel.getCurRoutine().getValue().getongoing());
+            Log.d("RoutineFragment", "ROUTINE SHOULD NOT BE ONGOING: " + activityModel.getCurRoutine().getValue().getOngoing());
             Log.d("RoutineFragment", "COMPLETION: " + activityModel.getCompleted().getValue());
         });
 

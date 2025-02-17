@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.function.Consumer;
 
@@ -63,7 +62,7 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         var layoutInflater = LayoutInflater.from(getContext());
         binding = TaskViewBinding.inflate(layoutInflater, parent, false);
 
-        if (routine.getongoing()) {
+        if (routine.getOngoing()) {
             binding.editButton.setVisibility(View.INVISIBLE);
             binding.deleteButton.setVisibility(View.INVISIBLE);
         }
@@ -96,11 +95,10 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 
         // Set click listener on the entire view
         binding.getRoot().setOnClickListener(v -> {
-            if(task.isCompleted() || !routine.getongoing()) return;
+            if(task.isCompleted() || !routine.getOngoing()) return;
             task.toggleCompletion();  // Toggle task completion state
             Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
             updateStrikeThrough(binding.taskTitle, task.isCompleted());
-//            routine.checkOffTask(task);
             binding.taskTime.setText(routine.checkOffTask(task) + "m");
         });
 

@@ -45,40 +45,41 @@ public class Task {
     }
 
     /**
-     * Returns if time spent on task.
-     * 
-     * @return timeSpent. 
+     * Returns time spent on task in seconds
      */
     public int getTimeSpent() {
         return timeSpent;
     }
 
+    /**
+     * Returns time spent on task in minutes
+     */
     public int getTimeSpentMinutes() {
         return (int) Math.ceil(timeSpent / 60.0);
     }
 
     /**
-     * Sets timeSpent.
+     * Sets timeSpent
      * 
-     * @param timeSpent to set timeSpent too. 
+     * @param timeSpent the number of seconds to set timeSpent to
      */
     public void setTime(int timeSpent) {
         this.timeSpent = timeSpent;
     }
 
     /**
-     * Gets name.
+     * Gets name of task
      * 
-     * @return name. 
+     * @return name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Sets name.
+     * Sets name of task
      * 
-     * @param name New name to set too. 
+     * @param name new name
      */
     public void setName(String name) {
         this.name = name;

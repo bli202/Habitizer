@@ -34,7 +34,6 @@ public class MainViewModel extends ViewModel {
 
     private final PlainMutableSubject<Task> firstTask;
     private final PlainMutableSubject<Boolean> completed;
-    private final PlainMutableSubject<String> taskName;
     private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.MORNING_ROUTINE);
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
@@ -48,14 +47,12 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
-        //this.routineName = routineName;
 
         Log.d(LOG_TAG, "MainViewModel constructor");
 
         this.morningTasks = new PlainMutableSubject<>();
         this.firstTask = new PlainMutableSubject<>();
         this.completed = new PlainMutableSubject<>(false);
-        this.taskName = new PlainMutableSubject<>();
         this.eveningTasks = new PlainMutableSubject<>();
         this.estimatedTime = new PlainMutableSubject<>();
 

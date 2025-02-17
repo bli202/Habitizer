@@ -2,15 +2,10 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.time.Duration;
-import java.time.Instant;
 
 public class Routine {
     private List<Task> taskList;
-//    private Instant startTime;
-//    private long elapsedTime;
     private int estimatedTime;
-//    private Instant cumTaskTime;
     private boolean ongoing;
     private int tasksDone;
     private final String name;
@@ -19,15 +14,13 @@ public class Routine {
     /**
      * Routine Constructor
      *
-     * @param name  The nname of the routine (Hardcoded to monring and night)
+     * @param name the name of the routine
      * @param estimatedTime the total estimated time user picks to display
      */
     public Routine(int estimatedTime, String name) {
         this.name = name;
         this.taskList = new ArrayList<>();
         this.estimatedTime = estimatedTime;
-//        this.elapsedTime = Duration.ZERO;
-//        this.cumTaskTime = Instant.now();
         this.ongoing = false;
         this.timer = new CustomTimer();
         this.tasksDone = 0;
@@ -85,7 +78,7 @@ public class Routine {
     }
 
     /**
-     * Starts routine that is timers
+     * Starts routine; starts timer and updates all tasks to be not completed
      *
      * @throws IllegalArgumentException if routine has no tasks
      */
@@ -106,9 +99,12 @@ public class Routine {
         this.ongoing = true;
     }
 
+
+    /**
+     * Ends routine; stops timer
+     */
     public void endRoutine() {
         if (ongoing) {
-//            elapsedTime = Duration.between(startTime, Instant.now());
             timer.pause();
             ongoing = false;
         }
@@ -146,33 +142,23 @@ public class Routine {
      * - Update the cumulative task time and progress
      * - Auto end routine when all tasks are done
      *
-     * @param taskName Name of the task to check off
-     * @return true if task is checked off, false otherwise
+     * @param t Task to check off
+     * @return the time taken for the current task, in minutes
      */
     public int checkOffTask(Task t) {
-//        if (!ongoing) return false;
-
-        // Finding task to check off
-//        for (Task t : taskList) {
-//            if (t.getName().equals(task.getName()) && !t.isCompleted()) {
         t.completeTask();
-                tasksDone++;
-//                int taskTime = (int) Duration.between(cumTaskTime, Instant.now()).getSeconds() * 1000;
-                long taskTime = timer.getTaskTime();
-//                long cumTaskTime = timer.getTime();
-                int taskTimeMinutes = (int) Math.ceil(taskTime / 60.0);
-                t.setTime((int) taskTime);
-                if (tasksDone == taskList.size()) {
-                    endRoutine();
-                }
-                return (int) taskTimeMinutes;
-//            }
-//        }
-//        return false;
+        tasksDone++;
+        long taskTime = timer.getTaskTime();
+        int taskTimeMinutes = (int) Math.ceil(taskTime / 60.0);
+        t.setTime((int) taskTime);
+        if (tasksDone == taskList.size()) {
+            endRoutine();
+        }
+        return taskTimeMinutes;
     }
 
 
-    //Getters for Routine
+    // Getters for Routine
 
     /**
      * Returns list of tasks in the routine
@@ -186,10 +172,6 @@ public class Routine {
      * If the routine is ongoing, calculates the duration from start to now
      */
     public int getElapsedTime() {
-//        if (ongoing && startTime != null) {
-//            return Duration.between(startTime, Instant.now());
-//        }
-//        return elapsedTime;
         if(ongoing) {
             return ((int) timer.getTime()) / 60;
         } else {
@@ -212,47 +194,30 @@ public class Routine {
         System.out.println(estimatedTime);
     }
 
-    /*
-     * *** All Commented Methods Delegated to CustomTimer ***
-     *
-     * Returns the cumulative time spent on all tasks
-     */
-//    public int getCumTaskTime() {
-//        return (int) timer.getTime();
-//    }
-
     /**
      * Returns if the routine is started or not
      */
-    public boolean getongoing() {
+    public boolean getOngoing() {
         return ongoing;
     }
 
-//    public void setOngoing(boolean b) {
-//        this.ongoing = b;
-//    }
-
     /**
-     * Return the num of tasks done
+     * Return the num of tasks done so far
      */
     public int getTasksDone() {
         return tasksDone;
     }
 
     /**
-     * Returns name of task (In this case either morning or night)
+     * Returns name of routine
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Returns the start time
+     * Returns the number of tasks in the routine
      */
-//    public Instant getStartTime() {
-//        return startTime;
-//    }
-
     public int getNumTasks() {
         return taskList.size();
     }
@@ -288,6 +253,9 @@ public class Routine {
         return (int) timer.getTime();
     }
 
+    /**
+     * Returns the timer object associated with this routine
+     */
     public CustomTimer getTimer() {
         return timer;
     }

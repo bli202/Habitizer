@@ -187,7 +187,6 @@ public class InMemoryDataSource {
 
         if (tasksList != null) {
             tasksList.removeIf(t -> t.getName().equals(taskName));
-            //tasksList.remove(getTaskSubject(taskName));
         }
         // Update observable subject.
         if (routineTasksSubjects.containsKey(routineName)) {
@@ -289,11 +288,12 @@ public class InMemoryDataSource {
      */
     public static InMemoryDataSource fromDefault() {
         InMemoryDataSource data = new InMemoryDataSource();
-        // Add default routine.
+        // Add default routines.
         data.putRoutine(MORNING_ROUTINE);
         data.putRoutine(EVENING_ROUTINE);
-        // Add default task to the default routine.
 
+
+        // Add default tasks to the default routines.
         data.putTask(MORNING_ROUTINE.getTitle(), SHOWER);
         data.putTask(MORNING_ROUTINE.getTitle(), BRUSH_TEETH);
         data.putTask(MORNING_ROUTINE.getTitle(), DRESS);
