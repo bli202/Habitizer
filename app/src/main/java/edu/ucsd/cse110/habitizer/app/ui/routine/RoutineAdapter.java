@@ -90,7 +90,7 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 
         // If the task is already completed, display its stored time.
         if (task.isCompleted()){
-            binding.taskTime.setText(String.valueOf(task.getTimeSpent()));
+            binding.taskTime.setText(task.getTimeSpentMinutes() + "m");
         }
 
 
@@ -101,7 +101,7 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
             Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
             updateStrikeThrough(binding.taskTitle, task.isCompleted());
 //            routine.checkOffTask(task);
-            binding.taskTime.setText(String.valueOf(routine.checkOffTask(task)));
+            binding.taskTime.setText(routine.checkOffTask(task) + "m");
         });
 
 

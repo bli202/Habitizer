@@ -270,9 +270,19 @@ public class InMemoryDataSource {
      * Default routine and task for bootstrapping.
      */
     public static final Routine MORNING_ROUTINE = new Routine(30, "Morning Routine");
-    public static final Task BRUSH_TEETH = new Task("Brush teeth");
+    public static final Task SHOWER = new Task("Shower");
+    public static final Task BRUSH_TEETH = new Task("Brush Teeth");
+    public static final Task DRESS = new Task("Dress");
+    public static final Task MAKE_COFFEE = new Task("Make Coffee");
+    public static final Task MAKE_LUNCH = new Task("Make Lunch");
+    public static final Task DINNER_PREP = new Task("Dinner Prep");
+    public static final Task PACK_BAG = new Task("Pack Bag");
     public static final Routine EVENING_ROUTINE = new Routine(45, "Evening Routine");
-    public static final Task WORK_OUT = new Task("Work out");
+    public static final Task CHARGE_DEVICES = new Task("Charge Devices");
+    public static final Task PREPARE_DINNER = new Task("Prepare Dinner");
+    public static final Task EAT_DINNER = new Task("Eat Dinner");
+    public static final Task WASH_DISHES = new Task("Wash Dishes");
+    public static final Task PACK_BAG_EVENING = new Task("Pack Bag");
 
     /**
      * Factory method to create a data source preloaded with default routines and tasks.
@@ -284,8 +294,18 @@ public class InMemoryDataSource {
         data.putRoutine(EVENING_ROUTINE);
         // Add default task to the default routine.
 
+        data.putTask(MORNING_ROUTINE.getTitle(), SHOWER);
         data.putTask(MORNING_ROUTINE.getTitle(), BRUSH_TEETH);
-        data.putTask(EVENING_ROUTINE.getTitle(), WORK_OUT);
+        data.putTask(MORNING_ROUTINE.getTitle(), DRESS);
+        data.putTask(MORNING_ROUTINE.getTitle(), MAKE_COFFEE);
+        data.putTask(MORNING_ROUTINE.getTitle(), MAKE_LUNCH);
+        data.putTask(MORNING_ROUTINE.getTitle(), DINNER_PREP);
+        data.putTask(MORNING_ROUTINE.getTitle(), PACK_BAG);
+        data.putTask(EVENING_ROUTINE.getTitle(), CHARGE_DEVICES);
+        data.putTask(EVENING_ROUTINE.getTitle(), PREPARE_DINNER);
+        data.putTask(EVENING_ROUTINE.getTitle(), EAT_DINNER);
+        data.putTask(EVENING_ROUTINE.getTitle(), WASH_DISHES);
+        data.putTask(EVENING_ROUTINE.getTitle(), PACK_BAG_EVENING);
       
         return data;
     }

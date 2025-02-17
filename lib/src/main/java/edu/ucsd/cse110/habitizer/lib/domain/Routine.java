@@ -165,7 +165,7 @@ public class Routine {
                 if (tasksDone == taskList.size()) {
                     endRoutine();
                 }
-                return (int) taskTime;
+                return (int) taskTimeMinutes;
 //            }
 //        }
 //        return false;
@@ -190,7 +190,11 @@ public class Routine {
 //            return Duration.between(startTime, Instant.now());
 //        }
 //        return elapsedTime;
-        return ((int) timer.getTime()) / 60;
+        if(ongoing) {
+            return ((int) timer.getTime()) / 60;
+        } else {
+            return (int) Math.ceil(timer.getTime() / 60.0);
+        }
     }
 
     /**
