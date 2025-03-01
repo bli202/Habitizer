@@ -20,4 +20,5 @@
     <string name="invalid_task">Invalid task name, please change it!</string>
     <string name="invalid_start">Please add a task to start your routine!</string>
     <string name="invalid_time">Invalid estimated time, please change it!</string>
+    <string name="delete_routine">delete_routine</string>
 </resources>
