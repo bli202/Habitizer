@@ -16,8 +16,8 @@ public class SimpleTaskRepository implements TaskRepository {
      * Returns the number of tasks in the specified routine.
      */
     @Override
-    public Integer count(String routineName) {
-        return dataSource.getTasksForRoutine(routineName).size();
+    public Integer count(int routineId) {
+        return dataSource.getTasksForRoutine(routineId).size();
     }
 
     /**

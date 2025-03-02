@@ -11,24 +11,24 @@ import edu.ucsd.cse110.observables.PlainMutableSubject;
 import edu.ucsd.cse110.observables.Subject;
 
 public class InMemoryDataSource {
-    // Mapping from routine name to Routine object.
-    private final Map<String, Routine> routines = new HashMap<>();
+    // Mapping from routine id to Routine object.
+    private final Map<Integer, Routine> routines = new HashMap<>();
 
     // Global mapping from task name to Task object.
     private final Map<String, Task> tasks = new HashMap<>();
 
-    // Mapping from routine name to the list of tasks belonging to that routine.
-    private final Map<String, List<Task>> routineTasks = new HashMap<>();
+    // Mapping from routine id to the list of tasks belonging to that routine.
+    private final Map<Integer, List<Task>> routineTasks = new HashMap<>();
 
     // Observable subjects for individual routines.
-    private final Map<String, PlainMutableSubject<Routine>> routineSubjects = new HashMap<>();
+    private final Map<Integer, PlainMutableSubject<Routine>> routineSubjects = new HashMap<>();
     // Observable subject for the list of all routines.
     private final PlainMutableSubject<List<Routine>> allRoutinesSubject = new PlainMutableSubject<>();
 
     // Observable subjects for individual tasks.
     private final Map<String, PlainMutableSubject<Task>> taskSubjects = new HashMap<>();
     // Observable subjects for the list of tasks in a specific routine.
-    private final Map<String, PlainMutableSubject<List<Task>>> routineTasksSubjects = new HashMap<>();
+    private final Map<Integer, PlainMutableSubject<List<Task>>> routineTasksSubjects = new HashMap<>();
 
     public InMemoryDataSource() {
         allRoutinesSubject.setValue(new ArrayList<>());
@@ -46,20 +46,20 @@ public class InMemoryDataSource {
     /**
      * Returns the Routine object with the given name.
      */
-    public Routine getRoutine(String routineName) {
-        return routines.get(routineName);
+    public Routine getRoutine(int routineId) {
+        return routines.get(routineId);
     }
 
     /**
      * Returns an observable subject for a specific routine.
      */
-    public Subject<Routine> getRoutineSubject(String routineName) {
-        if (!routineSubjects.containsKey(routineName)) {
+    public Subject<Routine> getRoutineSubject(int routineId) {
+        if (!routineSubjects.containsKey(routineId)) {
             PlainMutableSubject<Routine> subject = new PlainMutableSubject<>();
-            subject.setValue(getRoutine(routineName));
-            routineSubjects.put(routineName, subject);
+            subject.setValue(getRoutine(routineId));
+            routineSubjects.put(routineId, subject);
         }
-        return routineSubjects.get(routineName);
+        return routineSubjects.get(routineId);
     }
 
     /**
@@ -268,7 +268,7 @@ public class InMemoryDataSource {
     /**
      * Default routine and task for bootstrapping.
      */
-    public static final Routine MORNING_ROUTINE = new Routine(30, "Morning Routine");
+    public static final Routine MORNING_ROUTINE = new Routine(0, 30, "Morning Routine");
     public static final Task SHOWER = new Task("Shower");
     public static final Task BRUSH_TEETH = new Task("Brush Teeth");
     public static final Task DRESS = new Task("Dress");
@@ -276,7 +276,7 @@ public class InMemoryDataSource {
     public static final Task MAKE_LUNCH = new Task("Make Lunch");
     public static final Task DINNER_PREP = new Task("Dinner Prep");
     public static final Task PACK_BAG = new Task("Pack Bag");
-    public static final Routine EVENING_ROUTINE = new Routine(45, "Evening Routine");
+    public static final Routine EVENING_ROUTINE = new Routine(1, 45, "Evening Routine");
     public static final Task CHARGE_DEVICES = new Task("Charge Devices");
     public static final Task PREPARE_DINNER = new Task("Prepare Dinner");
     public static final Task EAT_DINNER = new Task("Eat Dinner");

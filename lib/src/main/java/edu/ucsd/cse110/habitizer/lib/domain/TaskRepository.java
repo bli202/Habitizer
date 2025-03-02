@@ -5,7 +5,7 @@ import java.util.List;
 import edu.ucsd.cse110.observables.Subject;
 
 public interface TaskRepository {
-    Integer count(String routineName);
+    Integer count(int routineId);
 
     Subject<Routine> findRoutine(String name);
 
