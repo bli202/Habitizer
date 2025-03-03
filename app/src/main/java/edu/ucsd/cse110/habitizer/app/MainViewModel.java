@@ -59,7 +59,7 @@ public class MainViewModel extends ViewModel {
         // Observe tasks for the specified routine.
 
 
-        taskRepository.findAll(InMemoryDataSource.MORNING_ROUTINE.getName())
+        taskRepository.findAll(InMemoryDataSource.MORNING_ROUTINE.getId())
                 .observe(tasks -> {
             if (tasks == null) return; // Not ready yet, ignore.
             // Create a new ordered list (you can add a Comparator if needed).
@@ -74,7 +74,7 @@ public class MainViewModel extends ViewModel {
                 firstTask.setValue(morningTasks.get(0));
             }
                 });
-        taskRepository.findAll(InMemoryDataSource.EVENING_ROUTINE.getName()).observe(tasks -> {
+        taskRepository.findAll(InMemoryDataSource.EVENING_ROUTINE.getId()).observe(tasks -> {
             if (tasks == null) return;
 
 
@@ -103,14 +103,14 @@ public class MainViewModel extends ViewModel {
      * Adds a task to the current routine.
      */
     public void append(Task task) {
-        taskRepository.save(getCurRoutine().getValue().getName(), task);
+        taskRepository.save(getCurRoutine().getValue().getId(), task);
     }
 
     /**
      * Edits an existing task in the current routine.
      */
     public void edit(String oldName, String newName) {
-        taskRepository.edit(getCurRoutine().getValue().getName(), oldName, newName);
+        taskRepository.edit(getCurRoutine().getValue().getId(), oldName, newName);
     }
 
     /**
@@ -118,7 +118,7 @@ public class MainViewModel extends ViewModel {
      */
     public void remove(String name) {
         Log.d("MainViewModel", "Task being removed: " + name);
-        taskRepository.remove(getCurRoutine().getValue().getName(), name);
+        taskRepository.remove(getCurRoutine().getValue().getId(), name);
         curRoutine.setValue(getCurRoutine().getValue());
         Log.d("MainViewModel", "Number of Tasks: " + getCurRoutine().getValue().getNumTasks());
     }

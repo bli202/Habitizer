@@ -46,13 +46,16 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation(project(":lib"))
-    implementation(project(":lib"))
-    implementation(project(":observables"))
     implementation(project(":observables"))
 
     testImplementation(libs.junit4)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.ext.espresso.core)
+
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
 }
 

@@ -10,6 +10,7 @@ public class Routine {
     private int tasksDone;
     private final String name;
     private CustomTimer timer;
+    private final int id;
 
     /**
      * Routine Constructor
@@ -17,13 +18,18 @@ public class Routine {
      * @param name the name of the routine
      * @param estimatedTime the total estimated time user picks to display
      */
-    public Routine(int estimatedTime, String name) {
+    public Routine(int id, int estimatedTime, String name) {
+        this.id = id;
         this.name = name;
         this.taskList = new ArrayList<>();
         this.estimatedTime = estimatedTime;
         this.ongoing = false;
         this.timer = new CustomTimer();
         this.tasksDone = 0;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String toString() {
@@ -157,6 +163,10 @@ public class Routine {
         return taskTimeMinutes;
     }
 
+    public int getTaskTime() {
+        return (int) timer.getTaskTimeNoReset();
+    }
+
 
     // Getters for Routine
 
@@ -199,6 +209,10 @@ public class Routine {
      */
     public boolean getOngoing() {
         return ongoing;
+    }
+
+    public void setOngoing(boolean ongoing) {
+        this.ongoing = ongoing;
     }
 
     /**
@@ -258,5 +272,13 @@ public class Routine {
      */
     public CustomTimer getTimer() {
         return timer;
+    }
+
+    public void setTimer(CustomTimer t) {
+        this.timer = t;
+    }
+
+    public void setTasksDone(int i) {
+        this.tasksDone = i;
     }
 }

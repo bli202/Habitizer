@@ -99,7 +99,15 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
             task.toggleCompletion();  // Toggle task completion state
             Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
             updateStrikeThrough(binding.taskTitle, task.isCompleted());
-            binding.taskTime.setText(routine.checkOffTask(task) + "m");
+            String checkoffTimeStr;
+            int checkoffTime = routine.getTaskTime();
+            int checkoffTimeMins = routine.checkOffTask(task);
+            if(checkoffTime >= 60) {
+                checkoffTimeStr = checkoffTimeMins + "m";
+            } else {
+                checkoffTimeStr = checkoffTime + "s";
+            }
+            binding.taskTime.setText(checkoffTimeStr);
         });
 
 
