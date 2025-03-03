@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         routineList.add(InMemoryDataSource.EVENING_ROUTINE);
 
         ListView routineView = findViewById(R.id.routine_view);
+        Button addRoutine = findViewById(R.id.addRoutine);
 
         ArrayAdapter<Routine> adapter = new ArrayAdapter<>(
                 this,
@@ -89,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        addRoutine.setOnClickListener(x -> {
+            var newRoutine = new Routine(0, "New Routine");
+            Log.d("MainActivity", "Added New Routine");
+            routineList.add(newRoutine);
+            adapter.notifyDataSetChanged();
+        });
+
         routineView.setAdapter(adapter);
 
         routineView.setOnItemClickListener((parent, view, position, id) -> {
@@ -101,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
             RoutineFragment routineFragment = RoutineFragment.newInstance();
 
             routineView.setVisibility(View.GONE);
+            addRoutine.setVisibility(View.INVISIBLE);
             findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);
 
             getSupportFragmentManager()
@@ -118,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (itemId == R.id.home_menu) {
             swapFragments();
+            Log.d("MainActivity", "Home Button Pushed");
         }
 
         return super.onOptionsItemSelected(item);
@@ -137,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
             // Show the routine list
             ListView routineView = findViewById(R.id.routine_view);
             routineView.setVisibility(View.VISIBLE);
+            Button addRoutine = findViewById(R.id.addRoutine);
+            addRoutine.setVisibility(View.VISIBLE);
 
             homeScreen = true;
         }
