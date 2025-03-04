@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         activityModel.getCurRoutine().observe(routine -> {
             for (int i = 0; i < routineList.size(); i++) {
-                if (routineList.get(i).getName().equals(routine.getName())) {
+                if (routineList.get(i).getId() == (routine.getId())) {
                     routineList.set(i, routine);
                     adapter.notifyDataSetChanged();
                     break;

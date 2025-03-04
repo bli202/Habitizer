@@ -56,33 +56,6 @@ public class MainViewModel extends ViewModel {
         // Observe tasks for the specified routine.
 
 
-//        taskRepository.findAll(InMemoryDataSource.MORNING_ROUTINE.getName())
-//                .observe(tasks -> {
-//            if (tasks == null) return; // Not ready yet, ignore.
-//            // Create a new ordered list (you can add a Comparator if needed).
-//            List<Task> morningTasks = new ArrayList<>(tasks);
-//            this.morningTasks.setValue(morningTasks);
-//            Log.d("MainViewModel", "Number of Tasks in morningTasks: " + this.morningTasks.getValue().size());
-//
-//            Log.d("MainViewModel", "Number of Tasks in curRoutine: " + getCurRoutine().getValue().getNumTasks());
-//
-//            // Optionally update firstTask observable.
-//            if (!morningTasks.isEmpty()) {
-//                firstTask.setValue(morningTasks.get(0));
-//            }
-//                });
-//        taskRepository.findAll(InMemoryDataSource.EVENING_ROUTINE.getName()).observe(tasks -> {
-//            if (tasks == null) return;
-//
-//
-//            List<Task> eveningTasks = new ArrayList<>(tasks);
-//            this.eveningTasks.setValue(eveningTasks);
-//
-//            if (!eveningTasks.isEmpty()) {
-//                firstTask.setValue(eveningTasks.get(0));
-//            }
-//        });
-
         taskRepository.findAll(Objects.requireNonNull(getCurRoutine().getValue()).getId()).observe(tasks -> {
             if (tasks == null) return;
 
