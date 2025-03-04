@@ -36,10 +36,10 @@ public class SimpleRoutineRepository implements RoutineRepository {
         System.out.println(datasource.getRoutines());
     }
 
-    @Override
-    public Subject<List<Routine>> getRoutineList() {
-        return datasource.getAllRoutinesSubject();
-    }
+//    @Override
+//    public Subject<List<Routine>> getRoutineList() {
+//        return datasource.getAllRoutinesSubject();
+//    }
     
     @Override
     public void setEstimatedTime(int routineId, int time) {

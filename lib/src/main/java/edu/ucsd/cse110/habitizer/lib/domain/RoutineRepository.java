@@ -9,7 +9,7 @@ public interface RoutineRepository {
 
     void addRoutine(Routine routine);
 
-    Subject<List<Routine>> getRoutineList();
+//    Subject<List<Routine>> getRoutineList();
     
     void setEstimatedTime(int routineId, int time);
 }

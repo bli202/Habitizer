@@ -45,4 +45,10 @@ public interface RoutineDao {
 
     @Query("DELETE FROM routines WHERE id = :id")
     void delete(int id);
+    
+    @Query("UPDATE routines SET estimatedTime = :time WHERE id = :routineId")
+    void setEstimatedTime(int routineId, int time);
+    
+    @Query("SELECT COUNT(*) FROM routines")
+    int count();
 }

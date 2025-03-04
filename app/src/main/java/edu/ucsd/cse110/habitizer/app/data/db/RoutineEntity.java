@@ -3,6 +3,8 @@ package edu.ucsd.cse110.habitizer.app.data.db;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
@@ -12,7 +14,13 @@ import edu.ucsd.cse110.habitizer.lib.domain.CustomTimer;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
-@Entity(tableName = "routines")
+@Entity(
+        tableName = "routines",
+        foreignKeys = {
+                @ForeignKey(entity = CustomTimerEntity.class, parentColumns = "routineId", childColumns = "id"),
+        },
+        indices = {@Index(value = "id", unique = true)}
+)
 public class RoutineEntity {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -22,13 +30,13 @@ public class RoutineEntity {
     public List<Task> taskList;
 
     @ColumnInfo(name = "estimatedTime")
-    public int estimatedTime;
+    public Integer estimatedTime;
 
     @ColumnInfo(name = "ongoing")
-    public boolean ongoing;
+    public Boolean ongoing;
 
     @ColumnInfo(name = "tasksDone")
-    public int tasksDone;
+    public Integer tasksDone;
 
     @ColumnInfo(name = "name")
     public String name;
