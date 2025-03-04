@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.habitizer.app;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -24,7 +22,6 @@ import java.util.Objects;
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.TaskFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.RoutineAdapter;
-import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,15 +44,21 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding view = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(view.getRoot());
         
-        ArrayList<Routine> routineList = new ArrayList<>();
+        // Keep track of routine time changes and new routines
+        var modelOwner = this;
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        var activityModel = modelProvider.get(MainViewModel.class);
         
-        routineList.add(InMemoryDataSource.MORNING_ROUTINE);
-        routineList.add(InMemoryDataSource.EVENING_ROUTINE);
+        ArrayList<Routine> routineList = (ArrayList<Routine>) activityModel.getRoutines();
+//
+//        routineList.add(InMemoryDataSource.MORNING_ROUTINE);
+//        routineList.add(InMemoryDataSource.EVENING_ROUTINE);
         
         ListView routineView = findViewById(R.id.routine_view);
         Button addRoutine = findViewById(R.id.addRoutine);
         
-        RoutineAdapter adapter = new RoutineAdapter(this, routineList) {
+        RoutineAdapter adapter = new RoutineAdapter(this, activityModel.getRoutines()) {
             
             @NonNull
             @Override
@@ -107,12 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 return convertView;
             }
         };
-        
-        // Keep track of routine time changes and new routines
-        var modelOwner = this;
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        var activityModel = modelProvider.get(MainViewModel.class);
         
         MainViewModel.getCurRoutine().observe(routine -> {
             for (int i = 0; i < routineList.size(); i++) {

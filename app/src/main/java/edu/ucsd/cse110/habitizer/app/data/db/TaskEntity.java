@@ -34,8 +34,8 @@ public class TaskEntity {
     }
     
     // Method to create TaskEntity from Task
-    public static TaskEntity fromTask(Routine routine, Task task) {
-        TaskEntity te = new TaskEntity(routine.getId(), task.getName());
+    public static TaskEntity fromTask(int id, Task task) {
+        TaskEntity te = new TaskEntity(id, task.getName());
         te.completed = task.isCompleted();
         return te;
     }

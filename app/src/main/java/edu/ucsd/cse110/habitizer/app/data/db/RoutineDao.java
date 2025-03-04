@@ -15,34 +15,52 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 public interface RoutineDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(RoutineEntity routine);
-
+    
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insert(List<RoutineEntity> routines);
-
+    List<Long> insertRoutines(List<RoutineEntity> routines);
+    
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Long insertTask(TaskEntity task);
+    
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    List<Long> insertTasks(List<TaskEntity> tasks);
+    
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Long insertTimer(CustomTimerEntity timer);
+    
     @Query("SELECT * FROM routines WHERE id = :id")
     RoutineEntity find(int id);
-
+    
+    @Query("SELECT * FROM tasks WHERE routineId = :routineId")
+    List<TaskEntity> findTasksForRoutine(int routineId);
+    
+    @Query("SELECT * FROM timers WHERE routineId = :routineId")
+    CustomTimerEntity findTimerForRoutine(int routineId);
+    
     @Query("SELECT * FROM routines")
     List<RoutineEntity> findAll();
-
+    
     @Query("SELECT * FROM routines WHERE id = :id")
     LiveData<RoutineEntity> findAsLiveData(int id);
-
+    
     @Query("SELECT * FROM routines")
     LiveData<List<RoutineEntity>> findAllAsLiveData();
-
+    
     @Transaction
-    default int append(RoutineEntity routine) {
+    default int append(RoutineEntity routine, CustomTimerEntity timer) {
+        insertTimer(timer);
+        insert(routine);
         return Math.toIntExact(insert(routine));
     }
-
+    
     @Transaction
     default int addTaskToRoutine(RoutineEntity routineEntity, Task task) {
-        var routine = routineEntity.toRoutine();
+        var routine = routineEntity.toRoutine(findTasksForRoutine(routineEntity.id), findTimerForRoutine(routineEntity.id));
         routine.addTask(task);
+        insertTask(TaskEntity.fromTask(routine.getId(), task));
         return Math.toIntExact(insert(RoutineEntity.fromRoutine(routine)));
     }
-
+    
     @Query("DELETE FROM routines WHERE id = :id")
     void delete(int id);
     

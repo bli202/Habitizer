@@ -59,7 +59,6 @@ public class MainViewModel extends ViewModel {
         taskRepository.findAll(Objects.requireNonNull(getCurRoutine().getValue()).getId()).observe(tasks -> {
             if (tasks == null) return;
 
-
             List<Task> curRoutineTasks = new ArrayList<>(tasks);
 
             if (!curRoutineTasks.isEmpty()) {
@@ -114,10 +113,10 @@ public class MainViewModel extends ViewModel {
         return taskRepository.findAll(Objects.requireNonNull(curRoutine.getValue()).getId());
     }
     
-//    @SuppressWarnings("unused")
-//    public List<Routine> getRoutines() {
-//        return routineRepository.getRoutineList().getValue();
-//    }
+    @SuppressWarnings("unused")
+    public List<Routine> getRoutines() {
+        return routineRepository.getRoutineList().getValue();
+    }
 
     public void endCurRoutine() {
         Objects.requireNonNull(curRoutine.getValue()).endRoutine();
