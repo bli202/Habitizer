@@ -3,20 +3,15 @@ package edu.ucsd.cse110.habitizer.app;
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
 import android.util.Log;
-import android.view.View;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import java.util.Objects;
-
-import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
+import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
-import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 import edu.ucsd.cse110.observables.PlainMutableSubject;
 import edu.ucsd.cse110.observables.Subject;
 
@@ -25,67 +20,49 @@ public class MainViewModel extends ViewModel {
     private static final String LOG_TAG = "MainViewModel";
 
     // Domain state (Model) and current routine context.
-    private final TaskRepository taskRepository;
+    private final RoutineRepository routineRepository;
 
     // UI state observables.
-    private final PlainMutableSubject<List<Task>> morningTasks;
-    private final PlainMutableSubject<List<Task>> eveningTasks;
+    private final Subject<List<Task>> morningTasks;
+    private final Subject<List<Task>> eveningTasks;
     private final PlainMutableSubject<Integer> estimatedTime;
-
     private final PlainMutableSubject<Task> firstTask;
     private final PlainMutableSubject<Boolean> completed;
-    private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.MORNING_ROUTINE);
+    private static PlainMutableSubject<Routine> curRoutine = null;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
-                    MainViewModel.class,
-                    creationExtras -> {
-                        var app = (HabitizerApplication) creationExtras.get(APPLICATION_KEY);
-                        assert app != null;
-                        // Here we are initializing the view model for a specific routine.
-                        return new MainViewModel(app.getTaskRepository());
-                    });
+            MainViewModel.class,
+            creationExtras -> {
+                var app = (HabitizerApplication) creationExtras.get(APPLICATION_KEY);
+                assert app != null;
+                return new MainViewModel(app.getRoutineRepository());
+            }
+    );
 
-    public MainViewModel(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
 
+    public MainViewModel(RoutineRepository routineRepository) {
+        this.routineRepository = routineRepository;
         Log.d(LOG_TAG, "MainViewModel constructor");
 
-        this.morningTasks = new PlainMutableSubject<>();
         this.firstTask = new PlainMutableSubject<>();
         this.completed = new PlainMutableSubject<>(false);
-        this.eveningTasks = new PlainMutableSubject<>();
         this.estimatedTime = new PlainMutableSubject<>();
 
-        // Observe tasks for the specified routine.
 
 
-        taskRepository.findAll(InMemoryDataSource.MORNING_ROUTINE.getId())
-                .observe(tasks -> {
-            if (tasks == null) return; // Not ready yet, ignore.
-            // Create a new ordered list (you can add a Comparator if needed).
-            List<Task> morningTasks = new ArrayList<>(tasks);
-            this.morningTasks.setValue(morningTasks);
-            Log.d("MainViewModel", "Number of Tasks in morningTasks: " + this.morningTasks.getValue().size());
+        // Observe routines and tasks
+        this.eveningTasks = routineRepository.getTaskListForRoutine(getRoutineByName("Evening Routine"));
 
-            Log.d("MainViewModel", "Number of Tasks in curRoutine: " + getCurRoutine().getValue().getNumTasks());
+        Routine morningRoutine = getRoutineByName("Morning Routine");
+        if (morningRoutine != null) {
+            this.morningTasks = routineRepository.getTaskListForRoutine(morningRoutine);
+        } else {
+            Log.e(LOG_TAG, "Error: 'Morning Routine' not found in repository!");
+            this.morningTasks = new PlainMutableSubject<>(List.of()); // Empty tasks list
+        }
 
-            // Optionally update firstTask observable.
-            if (!morningTasks.isEmpty()) {
-                firstTask.setValue(morningTasks.get(0));
-            }
-                });
-        taskRepository.findAll(InMemoryDataSource.EVENING_ROUTINE.getId()).observe(tasks -> {
-            if (tasks == null) return;
-
-
-            List<Task> eveningTasks = new ArrayList<>(tasks);
-            this.eveningTasks.setValue(eveningTasks);
-
-            if (!eveningTasks.isEmpty()) {
-                firstTask.setValue(eveningTasks.get(0));
-            }
-        });
     }
+
 
     public Subject<List<Task>> getMorningTasks() {
         return morningTasks;
@@ -99,18 +76,18 @@ public class MainViewModel extends ViewModel {
         return estimatedTime;
     }
 
+    public RoutineRepository getRoutineRepository() {
+        return routineRepository;
+    }
+
     /**
      * Adds a task to the current routine.
      */
     public void append(Task task) {
-        taskRepository.save(getCurRoutine().getValue().getId(), task);
-    }
-
-    /**
-     * Edits an existing task in the current routine.
-     */
-    public void edit(String oldName, String newName) {
-        taskRepository.edit(getCurRoutine().getValue().getId(), oldName, newName);
+        Routine routine = getCurRoutine().getValue();
+        if (routine != null) {
+            routineRepository.addTaskToRoutine(routine, task);
+        }
     }
 
     /**
@@ -118,18 +95,62 @@ public class MainViewModel extends ViewModel {
      */
     public void remove(String name) {
         Log.d("MainViewModel", "Task being removed: " + name);
-        taskRepository.remove(getCurRoutine().getValue().getId(), name);
-        curRoutine.setValue(getCurRoutine().getValue());
-        Log.d("MainViewModel", "Number of Tasks: " + getCurRoutine().getValue().getNumTasks());
+        Routine routine = getCurRoutine().getValue();
+        if (routine != null) {
+            routineRepository.removeTaskFromRoutine(routine, new Task(name));
+            curRoutine.setValue(routine);
+            Log.d("MainViewModel", "Number of Tasks: " + routine.getNumTasks());
+        }
     }
 
+    /**
+     * Edits an existing routine.
+     */
+    public void editRoutine(String newName, int newEstimatedTime) {
+        Routine routine = getCurRoutine().getValue();
+        if (routine != null) {
+            Log.d("MainViewModel", "Editing routine: " + routine.getName());
+
+            // Update routine properties
+            Routine updatedRoutine = new Routine(routine.getId(), newEstimatedTime, newName);
+            updatedRoutine.setTasksDone(routine.getTasksDone());
+            updatedRoutine.setOngoing(routine.getOngoing());
+            updatedRoutine.setTimer(routine.getTimer());
+
+            // Save to repository
+            routineRepository.removeRoutine(routine);
+            routineRepository.addRoutine(updatedRoutine);
+            curRoutine.setValue(updatedRoutine);
+        }
+    }
+
+    public void editTask(String oldName, String newName) {
+        Routine routine = getCurRoutine().getValue();
+        if (routine != null) {
+            Log.d("MainViewModel", "Editing task: " + oldName + " -> " + newName);
+
+            // Call repository to edit task
+            routineRepository.editTask(routine.getId(), oldName, newName);
+
+            // Refresh routine to reflect updated task name
+            curRoutine.setValue(routine);
+        }
+    }
+
+
+    /**
+     * Switches the current routine.
+     */
     public static void switchRoutine(Routine routine) {
         curRoutine.setValue(routine);
     }
 
     public void startTime() {
-        curRoutine.getValue().startRoutine();
-        completed.setValue(false);
+        Routine routine = getCurRoutine().getValue();
+        if (routine != null) {
+            routine.startRoutine();
+            completed.setValue(false);
+        }
     }
 
     public Subject<Routine> getCurRoutine() {
@@ -137,11 +158,35 @@ public class MainViewModel extends ViewModel {
     }
 
     public void endRoutine() {
-        curRoutine.getValue().endRoutine();
-        completed.setValue(true);
+        Routine routine = getCurRoutine().getValue();
+        if (routine != null) {
+            routine.endRoutine();
+            completed.setValue(true);
+        }
     }
 
     public Subject<Boolean> getCompleted() {
         return completed;
+    }
+
+    /**
+     * Helper method to get a routine by name.
+     */
+    private Routine getRoutineByName(String name) {
+        List<Routine> routines = routineRepository.getRoutineList().getValue();
+
+        if (routines == null || routines.isEmpty()) {
+            Log.e("MainViewModel", "Routine list is NULL or EMPTY!");
+            return null; // Prevent crash
+        }
+
+        for (Routine routine : routines) {
+            if (routine.getName().equalsIgnoreCase(name)) {
+                return routine;
+            }
+        }
+
+        Log.e("MainViewModel", "Routine '" + name + "' not found in repository!");
+        return null;
     }
 }

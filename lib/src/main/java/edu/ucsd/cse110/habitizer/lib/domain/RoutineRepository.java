@@ -10,4 +10,12 @@ public interface RoutineRepository {
     void addRoutine(Routine routine);
 
     Subject<List<Routine>> getRoutineList();
+
+    void removeTaskFromRoutine(Routine value, Task task);
+
+    Subject<List<Task>> getTaskListForRoutine(Routine morningRoutine);
+
+    void addTaskToRoutine(Routine routine, Task task);
+
+    void editTask(int id, String oldName, String newName);
 }

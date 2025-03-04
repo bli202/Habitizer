@@ -283,6 +283,11 @@ public class InMemoryDataSource {
     public static final Task WASH_DISHES = new Task("Wash Dishes");
     public static final Task PACK_BAG_EVENING = new Task("Pack Bag");
 
+    public static final List<Routine> DEFAULT_ROUTINES = List.of(
+            MORNING_ROUTINE,
+            EVENING_ROUTINE
+    );
+
     /**
      * Factory method to create a data source preloaded with default routines and tasks.
      */
