@@ -78,6 +78,12 @@ public class CustomTimer {
         return returnVal;
     }
 
+    public long getTaskTimeNoReset() {
+        update();
+        taskStartTime = Instant.now();
+        return taskTime / 1000;
+    }
+
     /**
      * Adds specified time to timer.
      *

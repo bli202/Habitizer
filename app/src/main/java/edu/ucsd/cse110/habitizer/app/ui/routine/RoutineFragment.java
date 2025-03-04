@@ -83,16 +83,22 @@ public class RoutineFragment extends Fragment {
                     DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
         });
 
-        activityModel.getMorningTasks().observe(tasks -> {
-            if (tasks == null) return;
-            Log.d("RoutineFragment", "Notified Data Set 1");
-            Log.d("RoutineFragment", "Number of tasks: " + activityModel.getMorningTasks().getValue().size());
-            adapter.notifyDataSetChanged();
-        });
+//        activityModel.getMorningTasks().observe(tasks -> {
+//            if (tasks == null) return;
+//            Log.d("RoutineFragment", "Notified Data Set 1");
+//            Log.d("RoutineFragment", "Number of tasks: " + activityModel.getMorningTasks().getValue().size());
+//            adapter.notifyDataSetChanged();
+//        });
+//
+//        activityModel.getEveningTasks().observe(tasks -> {
+//            if (tasks == null) return;
+//            Log.d("RoutineFragment", "Notified Data Set 2");
+//            adapter.notifyDataSetChanged();
+//        });
 
-        activityModel.getEveningTasks().observe(tasks -> {
+        activityModel.getCurTasks().observe(tasks -> {
             if (tasks == null) return;
-            Log.d("RoutineFragment", "Notified Data Set 2");
+            Log.d("RoutineFragment", "Notified Data Set 3");
             adapter.notifyDataSetChanged();
         });
 
