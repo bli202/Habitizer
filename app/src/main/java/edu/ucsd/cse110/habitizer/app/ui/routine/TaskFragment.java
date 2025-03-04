@@ -27,17 +27,17 @@ import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidStartDialogFragmen
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link RoutineFragment#newInstance} factory method to
+ * Use the {@link TaskFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RoutineFragment extends Fragment {
+public class TaskFragment extends Fragment {
 
     private MainViewModel activityModel;
-    private RoutineAdapter adapter;
+    private TaskAdapter adapter;
 
     private CountDownTimer timer;
 
-    public RoutineFragment() {
+    public TaskFragment() {
         // Required empty public constructor
     }
     private static final boolean[] timerRunning = {false};
@@ -48,8 +48,8 @@ public class RoutineFragment extends Fragment {
      *
      * @return A new instance of fragment RoutineFragment.
      */
-    public static RoutineFragment newInstance() {
-        RoutineFragment fragment = new RoutineFragment();
+    public static TaskFragment newInstance() {
+        TaskFragment fragment = new TaskFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -70,10 +70,10 @@ public class RoutineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_routine, container, false);
+        View view = inflater.inflate(R.layout.fragment_tasklist_view, container, false);
         Log.d("Routine Fragment", "onCreateView called and adapter made with " + activityModel.getCurRoutine().getValue());
         Log.d("RoutineFragment", "Current Routine: " + activityModel.getCurRoutine().getValue().getName());
-        this.adapter = new RoutineAdapter(requireContext(),
+        this.adapter = new TaskAdapter(requireContext(),
                 activityModel.getCurRoutine().getValue(),
                 name -> {
                     var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);
@@ -82,6 +82,7 @@ public class RoutineFragment extends Fragment {
                     var DeleteTaskdialogFragment = DeleteTaskDialogFragment.newInstance(taskName);
                     DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
         });
+
 
         activityModel.getCurTasks().observe(tasks -> {
             if (tasks == null) return;

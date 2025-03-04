@@ -31,7 +31,9 @@ public class SimpleRoutineRepository implements RoutineRepository {
                 throw new IllegalArgumentException("Routine is already added");
             }
         }
+        System.out.println(datasource.getRoutines());
         datasource.putRoutine(routine);
+        System.out.println(datasource.getRoutines());
     }
 
     @Override

@@ -13,12 +13,12 @@ import androidx.annotation.NonNull;
 import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.databinding.TaskViewBinding;
+import edu.ucsd.cse110.habitizer.app.databinding.TasklistItemBinding;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import android.graphics.Paint;
 
-public class RoutineAdapter extends ArrayAdapter<Task> {
+public class TaskAdapter extends ArrayAdapter<Task> {
 
     Consumer<String> onDeleteClick;
     Consumer<String> onEditClick;
@@ -26,9 +26,9 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
 
 
     Routine routine;
-    public RoutineAdapter(Context context, Routine routine,
-                          Consumer<String> onEditClick,
-                          Consumer<String> onDeleteClick
+    public TaskAdapter(Context context, Routine routine,
+                       Consumer<String> onEditClick,
+                       Consumer<String> onDeleteClick
                           ) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem(), for example.
@@ -58,9 +58,9 @@ public class RoutineAdapter extends ArrayAdapter<Task> {
         Log.d("RoutineAdapter", "Displaying task: " + task.getName());
 
         // Check if a view is being reused...
-        TaskViewBinding binding;
+        TasklistItemBinding binding;
         var layoutInflater = LayoutInflater.from(getContext());
-        binding = TaskViewBinding.inflate(layoutInflater, parent, false);
+        binding = TasklistItemBinding.inflate(layoutInflater, parent, false);
 
         if (routine.getOngoing()) {
             binding.editButton.setVisibility(View.INVISIBLE);

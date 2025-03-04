@@ -4,7 +4,7 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.routine.RoutineFragment">
+    tools:context=".ui.routine.TaskFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
@@ -71,7 +71,7 @@
             app:layout_constraintBottom_toTopOf="@id/button_bar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/task_view"/>
+            tools:listitem="@layout/tasklist_item"/>
 
 
         <!-- Bottom Button Bar -->

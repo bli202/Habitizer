@@ -268,7 +268,7 @@ public class InMemoryDataSource {
     /**
      * Default routine and task for bootstrapping.
      */
-    public static final Routine MORNING_ROUTINE = new Routine(0, 30, "Morning Routine");
+    public static final Routine MORNING_ROUTINE = new Routine(30, "Morning Routine");
     public static final Task SHOWER = new Task("Shower");
     public static final Task BRUSH_TEETH = new Task("Brush Teeth");
     public static final Task DRESS = new Task("Dress");
@@ -276,7 +276,7 @@ public class InMemoryDataSource {
     public static final Task MAKE_LUNCH = new Task("Make Lunch");
     public static final Task DINNER_PREP = new Task("Dinner Prep");
     public static final Task PACK_BAG = new Task("Pack Bag");
-    public static final Routine EVENING_ROUTINE = new Routine(1, 45, "Evening Routine");
+    public static final Routine EVENING_ROUTINE = new Routine(45, "Evening Routine");
     public static final Task CHARGE_DEVICES = new Task("Charge Devices");
     public static final Task PREPARE_DINNER = new Task("Prepare Dinner");
     public static final Task EAT_DINNER = new Task("Eat Dinner");

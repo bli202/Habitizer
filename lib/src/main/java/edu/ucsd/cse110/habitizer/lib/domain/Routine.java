@@ -20,8 +20,7 @@ public class Routine {
      * @param estimatedTime the total estimated time user picks to display
      */
     public Routine(int estimatedTime, String name) {
-        this.id = idCounter;
-        idCounter++;
+        this.id = idCounter++;
         this.name = name;
         this.taskList = new ArrayList<>();
         this.estimatedTime = estimatedTime;
