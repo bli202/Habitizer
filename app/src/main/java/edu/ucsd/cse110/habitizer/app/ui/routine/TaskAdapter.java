@@ -12,20 +12,19 @@ import androidx.annotation.NonNull;
 
 import java.util.function.Consumer;
 
-import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.databinding.TasklistItemBinding;
+import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import android.graphics.Paint;
 
-public class TaskAdapter extends ArrayAdapter<Task> {
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+public class TaskAdapter extends ArrayAdapter<Task> {
+    private final String TAG = "TaskAdapter";
     Consumer<String> onDeleteClick;
     Consumer<String> onEditClick;
-    MainViewModel activityModel;
-
-
     Routine routine;
+    
     public TaskAdapter(Context context, Routine routine,
                        Consumer<String> onEditClick,
                        Consumer<String> onDeleteClick
@@ -44,66 +43,70 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        if (convertView == null) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(R.layout.tasklist_item, parent, false);
+        }
 
-        Log.d("RoutineAdapter", "getView() called for position " + position);
+        Log.d(TAG, "getView() called for position " + position);
 
         // Get the task for this position.
         var task = getItem(position);
         if (task == null) {
-            Log.e("RoutineAdapter", "Task is NULL at position " + position);
+            Log.e(TAG, "Task is NULL at position " + position);
             return new View(getContext());
         }
 
-        Log.d("RoutineAdapter", "Displaying task: " + task.getName());
+        Log.d(TAG, "Displaying task: " + task.getName());
 
-        // Check if a view is being reused...
-        TasklistItemBinding binding;
-        var layoutInflater = LayoutInflater.from(getContext());
-        binding = TasklistItemBinding.inflate(layoutInflater, parent, false);
+        // UI Elements to reuse.
+        FloatingActionButton editTaskButton = convertView.findViewById(R.id.editTaskButton);
+        FloatingActionButton deleteTaskButton = convertView.findViewById(R.id.deleteTaskButton);
+        TextView taskTitle = convertView.findViewById(R.id.taskTitle);
+        TextView taskTime = convertView.findViewById(R.id.task_time);
 
         if (routine.getOngoing()) {
-            binding.editButton.setVisibility(View.INVISIBLE);
-            binding.deleteButton.setVisibility(View.INVISIBLE);
+            editTaskButton.setVisibility(View.INVISIBLE);
+            deleteTaskButton.setVisibility(View.INVISIBLE);
         }
         else {
-            binding.editButton.setVisibility(View.VISIBLE);
-            binding.deleteButton.setVisibility(View.VISIBLE);
+            editTaskButton.setVisibility(View.VISIBLE);
+            deleteTaskButton.setVisibility(View.VISIBLE);
         }
-
-
-        binding.editButton.setOnClickListener(v -> {
+        
+        
+        editTaskButton.setOnClickListener(v -> {
             var name = task.getName();
             assert name != null;
             onEditClick.accept(name);
         });
-
-        binding.deleteButton.setOnClickListener(v -> {
-            onDeleteClick.accept(task.getName());
-        });
-
-        binding.taskTitle.setText(task.getName());
+        
+        deleteTaskButton.setOnClickListener(v -> onDeleteClick.accept(task.getName()));
+        
+        taskTitle.setText(task.getName());
 
         // Set initial strike-through based on task completion state
-        updateStrikeThrough(binding.taskTitle, task.isCompleted());
+        updateStrikeThrough(taskTitle, task.isCompleted());
 
         // If the task is already completed, display its stored time.
         if (task.isCompleted()){
-            binding.taskTime.setText(task.getTimeSpentMinutes() + "m");
+            String timeText = task.getTimeSpentMinutes() + "m";
+            taskTime.setText(timeText);
         }
 
 
         // Set click listener on the entire view
-        binding.getRoot().setOnClickListener(v -> {
+        convertView.setOnClickListener(v -> {
             if(task.isCompleted() || !routine.getOngoing()) return;
             task.toggleCompletion();  // Toggle task completion state
-            Log.d("TAG", "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
-            updateStrikeThrough(binding.taskTitle, task.isCompleted());
-            binding.taskTime.setText(routine.checkOffTask(task) + "m");
+            Log.d(TAG, "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
+            updateStrikeThrough(taskTitle, task.isCompleted());
+            String timeText = routine.checkOffTask(task) + "m";
+            taskTime.setText(timeText);
         });
-
-
-        return binding.getRoot();
+        
+        return convertView;
     }
 
     private void updateStrikeThrough(TextView textView, boolean isCompleted) {
@@ -126,9 +129,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
     @Override
     public Task getItem(int position) {
-        super.getItem(position);
         Task task = super.getItem(position);
-        Log.d("RoutineAdapter", "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
+        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
         return task;
     }
 }

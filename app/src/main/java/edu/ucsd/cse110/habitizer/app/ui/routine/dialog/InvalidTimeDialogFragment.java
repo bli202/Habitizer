@@ -15,11 +15,8 @@ import edu.ucsd.cse110.habitizer.app.databinding.FragmentDuplicateTaskBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentInvalidTimeBinding;
 
 public class InvalidTimeDialogFragment extends DialogFragment {
-
-    private FragmentInvalidTimeBinding view;
-    private MainViewModel activityModel;
-
-
+    
+    
     public InvalidTimeDialogFragment() {
 
     }
@@ -34,7 +31,7 @@ public class InvalidTimeDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = FragmentInvalidTimeBinding.inflate(getLayoutInflater());
+        FragmentInvalidTimeBinding view = FragmentInvalidTimeBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Invalid estimated time!")
@@ -54,12 +51,5 @@ public class InvalidTimeDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialize the Model
-        var modelOwner = requireActivity();
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        this.activityModel = modelProvider.get(MainViewModel.class);
     }
-
 }

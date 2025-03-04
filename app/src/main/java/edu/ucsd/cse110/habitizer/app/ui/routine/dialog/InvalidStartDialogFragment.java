@@ -15,11 +15,8 @@ import edu.ucsd.cse110.habitizer.app.databinding.FragmentDuplicateTaskBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentNoTaskStartBinding;
 
 public class InvalidStartDialogFragment extends DialogFragment {
-
-    private FragmentNoTaskStartBinding view;
-    private MainViewModel activityModel;
-
-
+    
+    
     public InvalidStartDialogFragment() {
 
     }
@@ -34,7 +31,7 @@ public class InvalidStartDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = FragmentNoTaskStartBinding.inflate(getLayoutInflater());
+        FragmentNoTaskStartBinding view = FragmentNoTaskStartBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("You cannot start a routine with no tasks!")
@@ -52,12 +49,6 @@ public class InvalidStartDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialize the Model
-        var modelOwner = requireActivity();
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        this.activityModel = modelProvider.get(MainViewModel.class);
     }
 
 }

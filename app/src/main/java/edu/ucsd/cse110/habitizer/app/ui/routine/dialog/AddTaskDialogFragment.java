@@ -20,8 +20,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 public class AddTaskDialogFragment extends DialogFragment {
 
     private FragmentDialogAddTaskBinding view;
-    private MainViewModel activityModel;
-
+    
     public AddTaskDialogFragment() {
 
     }
@@ -60,7 +59,7 @@ public class AddTaskDialogFragment extends DialogFragment {
         }
 
         try {
-            for (Task t : Objects.requireNonNull(activityModel.getCurRoutine().getValue()).getTaskList()) {
+            for (Task t : Objects.requireNonNull(MainViewModel.getCurRoutine().getValue()).getTaskList()) {
                 if (t.getName().equals(name)) {
                     var dialogFragment = InvalidTaskDialogFragment.newInstance("");
                     dialogFragment.show(getParentFragmentManager(), "InvalidTaskDialogFragment");
@@ -71,6 +70,10 @@ public class AddTaskDialogFragment extends DialogFragment {
         } catch (Exception e) {
             Log.e("EditTaskDialogFragment", "Exception while checking task list", e);
         }
+        var modelOwner = requireActivity();
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        var activityModel = modelProvider.get(MainViewModel.class);
         activityModel.append(task);
         dialog.dismiss();
     }
@@ -82,12 +85,6 @@ public class AddTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialize the Model
-        var modelOwner = requireActivity();
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        this.activityModel = modelProvider.get(MainViewModel.class);
     }
 
 }

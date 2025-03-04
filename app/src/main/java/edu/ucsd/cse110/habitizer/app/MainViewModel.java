@@ -106,7 +106,7 @@ public class MainViewModel extends ViewModel {
         completed.setValue(false);
     }
 
-    public Subject<Routine> getCurRoutine() {
+    public static Subject<Routine> getCurRoutine() {
         return curRoutine;
     }
 

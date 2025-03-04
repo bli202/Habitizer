@@ -21,21 +21,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/editButton"
+        android:id="@+id/editTaskButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:contentDescription="@string/edits_a_task"
         app:fabCustomSize="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/deleteButton"
+        app:layout_constraintEnd_toStartOf="@+id/deleteTaskButton"
         app:layout_constraintStart_toEndOf="@+id/task_time"
         app:layout_constraintTop_toTopOf="parent"
         app:maxImageSize="14dp"
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/deleteButton"
+        android:id="@+id/deleteTaskButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -58,7 +58,7 @@
         android:text="@string/time_taken"
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/editButton"
+        app:layout_constraintEnd_toStartOf="@+id/editTaskButton"
         app:layout_constraintStart_toEndOf="@+id/taskTitle"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
