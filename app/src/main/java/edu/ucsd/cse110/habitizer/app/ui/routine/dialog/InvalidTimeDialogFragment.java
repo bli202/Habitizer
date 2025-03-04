@@ -8,10 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 
-import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.databinding.FragmentDuplicateTaskBinding;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentInvalidTimeBinding;
 
 public class InvalidTimeDialogFragment extends DialogFragment {
@@ -42,7 +39,7 @@ public class InvalidTimeDialogFragment extends DialogFragment {
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
-        var dialogFragment = new EditTimeDialogFragment();
+        var dialogFragment = new EditEstimatedTimeDialogFragment();
         dialogFragment.show(getParentFragmentManager(), "EditTimeDialogFragment");
         dialog.dismiss();
     }

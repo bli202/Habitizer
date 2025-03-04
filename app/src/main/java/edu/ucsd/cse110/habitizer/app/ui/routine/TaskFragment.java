@@ -24,7 +24,7 @@ import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
-import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTimeDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditEstimatedTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidStartDialogFragment;
 
 /**
@@ -100,7 +100,7 @@ public class TaskFragment extends Fragment {
         taskList.setAdapter(adapter);
 
         TextView titleView = view.findViewById(R.id.routine_title);
-        TextView timeView = view.findViewById(R.id.estimated_time);
+        TextView estimatedTimeView = view.findViewById(R.id.estimated_time);
         TextView actualTimeView = view.findViewById(R.id.actual_time);
 
         Button addTask = view.findViewById(R.id.add_task_button);
@@ -134,18 +134,19 @@ public class TaskFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
-        timeView.setOnClickListener(v -> {
+        estimatedTimeView.setOnClickListener(v -> {
             if (!curRoutine.getOngoing()) {
-                var dialogFragment = new EditTimeDialogFragment();
+                var dialogFragment = new EditEstimatedTimeDialogFragment();
                 dialogFragment.show(getChildFragmentManager(), "EditTimeDialogFragment");
 //                Log.d(TAG, "getTime: " + curRoutine.getEstimatedTime());
             }
+            adapter.notifyDataSetChanged();
         });
         
         curRoutineSubject.observe(routine -> {
             assert routine != null;
-            String timeText = routine.getElapsedTime() + "m";
-            timeView.setText(timeText);
+            String timeText = routine.getEstimatedTime() + "m";
+            estimatedTimeView.setText(timeText);
         });
 
         startRoutine.setOnClickListener(x -> {
@@ -217,7 +218,7 @@ public class TaskFragment extends Fragment {
 
         stopRoutine.setOnClickListener(v -> {
             if(!curRoutine.getOngoing()) return;
-            activityModel.endRoutine();
+            activityModel.endCurRoutine();
 //            Log.d(TAG, "ROUTINE SHOULD NOT BE ONGOING: " + curRoutine.getOngoing());
 //            Log.d(TAG, "COMPLETION: " + activityModel.getCompleted());
         });
@@ -226,7 +227,7 @@ public class TaskFragment extends Fragment {
         if (getArguments() != null) {
             titleView.setText(curRoutine.getName());
             String timeText = curRoutine.getEstimatedTime() + "m";
-            timeView.setText(timeText);
+            estimatedTimeView.setText(timeText);
         }
 
         return view;

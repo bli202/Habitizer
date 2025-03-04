@@ -10,4 +10,6 @@ public interface RoutineRepository {
     void addRoutine(Routine routine);
 
     Subject<List<Routine>> getRoutineList();
+    
+    void setEstimatedTime(int routineId, int time);
 }

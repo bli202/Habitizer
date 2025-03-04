@@ -40,7 +40,12 @@ public class SimpleRoutineRepository implements RoutineRepository {
     public Subject<List<Routine>> getRoutineList() {
         return datasource.getAllRoutinesSubject();
     }
-
+    
+    @Override
+    public void setEstimatedTime(int routineId, int time) {
+        datasource.setEstimatedTime(routineId, time);
+    }
+    
     /**
      * Gets a routine subject by its name
      * @param id the name of the routine to retrieve

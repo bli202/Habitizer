@@ -212,7 +212,6 @@ public class Routine {
      */
     public void setEstimatedTime(int time) {
         estimatedTime = time;
-        System.out.println(estimatedTime);
     }
 
     /**

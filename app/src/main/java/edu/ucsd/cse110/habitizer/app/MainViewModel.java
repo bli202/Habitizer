@@ -113,12 +113,13 @@ public class MainViewModel extends ViewModel {
     public Subject<List<Task>> getCurTasks() {
         return taskRepository.findAll(Objects.requireNonNull(curRoutine.getValue()).getId());
     }
-
+    
+    @SuppressWarnings("unused")
     public List<Routine> getRoutines() {
         return routineRepository.getRoutineList().getValue();
     }
 
-    public void endRoutine() {
+    public void endCurRoutine() {
         Objects.requireNonNull(curRoutine.getValue()).endRoutine();
         completed.setValue(true);
     }
@@ -127,8 +128,11 @@ public class MainViewModel extends ViewModel {
         return completed;
     }
     
-    @SuppressWarnings("unused")
     public void putRoutine(Routine routine) {
         routineRepository.addRoutine(routine);
+    }
+    
+    public void setCurRoutineEstimatedTime(int time) {
+        routineRepository.setEstimatedTime(Objects.requireNonNull(curRoutine.getValue()).getId(), time);
     }
 }

@@ -29,6 +29,7 @@ public class InMemoryDataSource {
     private final Map<String, PlainMutableSubject<Task>> taskSubjects = new HashMap<>();
     // Observable subjects for the list of tasks in a specific routine.
     private final Map<Integer, PlainMutableSubject<List<Task>>> routineTasksSubjects = new HashMap<>();
+    
 
     public InMemoryDataSource() {
         allRoutinesSubject.setValue(new ArrayList<>());
@@ -261,6 +262,10 @@ public class InMemoryDataSource {
             taskSubjects.put(newTaskName, subject);
         }
     }
+    
+    public void setEstimatedTime(int routineId, int time) {
+        routines.get(routineId).setEstimatedTime(time);
+    }
 
 
     // =================== Default Data Initialization ===================
@@ -309,5 +314,4 @@ public class InMemoryDataSource {
 
         return data;
     }
-
 }
