@@ -141,6 +141,10 @@ public class MainViewModel extends ViewModel {
         return taskRepository.findAll(Objects.requireNonNull(curRoutine.getValue()).getId());
     }
 
+    public List<Routine> getRoutines() {
+        return routineRepository.getRoutineList().getValue();
+    }
+
     public void endRoutine() {
         Objects.requireNonNull(curRoutine.getValue()).endRoutine();
         completed.setValue(true);
