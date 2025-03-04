@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             Routine selectedRoutine = routineList.get(position);
             Log.d("MainActivity", "Selected Routine: " + selectedRoutine);
 
-            // FIRST ROUTINE CLICKED SETS THE TASK VIEW
+            // ROUTINE CLICKED SETS THE TASK VIEW
             MainViewModel.switchRoutine(selectedRoutine);
 
             RoutineFragment routineFragment = RoutineFragment.newInstance();
