@@ -11,9 +11,11 @@
 
     <TextView
         android:id="@+id/RoutineTitle"
-        android:layout_width="261dp"
+        android:layout_width="0dp"
         android:layout_height="66dp"
-        android:gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center_vertical"
         android:text="@string/routine"
         android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,17 +25,29 @@
 
     <TextView
         android:id="@+id/RoutineTime"
-        android:layout_width="154dp"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
         android:autofillHints=""
         android:ems="10"
         android:gravity="center"
         android:text="@string/estimated_routine_time"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/deleteRoutineButton"
         app:layout_constraintStart_toEndOf="@+id/RoutineTitle"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/deleteRoutineButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/delete_routine"
+        android:src="@android:drawable/ic_menu_delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
