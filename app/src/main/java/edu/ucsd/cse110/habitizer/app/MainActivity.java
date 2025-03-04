@@ -84,36 +84,28 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         var activityModel = modelProvider.get(MainViewModel.class);
 
-        ArrayList<Routine> finalRoutineList = routineList;
         activityModel.getCurRoutine().observe(routine -> {
-            for (int i = 0; i < finalRoutineList.size(); i++) {
-                if (finalRoutineList.get(i).getName().equals(routine.getName())) {
-                    finalRoutineList.set(i, routine);
+            for (int i = 0; i < routineList.size(); i++) {
+                if (routineList.get(i).getName().equals(routine.getName())) {
+                    routineList.set(i, routine);
                     adapter.notifyDataSetChanged();
                     break;
                 }
             }
         });
 
-//        routineList = (ArrayList<Routine>) activityModel.getRoutines();
-//        adapter.notifyDataSetChanged();
-        Log.d("MainActivity", routineList.toString());
-
         addRoutine.setOnClickListener(x -> {
             Log.d("MainActivity", "Added New Routine");
             var routine = new Routine(0, "New Routine");
             activityModel.putRoutine(routine);
             routineList.add(routine);
-//            var dialogFragment = new AddRoutineDialogFragment();
-//            dialogFragment.show(getSupportFragmentManager(), "AddRoutineDialogFragment");
             adapter.notifyDataSetChanged();
         });
 
         routineView.setAdapter(adapter);
 
-        ArrayList<Routine> finalRoutineList1 = routineList;
         routineView.setOnItemClickListener((parent, view, position, id) -> {
-            Routine selectedRoutine = finalRoutineList1.get(position);
+            Routine selectedRoutine = routineList.get(position);
             Log.d("MainActivity", "Selected Routine: " + selectedRoutine);
 
             // FIRST ROUTINE CLICKED SETS THE TASK VIEW
