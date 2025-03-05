@@ -47,7 +47,8 @@ public class MainViewModel extends ViewModel {
         this.taskRepository = taskRepository;
         this.routineRepository = routineRepository;
 
-        curRoutine = new PlainMutableSubject<>(routineRepository.getRoutineList().getValue().get(0));
+        this.curRoutine = new PlainMutableSubject<>(Objects.requireNonNull(routineRepository
+                .getRoutineList().getValue()).get(0));
         Log.d(LOG_TAG, "MainViewModel constructor");
 
         // Creating observable subjects.
