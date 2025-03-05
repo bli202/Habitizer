@@ -26,7 +26,7 @@ public class MainViewModel extends ViewModel {
     // Domain state (Model) and current routine context.
     private final TaskRepository taskRepository;
     private final RoutineRepository routineRepository;
-    
+
     private final PlainMutableSubject<List<Task>> currTaskList;
     private final PlainMutableSubject<Integer> estimatedTime;
 
@@ -35,13 +35,13 @@ public class MainViewModel extends ViewModel {
     private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.MORNING_ROUTINE);
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
-                    MainViewModel.class,
-                    creationExtras -> {
-                        var app = (HabitizerApplication) creationExtras.get(APPLICATION_KEY);
-                        assert app != null;
-                        // Here we are initializing the view model for a specific routine.
-                        return new MainViewModel(app.getTaskRepository(), app.getRoutineRepository());
-                    });
+            MainViewModel.class,
+            creationExtras -> {
+                var app = (HabitizerApplication) creationExtras.get(APPLICATION_KEY);
+                assert app != null;
+                // Here we are initializing the view model for a specific routine.
+                return new MainViewModel(app.getTaskRepository(), app.getRoutineRepository());
+            });
 
     public MainViewModel(TaskRepository taskRepository, RoutineRepository routineRepository) {
         this.taskRepository = taskRepository;
@@ -96,7 +96,7 @@ public class MainViewModel extends ViewModel {
         taskRepository.remove(Objects.requireNonNull(getCurRoutine().getValue()).getId(), name);
         Log.d("MainViewModel", "Number of Tasks: " + getCurRoutine().getValue().getNumTasks());
     }
-    
+
     public void removeTaskById(int taskId) {
         Log.d("MainViewModel", "Task being removed: " + taskId);
         Objects.requireNonNull(curRoutine.getValue()).removeTask(taskId);
@@ -120,7 +120,7 @@ public class MainViewModel extends ViewModel {
     public Subject<List<Task>> getCurTasks() {
         return taskRepository.findAll(Objects.requireNonNull(curRoutine.getValue()).getId());
     }
-    
+
     public List<Routine> getRoutines() {
         return routineRepository.getRoutineList().getValue();
     }
@@ -133,15 +133,15 @@ public class MainViewModel extends ViewModel {
     public Subject<Boolean> getCompleted() {
         return completed;
     }
-    
+
     public void putRoutine(Routine routine) {
         routineRepository.addRoutine(routine);
     }
-    
+
     public void setCurRoutineEstimatedTime(int time) {
         routineRepository.setEstimatedTime(Objects.requireNonNull(curRoutine.getValue()).getId(), time);
     }
-    
+
     public void removeRoutine(Routine routine) {
         routineRepository.removeRoutine(routine);
     }

@@ -17,7 +17,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 @Entity(
         tableName = "routines",
         foreignKeys = {
-                @ForeignKey(entity = CustomTimerEntity.class, parentColumns = "routineId", childColumns = "id"),
+                @ForeignKey(entity = CustomTimerEntity.class, parentColumns = "routineId", childColumns = "id")
         },
         indices = {@Index(value = "id", unique = true)}
 )

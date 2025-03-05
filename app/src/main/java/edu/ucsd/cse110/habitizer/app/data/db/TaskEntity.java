@@ -1,23 +1,34 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
-@Entity(tableName = "tasks")
+@Entity(
+        tableName = "tasks",
+        primaryKeys = {"routineId", "taskName"},
+        foreignKeys = @ForeignKey(
+                entity = RoutineEntity.class, // References RoutineEntity
+                parentColumns = "id",         // Primary key in RoutineEntity
+                childColumns = "routineId",   // Foreign key in TaskEntity
+                onDelete = ForeignKey.CASCADE // Ensures tasks are deleted if routine is deleted
+        )
+)
 public class TaskEntity {
-    @PrimaryKey(autoGenerate = true)
+
     @ColumnInfo(name = "id")
     public Integer id = null;
-    
+
     @ColumnInfo(name = "routineId")
-    public Integer routineId;
-    
+    public @NonNull Integer routineId;
+
     @ColumnInfo(name = "taskName")
-    public String taskName;
+    public @NonNull String taskName;
     
     @ColumnInfo(name = "completed")
     public Boolean completed;
