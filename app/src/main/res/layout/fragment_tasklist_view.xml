@@ -43,7 +43,7 @@
                 android:layout_marginStart="8dp"
                 android:text="@string/estimated_time"
                 app:layout_constraintBottom_toTopOf="@+id/actual_time"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/edit_routine_button"
                 app:layout_constraintStart_toEndOf="@id/routine_title"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,9 +54,25 @@
                 android:layout_marginStart="8dp"
                 android:text="@string/actual_time"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/edit_routine_button"
                 app:layout_constraintStart_toEndOf="@id/routine_title"
                 app:layout_constraintTop_toBottomOf="@id/estimated_time" />
+
+            <!-- Edit Routine Button -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/edit_routine_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:clickable="true"
+                android:contentDescription="@string/edit_routine"
+                app:fabCustomSize="28dp"
+                app:maxImageSize="14dp"
+                app:srcCompat="@android:drawable/ic_menu_edit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/estimated_time"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

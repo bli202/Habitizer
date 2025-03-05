@@ -17,7 +17,6 @@ public class InvalidTimeDialogFragment extends DialogFragment {
     public InvalidTimeDialogFragment() {
 
     }
-
     public static InvalidTimeDialogFragment newInstance() {
         var fragment = new InvalidTimeDialogFragment();
         Bundle args = new Bundle();
