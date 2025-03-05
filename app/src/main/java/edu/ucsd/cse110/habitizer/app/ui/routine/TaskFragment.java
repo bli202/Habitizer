@@ -90,15 +90,15 @@ public class TaskFragment extends Fragment {
         });
         adapter.notifyDataSetChanged();
 
+        // List of all elements in fragment_tasklist_view
+        ListView taskList = view.findViewById(R.id.task_list_view);
+        taskList.setAdapter(adapter);
+
         activityModel.getCurTasks().observe(tasks -> {
             if (tasks == null) return;
             Log.d(TAG, "Notified Data Set 3");
             adapter.notifyDataSetChanged();
         });
-
-        // List of all elements in fragment_tasklist_view
-        ListView taskList = view.findViewById(R.id.task_list_view);
-        taskList.setAdapter(adapter);
 
         TextView titleView = view.findViewById(R.id.routine_title);
         TextView estimatedTimeView = view.findViewById(R.id.estimated_time);

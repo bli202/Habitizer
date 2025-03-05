@@ -99,7 +99,9 @@ public class MainActivity extends AppCompatActivity {
         
         addRoutine.setOnClickListener(x -> {
             Log.d(TAG, "Added New Routine");
-            var routine = new Routine(0, "New Routine");
+            var routine = new Routine((activityModel.getRoutines()
+                    .get(activityModel.getRoutines().size() - 1))
+                    .getId() + 1, 0, "New Routine");
             activityModel.putRoutine(routine);
             routineList.add(routine);
             adapter.notifyDataSetChanged();
