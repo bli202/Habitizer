@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -27,6 +28,8 @@ public class MainViewModel extends ViewModel {
     // Domain state (Model) and current routine context.
     private final TaskRepository taskRepository;
     private final RoutineRepository routineRepository;
+    
+    private final PlainMutableSubject<List<Task>> currTaskList;
     private final PlainMutableSubject<Integer> estimatedTime;
 
     private final PlainMutableSubject<Task> firstTask;
@@ -48,21 +51,21 @@ public class MainViewModel extends ViewModel {
 
         Log.d(LOG_TAG, "MainViewModel constructor");
 
-
+        // Creating observable subjects.
         this.firstTask = new PlainMutableSubject<>();
         this.completed = new PlainMutableSubject<>(false);
         this.estimatedTime = new PlainMutableSubject<>();
+        this.currTaskList = new PlainMutableSubject<>(Objects.requireNonNull(curRoutine.getValue()).getTaskList());
 
         // Observe tasks for the specified routine.
-
-
         taskRepository.findAll(Objects.requireNonNull(getCurRoutine().getValue()).getId()).observe(tasks -> {
             if (tasks == null) return;
 
-            List<Task> curRoutineTasks = new ArrayList<>(tasks);
+            var curRoutineTasks = tasks.stream()
+                    .toList();
 
             if (!curRoutineTasks.isEmpty()) {
-                firstTask.setValue(curRoutineTasks.get(0));
+                this.currTaskList.setValue(curRoutineTasks);
             }
         });
     }
@@ -92,7 +95,6 @@ public class MainViewModel extends ViewModel {
     public void remove(String name) {
         Log.d("MainViewModel", "Task being removed: " + name);
         taskRepository.remove(Objects.requireNonNull(getCurRoutine().getValue()).getId(), name);
-        curRoutine.setValue(getCurRoutine().getValue());
         Log.d("MainViewModel", "Number of Tasks: " + getCurRoutine().getValue().getNumTasks());
     }
 
