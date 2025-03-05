@@ -22,9 +22,6 @@ public class HabitizerApplication extends Application {
         String TAG = "HabitizerApplication";
         Log.d(TAG, TAG + "onCreate being called");
         
-        
-        // Initialize data source and repository
-        // TODO must change these next three lines.
         var database = Room.databaseBuilder(
                         getApplicationContext(),
                         HabitizerDatabase.class,
@@ -51,7 +48,7 @@ public class HabitizerApplication extends Application {
     }
     
     private void populateRepositories() {
-        InMemoryDataSource dataSource = InMemoryDataSource.fromDefault();
+        InMemoryDataSource.fromDefault();
         this.routineRepository.addRoutine(InMemoryDataSource.MORNING_ROUTINE);
         this.routineRepository.addRoutine(InMemoryDataSource.EVENING_ROUTINE);
         
