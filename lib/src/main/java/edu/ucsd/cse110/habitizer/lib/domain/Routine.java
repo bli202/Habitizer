@@ -46,11 +46,7 @@ public class Routine {
     public String toString() {
         return name;
     }
-
-    public String getTitle() {
-        return name;
-    }
-
+    
     public int getDuration() {
         return estimatedTime;
     }

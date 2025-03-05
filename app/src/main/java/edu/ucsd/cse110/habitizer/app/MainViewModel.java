@@ -7,11 +7,9 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -134,5 +132,9 @@ public class MainViewModel extends ViewModel {
     
     public void setCurRoutineEstimatedTime(int time) {
         routineRepository.setEstimatedTime(Objects.requireNonNull(curRoutine.getValue()).getId(), time);
+    }
+    
+    public void removeRoutine(Routine routine) {
+        routineRepository.removeRoutine(routine);
     }
 }
