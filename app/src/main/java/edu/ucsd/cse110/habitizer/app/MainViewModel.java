@@ -113,7 +113,6 @@ public class MainViewModel extends ViewModel {
         return taskRepository.findAll(Objects.requireNonNull(curRoutine.getValue()).getId());
     }
     
-    @SuppressWarnings("unused")
     public List<Routine> getRoutines() {
         return routineRepository.getRoutineList().getValue();
     }

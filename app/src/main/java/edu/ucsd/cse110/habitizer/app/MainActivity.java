@@ -50,10 +50,7 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         var activityModel = modelProvider.get(MainViewModel.class);
         
-        ArrayList<Routine> routineList = (ArrayList<Routine>) activityModel.getRoutines();
-//
-//        routineList.add(InMemoryDataSource.MORNING_ROUTINE);
-//        routineList.add(InMemoryDataSource.EVENING_ROUTINE);
+//        ArrayList<Routine> routineList = (ArrayList<Routine>) activityModel.getRoutines();
         
         ListView routineView = findViewById(R.id.routine_view);
         Button addRoutine = findViewById(R.id.addRoutine);
@@ -95,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                     
                     TaskFragment taskFragment = TaskFragment.newInstance();
                     
-                    
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_routine, taskFragment)
@@ -112,10 +108,10 @@ public class MainActivity extends AppCompatActivity {
         };
         
         MainViewModel.getCurRoutine().observe(routine -> {
-            for (int i = 0; i < routineList.size(); i++) {
+            for (int i = 0; i < activityModel.getRoutines().size(); i++) {
                 assert routine != null;
-                if (routineList.get(i).getId() == (routine.getId())) {
-                    routineList.set(i, routine);
+                if (activityModel.getRoutines().get(i).getId() == (routine.getId())) {
+                    activityModel.getRoutines().set(i, routine);
                     adapter.notifyDataSetChanged();
                     break;
                 }
@@ -126,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Added New Routine");
             var routine = new Routine(0, "New Routine");
             activityModel.putRoutine(routine);
-            routineList.add(routine);
+            activityModel.getRoutines().add(routine);
             adapter.notifyDataSetChanged();
         });
         
