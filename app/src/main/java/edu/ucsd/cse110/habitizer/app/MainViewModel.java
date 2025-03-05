@@ -32,7 +32,7 @@ public class MainViewModel extends ViewModel {
 
     private final PlainMutableSubject<Task> firstTask;
     private final PlainMutableSubject<Boolean> completed;
-    private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.MORNING_ROUTINE);
+    private static PlainMutableSubject<Routine> curRoutine;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
             MainViewModel.class,
@@ -47,6 +47,7 @@ public class MainViewModel extends ViewModel {
         this.taskRepository = taskRepository;
         this.routineRepository = routineRepository;
 
+        curRoutine = new PlainMutableSubject<>(routineRepository.getRoutineList().getValue().get(0));
         Log.d(LOG_TAG, "MainViewModel constructor");
 
         // Creating observable subjects.
