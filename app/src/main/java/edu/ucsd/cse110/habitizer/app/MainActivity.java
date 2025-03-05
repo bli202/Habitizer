@@ -21,7 +21,6 @@ import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.TaskFragment;
-import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.RoutineAdapter;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
     
+    private void toggleHomeScreen() {
+        this.homeScreen = !homeScreen;
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,68 +47,43 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding view = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(view.getRoot());
         
+        ListView routineView = findViewById(R.id.routine_view);
+        Button addRoutine = findViewById(R.id.addRoutine);
+        
         // Keep track of routine time changes and new routines
         var modelOwner = this;
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         var activityModel = modelProvider.get(MainViewModel.class);
         
-//        ArrayList<Routine> routineList = (ArrayList<Routine>) activityModel.getRoutines();
+        ArrayList<Routine> routineList = (ArrayList<Routine>) activityModel.getRoutines();
         
-        ListView routineView = findViewById(R.id.routine_view);
-        Button addRoutine = findViewById(R.id.addRoutine);
-        
-        RoutineAdapter adapter = new RoutineAdapter(this, activityModel.getRoutines()) {
-            
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                if (convertView == null) {
-                    LayoutInflater inflater = LayoutInflater.from(getContext());
-                    convertView = inflater.inflate(R.layout.routinelist_item, parent, false);
-                }
-                
-                
-                TextView titleView = convertView.findViewById(R.id.RoutineTitle);
-                TextView timeView = convertView.findViewById(R.id.RoutineTime);
-                
-                Routine routine = Objects.requireNonNull(getItem(position));
-                titleView.setText(routine.getTitle());
-                String timeText = routine.getDuration() + "m";
-                timeView.setText(timeText);
-                
-                ImageButton deleteButton = convertView.findViewById(R.id.deleteRoutineButton);
-                
-                // TODO
-                deleteButton.setOnClickListener(view1 -> {
-                    notifyDataSetChanged();
-                    //implementation
+        RoutineAdapter adapter = new RoutineAdapter(this,
+                activityModel.getRoutines(),
+                routine -> {
                     Log.d(TAG, "Delete Button CLicked");
-                });
-                
-                convertView.setOnClickListener(view2 -> {
-                    Routine selectedRoutine = getItem(position);
-                    Log.d(TAG, "Selected Routine: " + selectedRoutine);
-                    
-                    // FIRST ROUTINE CLICKED SETS THE TASK VIEW
-                    MainViewModel.switchRoutine(selectedRoutine);
-                    
+                    if (routineList.size() == 1) {
+                        var dialogFragment = new InvalidDeleteRoutineDialogFragment();
+                        dialogFragment.show(getSupportFragmentManager(), "InvalidDeleteRoutineDialogFragment");
+                    } else {
+                        activityModel.removeRoutine(routine);
+                        routineList.remove(routine);
+                    }
+                },
+                view2 -> {
                     TaskFragment taskFragment = TaskFragment.newInstance();
                     
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_routine, taskFragment)
-                            .addToBackStack(null) // for back button
+                            .addToBackStack(null)
                             .commit();
-                    homeScreen = !homeScreen;
                     
                     routineView.setVisibility(View.GONE);
                     addRoutine.setVisibility(View.INVISIBLE);
                     findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);
+                    toggleHomeScreen();
                 });
-                return convertView;
-            }
-        };
         
         MainViewModel.getCurRoutine().observe(routine -> {
             for (int i = 0; i < activityModel.getRoutines().size(); i++) {
