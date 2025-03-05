@@ -90,9 +90,17 @@ public class MainViewModel extends ViewModel {
     /**
      * Removes a task from the current routine.
      */
-    public void remove(String name) {
+    public void removeTaskByName(String name) {
         Log.d("MainViewModel", "Task being removed: " + name);
+        Objects.requireNonNull(curRoutine.getValue()).removeTask(name);
         taskRepository.remove(Objects.requireNonNull(getCurRoutine().getValue()).getId(), name);
+        Log.d("MainViewModel", "Number of Tasks: " + getCurRoutine().getValue().getNumTasks());
+    }
+    
+    public void removeTaskById(int taskId) {
+        Log.d("MainViewModel", "Task being removed: " + taskId);
+        Objects.requireNonNull(curRoutine.getValue()).removeTask(taskId);
+        taskRepository.remove(Objects.requireNonNull(getCurRoutine().getValue()).getId(), taskId);
         Log.d("MainViewModel", "Number of Tasks: " + getCurRoutine().getValue().getNumTasks());
     }
 

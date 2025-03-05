@@ -55,6 +55,11 @@ public class RoomTaskRepository implements TaskRepository {
     }
     
     @Override
+    public void remove(int routineId, int taskId) {
+        taskDao.deleteByRoutineIdAndTaskId(routineId, taskId);
+    }
+    
+    @Override
     public void edit(int routineId, String oldTaskName, String newTaskName) {
         List<TaskEntity> taskEntities = taskDao.findAllByRoutineId(routineId);
         for (TaskEntity taskEntity : taskEntities) {

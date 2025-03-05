@@ -43,6 +43,7 @@ public class DeleteTaskDialogFragment extends DialogFragment {
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
+        assert getArguments() != null;
         String taskNameToDelete = getArguments().getString(tName);
         if (taskNameToDelete != null) {
             Log.d("DeleteTaskDialogFragment", "Task being deleted: " + getArguments().getString(tName));
@@ -51,7 +52,7 @@ public class DeleteTaskDialogFragment extends DialogFragment {
             var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
             var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
             var activityModel = modelProvider.get(MainViewModel.class);
-            activityModel.remove(taskNameToDelete);
+            activityModel.removeTaskByName(taskNameToDelete);
         }
         dialog.dismiss();
     }

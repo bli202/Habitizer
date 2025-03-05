@@ -53,7 +53,12 @@ public class SimpleTaskRepository implements TaskRepository {
     public void remove(int routineId, String taskName) {
         dataSource.removeTask(routineId, taskName);
     }
-
+    
+    @Override
+    public void remove(int routineId, int taskId) {
+        dataSource.removeTaskById(routineId, taskId);
+    }
+    
     /**
      * Edits a task within the specified routine by replacing the old task name with the new one.
      */

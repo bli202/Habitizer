@@ -314,4 +314,8 @@ public class InMemoryDataSource {
 
         return data;
     }
+    
+    public void removeTaskById(int routineId, int taskId) {
+    
+    }
 }

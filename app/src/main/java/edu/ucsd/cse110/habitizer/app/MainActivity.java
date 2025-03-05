@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Routine> routineList = (ArrayList<Routine>) activityModel.getRoutines();
         
         RoutineAdapter adapter = new RoutineAdapter(this,
-                activityModel.getRoutines(),
+                routineList,
                 routine -> {
                     Log.d(TAG, "Delete Button CLicked");
                     if (routineList.size() == 1) {
@@ -87,10 +87,10 @@ public class MainActivity extends AppCompatActivity {
                 });
         
         MainViewModel.getCurRoutine().observe(routine -> {
-            for (int i = 0; i < activityModel.getRoutines().size(); i++) {
+            for (int i = 0; i < routineList.size(); i++) {
                 assert routine != null;
-                if (activityModel.getRoutines().get(i).getId() == (routine.getId())) {
-                    activityModel.getRoutines().set(i, routine);
+                if (routineList.get(i).getId() == (routine.getId())) {
+                    routineList.set(i, routine);
                     adapter.notifyDataSetChanged();
                     break;
                 }
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Added New Routine");
             var routine = new Routine(0, "New Routine");
             activityModel.putRoutine(routine);
-            activityModel.getRoutines().add(routine);
+            routineList.add(routine);
             adapter.notifyDataSetChanged();
         });
         

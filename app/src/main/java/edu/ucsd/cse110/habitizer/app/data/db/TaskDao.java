@@ -26,4 +26,7 @@ public interface TaskDao {
     
     @Update
     void update(TaskEntity task);
+    
+    @Query("DELETE FROM tasks WHERE routineId = :routineId AND id = :taskId")
+    void deleteByRoutineIdAndTaskId(int routineId, int taskId);
 }

@@ -33,6 +33,8 @@ public interface TaskRepository {
      * Removes the task with the given name from the specified routine.
      */
     public void remove(int routineId, String taskName);
+    
+    public void remove(int routineId, int taskName);
 
     /**
      * Edits a task within the specified routine by replacing the old task name with the new one.

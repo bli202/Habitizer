@@ -74,7 +74,7 @@ public class EditTaskDialogFragment extends DialogFragment {
 
         try {
             Log.d(TAG, "About to check task list");
-            for (Task t : Objects.requireNonNull(MainViewModel.getCurRoutine().getValue()).getTaskList()) {
+            for (Task t : Objects.requireNonNull(activityModel.getCurTasks().getValue())) {
                 Log.d(TAG, "Task Name: " + t.getName());
                 if (t.getName().equals(newName) || newName.isEmpty()) {
                     Log.d(TAG, "they r equal");
@@ -95,7 +95,6 @@ public class EditTaskDialogFragment extends DialogFragment {
 
         // Remove the old task and append the new task via the view model.
         activityModel.edit(oldTaskName, newName);
-
         dialog.dismiss();
     }
 

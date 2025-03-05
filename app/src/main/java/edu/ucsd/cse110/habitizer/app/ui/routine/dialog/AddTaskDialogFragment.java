@@ -49,15 +49,13 @@ public class AddTaskDialogFragment extends DialogFragment {
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var name = view.taskNameEditText.getText().toString();
 
-        var task = new Task(name);
-
         if (name.isEmpty()) {
             var dialogFragment = InvalidTaskDialogFragment.newInstance("");
             dialogFragment.show(getParentFragmentManager(), "InvalidTaskDialogFragment");
             dialog.dismiss();
             return;
         }
-
+        
         try {
             for (Task t : Objects.requireNonNull(MainViewModel.getCurRoutine().getValue()).getTaskList()) {
                 if (t.getName().equals(name)) {
@@ -70,6 +68,8 @@ public class AddTaskDialogFragment extends DialogFragment {
         } catch (Exception e) {
             Log.e("EditTaskDialogFragment", "Exception while checking task list", e);
         }
+        var task = new Task(name);
+        
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);

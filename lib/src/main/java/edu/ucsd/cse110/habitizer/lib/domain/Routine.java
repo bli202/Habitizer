@@ -89,6 +89,30 @@ public class Routine {
         }
         return false;
     }
+    
+    public boolean removeTask(String name) {
+        if (ongoing || taskList.isEmpty()) return false;
+        
+        // remove task from List
+        for (Task t : taskList) {
+            if (t.getName().equals(name)) {
+                return taskList.remove(t);
+            }
+        }
+        return false;
+    }
+    
+    public boolean removeTask(int taskId) {
+        if (ongoing || taskList.isEmpty()) return false;
+        
+        // remove task from List
+        for (Task t : taskList) {
+            if (t.getId() == (taskId)) {
+                return taskList.remove(t);
+            }
+        }
+        return false;
+    }
 
     /**
      * Starts routine; starts timer and updates all tasks to be not completed

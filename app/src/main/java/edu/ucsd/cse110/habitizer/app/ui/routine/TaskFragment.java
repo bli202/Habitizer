@@ -79,6 +79,7 @@ public class TaskFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tasklist_view, container, false);
         Log.d(TAG, "Current Routine: " + Objects.requireNonNull(curRoutine).getName());
         this.adapter = new TaskAdapter(requireContext(),
+                activityModel.getCurTasks().getValue(),
                 curRoutine,
                 name -> {
                     var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);
@@ -131,7 +132,7 @@ public class TaskFragment extends Fragment {
 //            Log.d(TAG, "Notified Data Set");
             var dialogFragment = new AddTaskDialogFragment();
             dialogFragment.show(getChildFragmentManager(), "AddTaskDialogFragment");
-            adapter.notifyDataSetChanged();
+//            adapter.notifyDataSetChanged();
         });
 
         estimatedTimeView.setOnClickListener(v -> {
@@ -140,7 +141,7 @@ public class TaskFragment extends Fragment {
                 dialogFragment.show(getChildFragmentManager(), "EditTimeDialogFragment");
 //                Log.d(TAG, "getTime: " + curRoutine.getEstimatedTime());
             }
-            adapter.notifyDataSetChanged();
+//            adapter.notifyDataSetChanged();
         });
         
         curRoutineSubject.observe(routine -> {
@@ -151,7 +152,7 @@ public class TaskFragment extends Fragment {
 
         startRoutine.setOnClickListener(x -> {
 //            Log.d(TAG, "Notified Data Set");
-            adapter.notifyDataSetChanged();
+//            adapter.notifyDataSetChanged();
             
             if (curRoutine.getNumTasks() == 0) {
                 var dialogFragment = InvalidStartDialogFragment.newInstance();
@@ -180,7 +181,7 @@ public class TaskFragment extends Fragment {
                     String timeText = curRoutine.getElapsedTime() + "m";
                     actualTimeView.setText(timeText);
                     if (!curRoutine.getOngoing()) {
-                        adapter.notifyDataSetChanged();
+//                        adapter.notifyDataSetChanged();
                         stopRoutine.setVisibility(View.INVISIBLE);
                         addTask.setVisibility(View.VISIBLE);
                         startRoutine.setVisibility(View.VISIBLE);
@@ -193,7 +194,7 @@ public class TaskFragment extends Fragment {
                 }
             }.start();
 //            Log.d(TAG, "Notified Data Set");
-            adapter.notifyDataSetChanged();
+//            adapter.notifyDataSetChanged();
 
         });
 

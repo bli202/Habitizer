@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.R;
@@ -25,7 +26,9 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     Consumer<String> onEditClick;
     Routine routine;
     
-    public TaskAdapter(Context context, Routine routine,
+    public TaskAdapter(Context context,
+                       List<Task> taskList,
+                       Routine routine,
                        Consumer<String> onEditClick,
                        Consumer<String> onDeleteClick
                           ) {
@@ -34,11 +37,11 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash.
-        super(context, 0, routine.getTaskList());
-        this.notifyDataSetChanged();
+        super(context, 0, taskList);
         this.onEditClick = onEditClick;
         this.onDeleteClick = onDeleteClick;
         this.routine = routine;
+        //notifyDataSetChanged();
     }
 
     @NonNull
@@ -75,14 +78,17 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             deleteTaskButton.setVisibility(View.VISIBLE);
         }
         
-        
         editTaskButton.setOnClickListener(v -> {
             var name = task.getName();
             assert name != null;
             onEditClick.accept(name);
+            notifyDataSetChanged();
         });
         
-        deleteTaskButton.setOnClickListener(v -> onDeleteClick.accept(task.getName()));
+        deleteTaskButton.setOnClickListener(v -> {
+            onDeleteClick.accept(task.getName());
+            notifyDataSetChanged();
+        });
         
         taskTitle.setText(task.getName());
 
