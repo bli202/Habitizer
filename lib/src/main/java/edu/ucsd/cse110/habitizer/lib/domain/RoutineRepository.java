@@ -12,4 +12,6 @@ public interface RoutineRepository {
     Subject<List<Routine>> getRoutineList();
     
     void setEstimatedTime(int routineId, int time);
+
+    public void edit(int routineId, String oldTaskName, String newTaskName);
 }

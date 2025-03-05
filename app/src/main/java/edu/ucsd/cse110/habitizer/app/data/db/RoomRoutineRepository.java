@@ -56,4 +56,11 @@ public class RoomRoutineRepository implements RoutineRepository {
     public void setEstimatedTime(int routineId, int time) {
         routineDao.setEstimatedTime(routineId, time);
     }
-}
+
+    @Override
+    public void edit(int routineId, String oldTaskName, String newTaskName) {
+        RoutineEntity routineEntity = routineDao.find(routineId);
+                routineEntity.name = newTaskName;
+                routineDao.update(routineEntity);
+        }
+    }

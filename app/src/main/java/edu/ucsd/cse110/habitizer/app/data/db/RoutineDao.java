@@ -6,9 +6,11 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import java.util.List;
 
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 @Dao
@@ -39,6 +41,9 @@ public interface RoutineDao {
     
     @Query("SELECT * FROM routines")
     List<RoutineEntity> findAll();
+
+    @Update
+    void update(RoutineEntity routine);
     
     @Query("SELECT * FROM routines WHERE id = :id")
     LiveData<RoutineEntity> findAsLiveData(int id);

@@ -26,6 +26,7 @@ import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditEstimatedTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidStartDialogFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditRoutineDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -111,7 +112,17 @@ public class TaskFragment extends Fragment {
         FloatingActionButton ffButton = view.findViewById(R.id.fast_forward_timer_button);
         FloatingActionButton pauseTimerButton = view.findViewById(R.id.pause_timer_button);
         FloatingActionButton restartTimerButton = view.findViewById(R.id.restart_timer_button);
-        
+        FloatingActionButton editRoutineButton = view.findViewById(R.id.edit_routine_button);
+        editRoutineButton.setOnClickListener(v -> {
+                var editRoutineDialogFragment = EditRoutineDialogFragment.newInstance(curRoutine.getName());
+                editRoutineDialogFragment.show(getParentFragmentManager(), "EditRoutineDialogFragment");
+        });
+
+        activityModel.getCurRoutine().observe(routine -> {
+            if (routine != null) {
+                titleView.setText(routine.getName());
+            }
+        });
         
         activityModel.getCompleted().observe(completed -> {
             Log.d(TAG, "COMPLETED!!!");

@@ -88,6 +88,14 @@ public class MainViewModel extends ViewModel {
     }
 
     /**
+     * Edit an existing routine name
+     */
+    public void editRoutine(String oldName, String newName) {
+        routineRepository.edit(Objects.requireNonNull(getCurRoutine().getValue()).getId(), oldName, newName);
+    }
+
+
+    /**
      * Removes a task from the current routine.
      */
     public void removeTaskByName(String name) {

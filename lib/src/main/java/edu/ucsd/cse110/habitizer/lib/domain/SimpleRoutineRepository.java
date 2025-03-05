@@ -55,4 +55,9 @@ public class SimpleRoutineRepository implements RoutineRepository {
         return datasource.getRoutineSubject(id);
     }
 
+    @Override
+    public void edit(int routineId, String oldTaskName, String newTaskName) {
+        datasource.editTask(routineId, oldTaskName, newTaskName);
+    }
+
 }
