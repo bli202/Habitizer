@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.TaskFragment;
+import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidDeleteRoutineDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class MainActivity extends AppCompatActivity {
