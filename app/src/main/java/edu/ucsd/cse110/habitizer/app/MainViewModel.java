@@ -32,7 +32,7 @@ public class MainViewModel extends ViewModel {
 
     private final PlainMutableSubject<Task> firstTask;
     private final PlainMutableSubject<Boolean> completed;
-    private static final PlainMutableSubject<Routine> curRoutine = new PlainMutableSubject<>(InMemoryDataSource.MORNING_ROUTINE);
+    private static PlainMutableSubject<Routine> curRoutine;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -47,7 +47,8 @@ public class MainViewModel extends ViewModel {
         this.taskRepository = taskRepository;
         this.routineRepository = routineRepository;
 
-        Log.d(LOG_TAG, "MainViewModel constructor");
+        this.curRoutine = new PlainMutableSubject<>(Objects.requireNonNull(routineRepository
+                .getRoutineList().getValue()).get(0));
 
         // Creating observable subjects.
         this.firstTask = new PlainMutableSubject<>();
@@ -91,9 +92,14 @@ public class MainViewModel extends ViewModel {
      * Edit an existing routine name
      */
     public void editRoutine(String oldName, String newName) {
-        routineRepository.edit(Objects.requireNonNull(getCurRoutine().getValue()).getId(), oldName, newName);
+        Routine currentRoutine = getCurRoutine().getValue();
+        if (currentRoutine != null) {
+            // Update in database
+            routineRepository.editRoutineName(currentRoutine.getId(), newName);
+            currentRoutine.setName(newName);
+            curRoutine.setValue(currentRoutine);
+        }
     }
-
 
     /**
      * Removes a task from the current routine.

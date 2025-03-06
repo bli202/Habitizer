@@ -39,6 +39,16 @@ public class Routine {
         this.tasksDone = 0;
     }
 
+    public void setName(String newName) {
+        try {
+            java.lang.reflect.Field field = Routine.class.getDeclaredField("name");
+            field.setAccessible(true);
+            field.set(this, newName);
+        } catch (Exception e) {
+            System.err.println("Error changing routine name: " + e.getMessage());
+        }
+    }
+
     public int getId() {
         return id;
     }

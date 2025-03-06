@@ -42,9 +42,15 @@ public interface RoutineDao {
     @Query("SELECT * FROM routines")
     List<RoutineEntity> findAll();
 
-    @Update
-    void update(RoutineEntity routine);
-    
+    /**
+     * Updates the name of a routine.
+     *
+     * @param id The ID of the routine to update
+     * @param newName The new name for the routine
+     */
+    @Query("UPDATE routines SET name = :newName WHERE id = :id")
+    void updateRoutineName(int id, String newName);
+
     @Query("SELECT * FROM routines WHERE id = :id")
     LiveData<RoutineEntity> findAsLiveData(int id);
     

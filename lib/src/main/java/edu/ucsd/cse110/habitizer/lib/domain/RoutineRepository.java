@@ -13,5 +13,5 @@ public interface RoutineRepository {
     
     void setEstimatedTime(int routineId, int time);
 
-    public void edit(int routineId, String oldTaskName, String newTaskName);
+    public void editRoutineName(int routineId, String newTaskName);
 }

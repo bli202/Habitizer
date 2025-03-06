@@ -20,7 +20,7 @@ public class RoomRoutineRepository implements RoutineRepository {
     public RoomRoutineRepository(RoutineDao routineDao) {
         this.routineDao = routineDao;
     }
-    
+
     @Override
     public void removeRoutine(Routine routine) {
         routineDao.delete(routine.getId());
@@ -58,9 +58,7 @@ public class RoomRoutineRepository implements RoutineRepository {
     }
 
     @Override
-    public void edit(int routineId, String oldTaskName, String newTaskName) {
-        RoutineEntity routineEntity = routineDao.find(routineId);
-                routineEntity.name = newTaskName;
-                routineDao.update(routineEntity);
-        }
+    public void editRoutineName(int routineId, String newRoutineName) {
+        routineDao.updateRoutineName(routineId, newRoutineName);
+    }
     }
