@@ -42,7 +42,7 @@ public class InvalidRoutineDialogFragment extends DialogFragment {
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Invalid Routine Name")
-                .setMessage("Routine name cannot be empty or a duplicate of an existing routine.")
+                .setMessage("Routine name cannot be empty of an existing routine.")
                 .setPositiveButton("Try Again", (dialog, which) -> {
                     // Show the edit dialog again with the original name
                     var editDialogFragment = EditRoutineDialogFragment.newInstance(originalRoutineName);

@@ -58,6 +58,7 @@ public class RoomTaskRepository implements TaskRepository {
     public void remove(int routineId, int taskId) {
         taskDao.deleteByRoutineIdAndTaskId(routineId, taskId);
     }
+
     
     @Override
     public void edit(int routineId, String oldTaskName, String newTaskName) {
@@ -65,7 +66,7 @@ public class RoomTaskRepository implements TaskRepository {
         for (TaskEntity taskEntity : taskEntities) {
             if (taskEntity.taskName.equals(oldTaskName)) {
                 taskEntity.taskName = newTaskName;
-                taskDao.update(taskEntity);
+                taskDao.editTask(routineId, oldTaskName, newTaskName);
                 break;
             }
         }

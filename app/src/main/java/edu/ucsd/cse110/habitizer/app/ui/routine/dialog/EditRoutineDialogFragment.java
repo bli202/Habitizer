@@ -73,15 +73,15 @@ public class EditRoutineDialogFragment extends DialogFragment {
         }
 
         try {
-            Log.d(TAG, "Checking routine list for duplicate names");
             // Check if the new routine name already exists or is empty
-            if (routineNameExists(newName) || newName.isEmpty()) {
-                Log.d(TAG, "Invalid routine name: duplicate or empty");
+            if (newName.isEmpty()) {
+                Log.d(TAG, "Invalid routine name: empty");
                 var dialogFragment = InvalidRoutineDialogFragment.newInstance(oldRoutineName);
                 dialogFragment.show(getParentFragmentManager(), "InvalidRoutineDialogFragment");
                 dialog.dismiss();
                 return;
             }
+
         } catch (Exception e) {
             Log.e(TAG, "Exception while checking routine list", e);
         }

@@ -24,6 +24,7 @@ public class RoomRoutineRepository implements RoutineRepository {
     @Override
     public void removeRoutine(Routine routine) {
         routineDao.delete(routine.getId());
+        routineDao.deleteTimer(routine.getId());
     }
     
     @Override
