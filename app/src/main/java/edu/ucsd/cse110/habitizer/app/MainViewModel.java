@@ -110,7 +110,7 @@ public class MainViewModel extends ViewModel {
 
     public static void switchRoutine(Routine routine) {
         curRoutine.setValue(routine);
-        currTaskList.setValue(routine.getTaskList());
+//        currTaskList.setValue(routine.getTaskList());
 
         // Observe tasks for the specified routine.
         taskRepository.findAll(Objects.requireNonNull(getCurRoutine().getValue()).getId()).observe(tasks -> {
