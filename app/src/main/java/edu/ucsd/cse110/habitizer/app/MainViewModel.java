@@ -49,25 +49,13 @@ public class MainViewModel extends ViewModel {
         this.taskRepository = taskRepository;
         this.routineRepository = routineRepository;
 
-        this.curRoutine = new PlainMutableSubject<>(Objects.requireNonNull(routineRepository
-                .getRoutineList().getValue()).get(0));
+        this.curRoutine = new PlainMutableSubject<>();
 
         // Creating observable subjects.
         this.firstTask = new PlainMutableSubject<>();
         this.completed = new PlainMutableSubject<>(false);
         this.estimatedTime = new PlainMutableSubject<>();
-        currTaskList = new PlainMutableSubject<>(Objects.requireNonNull(Objects.requireNonNull(curRoutine.getValue()).getTaskList()));
-
-        // Observe tasks for the specified routine.
-        taskRepository.findAll(Objects.requireNonNull(getCurRoutine().getValue()).getId()).observe(tasks -> {
-            if (tasks == null) return;
-
-            var curRoutineTasks = tasks.stream()
-                    .collect(Collectors.toList());
-
-            this.currTaskList.setValue(curRoutineTasks);
-
-        });
+        currTaskList = new PlainMutableSubject<>();
     }
 
     @SuppressWarnings("unused")
@@ -123,6 +111,14 @@ public class MainViewModel extends ViewModel {
     public static void switchRoutine(Routine routine) {
         curRoutine.setValue(routine);
         currTaskList.setValue(routine.getTaskList());
+
+        // Observe tasks for the specified routine.
+        taskRepository.findAll(Objects.requireNonNull(getCurRoutine().getValue()).getId()).observe(tasks -> {
+            if (tasks == null) return;
+            var curRoutineTasks = tasks.stream()
+                    .collect(Collectors.toList());
+            currTaskList.setValue(curRoutineTasks);
+        });
     }
 
     public void startTime() {
