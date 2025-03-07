@@ -3,6 +3,7 @@ package edu.ucsd.cse110.habitizer.app.data.db;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+import androidx.room.Query;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +48,7 @@ public class RoomTaskRepository implements TaskRepository {
     @Override
     public void save(int routineId, Task task) {
         TaskEntity taskEntity = TaskEntity.fromTask(routineId, task);
-        taskDao.insert(taskEntity);
+        taskDao.append(taskEntity);
     }
     
     @Override
@@ -72,4 +73,21 @@ public class RoomTaskRepository implements TaskRepository {
             }
         }
     }
+
+    public void moveUp(int routineId, int order) {
+        swapTasks(routineId, order - 1, order);
+    }
+
+    public void moveDown(int routineId, int order) {
+        swapTasks(routineId, order, order + 1);
+    }
+
+    public void swapTasks(int routineId, int firstSortOrder, int secondSortOrder) {
+        taskDao.setTemporarySortOrder(routineId, firstSortOrder);  // Step 1: Store first value temporarily
+        taskDao.updateFirstTaskSortOrder(routineId, firstSortOrder, secondSortOrder);  // Step 2: Move second task
+        taskDao.updateSecondTaskSortOrder(routineId, secondSortOrder);  // Step 3: Move first task to second's position
+    }
+
+
+
 }

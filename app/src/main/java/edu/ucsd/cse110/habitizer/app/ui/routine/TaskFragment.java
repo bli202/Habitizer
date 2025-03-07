@@ -75,7 +75,7 @@ public class TaskFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         this.adapter = new TaskAdapter(requireContext(),
-                new ArrayList<>(),
+                new ArrayList<>(List.of()),
                 activityModel.getCurRoutine().getValue(),
                 name -> {
                     var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);

@@ -40,4 +40,8 @@ public interface TaskRepository {
      * Edits a task within the specified routine by replacing the old task name with the new one.
      */
     public void edit(int routineId, String oldTaskName, String newTaskName);
+
+    public void moveUp(int routineId, int order);
+
+    public void moveDown(int routineId, int order);
 }

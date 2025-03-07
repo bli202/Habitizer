@@ -4,9 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.PrimaryKey;
+import androidx.room.Index;
 
-import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 @Entity(
@@ -17,12 +16,16 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
                 parentColumns = "id",         // Primary key in RoutineEntity
                 childColumns = "routineId",   // Foreign key in TaskEntity
                 onDelete = ForeignKey.CASCADE // Ensures tasks are deleted if routine is deleted
-        )
+        ),
+        indices = {@Index(value = "sortOrder", unique = true)}
 )
 public class TaskEntity {
 
     @ColumnInfo(name = "id")
     public Integer id = null;
+
+    @ColumnInfo(name = "sortOrder")
+    public @NonNull Integer sortOrder;
 
     @ColumnInfo(name = "routineId")
     public @NonNull Integer routineId;
@@ -33,21 +36,24 @@ public class TaskEntity {
     @ColumnInfo(name = "completed")
     public Boolean completed;
     
-    public TaskEntity(Integer routineId, String taskName) {
+    public TaskEntity(Integer routineId, String taskName, Integer sortOrder) {
         this.routineId = routineId;
         this.taskName = taskName;
         this.completed = false;
+        this.sortOrder = sortOrder;
     }
     
     // Method to convert TaskEntity to Task
     public Task toTask() {
-        return new Task(taskName);
+        return new Task(taskName, sortOrder);
     }
     
     // Method to create TaskEntity from Task
     public static TaskEntity fromTask(int id, Task task) {
-        TaskEntity te = new TaskEntity(id, task.getName());
+        TaskEntity te = new TaskEntity(id, task.getName(), task.getOrder());
         te.completed = task.isCompleted();
         return te;
     }
+
+
 }

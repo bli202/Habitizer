@@ -68,7 +68,7 @@ public class AddTaskDialogFragment extends DialogFragment {
         } catch (Exception e) {
             Log.e("EditTaskDialogFragment", "Exception while checking task list", e);
         }
-        var task = new Task(name);
+        var task = new Task(name, MainViewModel.getCurRoutine().getValue().getNumTasks());
         
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);

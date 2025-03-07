@@ -55,7 +55,8 @@ public class MainViewModel extends ViewModel {
         this.firstTask = new PlainMutableSubject<>();
         this.completed = new PlainMutableSubject<>(false);
         this.estimatedTime = new PlainMutableSubject<>();
-        currTaskList = new PlainMutableSubject<>();
+        this.currTaskList = new PlainMutableSubject<>();
+
     }
 
     @SuppressWarnings("unused")
@@ -157,5 +158,13 @@ public class MainViewModel extends ViewModel {
 
     public void removeRoutine(Routine routine) {
         routineRepository.removeRoutine(routine);
+    }
+
+    public static void moveUp(int routineId, int order) {
+        taskRepository.moveUp(routineId, order);
+    }
+
+    public static void moveDown(int routineId, int order) {
+        taskRepository.moveDown(routineId, order);
     }
 }

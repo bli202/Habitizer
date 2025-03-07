@@ -66,4 +66,14 @@ public class SimpleTaskRepository implements TaskRepository {
     public void edit(int routineId, String oldTaskName, String newTaskName) {
         dataSource.editTask(routineId, oldTaskName, newTaskName);
     }
+
+    @Override
+    public void moveUp(int routineId, int order) {
+
+    }
+
+    @Override
+    public void moveDown(int routineId, int order) {
+
+    }
 }

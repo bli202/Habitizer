@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
+import androidx.room.Transaction;
 
 import java.util.List;
 
@@ -14,11 +15,20 @@ import java.util.List;
 public interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(TaskEntity task);
+
+    @Transaction
+    default int append(TaskEntity task) {
+        var maxSortOrder = getMaxSortOrder();
+        var newTask  = new TaskEntity(
+                task.routineId, task.taskName, maxSortOrder + 1
+        );
+        return Math.toIntExact(insert(newTask));
+    }
     
-    @Query("SELECT * FROM tasks WHERE routineId = :routineId")
+    @Query("SELECT * FROM tasks WHERE routineId = :routineId ORDER BY sortOrder")
     List<TaskEntity> findAllByRoutineId(int routineId);
     
-    @Query("SELECT * FROM tasks WHERE routineId = :routineId")
+    @Query("SELECT * FROM tasks WHERE routineId = :routineId ORDER BY sortOrder")
     LiveData<List<TaskEntity>> findAllByRoutineIdAsLiveData(int routineId);
     
     @Query("DELETE FROM tasks WHERE routineId = :routineId AND taskName = :taskName")
@@ -32,4 +42,24 @@ public interface TaskDao {
     
     @Query("DELETE FROM tasks WHERE routineId = :routineId AND id = :taskId")
     void deleteByRoutineIdAndTaskId(int routineId, int taskId);
+
+    @Query("SELECT MIN(sortOrder) FROM tasks")
+    int getMinSortOrder();
+
+    @Query("SELECT MAX(sortOrder) FROM tasks")
+    int getMaxSortOrder();
+
+    @Query("UPDATE tasks SET sortOrder = -1 " +
+            "WHERE sortOrder = :firstSortOrder AND routineId = :routineId")
+    void setTemporarySortOrder(int routineId, int firstSortOrder);
+
+    @Query("UPDATE tasks SET sortOrder = :firstSortOrder " +
+            "WHERE sortOrder = :secondSortOrder AND routineId = :routineId")
+    void updateFirstTaskSortOrder(int routineId, int firstSortOrder, int secondSortOrder);
+
+    @Query("UPDATE tasks SET sortOrder = :secondSortOrder " +
+            "WHERE sortOrder = -1 AND routineId = :routineId")
+    void updateSecondTaskSortOrder(int routineId, int secondSortOrder);
+
+
 }
