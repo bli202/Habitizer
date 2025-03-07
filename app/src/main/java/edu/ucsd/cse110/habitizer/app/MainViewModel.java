@@ -65,12 +65,8 @@ public class MainViewModel extends ViewModel {
             var curRoutineTasks = tasks.stream()
                     .collect(Collectors.toList());
 
-            Log.d(TAG, "curRoutineTasks size: " + curRoutineTasks.size());
-
-            Log.d(TAG, "curTasksSubject setValue called with size: " + (curRoutineTasks == null ? "null" : curRoutineTasks.size()), new Exception());
             this.currTaskList.setValue(curRoutineTasks);
 
-            Log.d(TAG, "currTaskList size: " + currTaskList.getValue().size());
         });
     }
 
@@ -98,6 +94,7 @@ public class MainViewModel extends ViewModel {
      */
     public void editRoutine(String oldName, String newName) {
         Routine currentRoutine = getCurRoutine().getValue();
+        Log.d(TAG, "routine to edit: " + currentRoutine.getName());
         if (currentRoutine != null) {
             // Update in database
             routineRepository.editRoutineName(currentRoutine.getId(), newName);
@@ -125,6 +122,7 @@ public class MainViewModel extends ViewModel {
 
     public static void switchRoutine(Routine routine) {
         curRoutine.setValue(routine);
+        currTaskList.setValue(routine.getTaskList());
     }
 
     public void startTime() {

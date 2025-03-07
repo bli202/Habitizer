@@ -87,6 +87,7 @@ public class EditRoutineDialogFragment extends DialogFragment {
         }
 
         if (oldRoutineName.isEmpty()) {
+            Log.d(TAG, "onposbutton here");
             // Should not occur if this dialog was invoked for an existing routine.
             dialog.dismiss();
             return;
