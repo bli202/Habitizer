@@ -62,11 +62,9 @@ public class EditTaskDialogFragment extends DialogFragment {
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         final String TAG = "EditTaskDialogFragment";
-        
-        // Get the new task name from the EditText.
+
         String newName = binding.editTask.getText().toString().trim();
 
-        // Retrieve the old task name from the arguments.
         String oldTaskName = "";
         if (getArguments() != null) {
             oldTaskName = getArguments().getString("oldTaskName", "");
@@ -88,12 +86,10 @@ public class EditTaskDialogFragment extends DialogFragment {
             Log.e(TAG, "Exception while checking task list", e);
         }
         if (oldTaskName.isEmpty()) {
-            // Should not occur if this dialog was invoked for an existing task.
             dialog.dismiss();
             return;
         }
 
-        // Remove the old task and append the new task via the view model.
         activityModel.edit(oldTaskName, newName);
         dialog.dismiss();
     }
