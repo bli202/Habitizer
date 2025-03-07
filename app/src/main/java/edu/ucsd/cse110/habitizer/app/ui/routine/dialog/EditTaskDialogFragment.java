@@ -74,7 +74,7 @@ public class EditTaskDialogFragment extends DialogFragment {
 
         try {
             Log.d(TAG, "About to check task list");
-            for (Task t : Objects.requireNonNull(activityModel.getCurTasks().getValue())) {
+            for (Task t : activityModel.getCurRoutine().getValue().getTaskList()) {
                 Log.d(TAG, "Task Name: " + t.getName());
                 if (t.getName().equals(newName) || newName.isEmpty()) {
                     Log.d(TAG, "they r equal");

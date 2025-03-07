@@ -41,7 +41,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         this.onEditClick = onEditClick;
         this.onDeleteClick = onDeleteClick;
         this.routine = routine;
-        //notifyDataSetChanged();
+
+        Log.d(TAG, "task adapter tasklist size:" + taskList.size());
     }
 
     @NonNull

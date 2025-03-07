@@ -2,6 +2,7 @@ package edu.ucsd.cse110.habitizer.app.data.db;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,13 +35,13 @@ public class RoomTaskRepository implements TaskRepository {
     
     @Override
     public Subject<List<Task>> findAll(int routineId) {
-        List<TaskEntity> taskEntities = taskDao.findAllByRoutineId(routineId);
-        List<Task> tasks = taskEntities.stream()
+        LiveData<List<TaskEntity>> taskEntities = taskDao.findAllByRoutineIdAsLiveData(routineId);
+        LiveData<List<Task>> tasks = Transformations.map(taskEntities, entities -> {
+            return entities.stream()
                 .map(TaskEntity::toTask)
                 .collect(Collectors.toList());
-        
-        MutableLiveData<List<Task>> liveData = new MutableLiveData<>(tasks);
-        return new LiveDataSubjectAdapter<>(liveData);
+            });
+        return new LiveDataSubjectAdapter<>(tasks);
     }
     
     @Override

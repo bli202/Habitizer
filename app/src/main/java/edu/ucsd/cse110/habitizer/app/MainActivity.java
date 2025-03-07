@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;

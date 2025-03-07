@@ -7,9 +7,11 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -21,13 +23,13 @@ import edu.ucsd.cse110.observables.Subject;
 
 public class MainViewModel extends ViewModel {
 
-    private static final String LOG_TAG = "MainViewModel";
+    private static final String TAG = "MainViewModel";
 
     // Domain state (Model) and current routine context.
-    private final TaskRepository taskRepository;
+    private static TaskRepository taskRepository;
     private final RoutineRepository routineRepository;
 
-    private final PlainMutableSubject<List<Task>> currTaskList;
+    private static PlainMutableSubject<List<Task>> currTaskList;
     private final PlainMutableSubject<Integer> estimatedTime;
 
     private final PlainMutableSubject<Task> firstTask;
@@ -54,18 +56,21 @@ public class MainViewModel extends ViewModel {
         this.firstTask = new PlainMutableSubject<>();
         this.completed = new PlainMutableSubject<>(false);
         this.estimatedTime = new PlainMutableSubject<>();
-        this.currTaskList = new PlainMutableSubject<>(Objects.requireNonNull(curRoutine.getValue()).getTaskList());
+        currTaskList = new PlainMutableSubject<>(Objects.requireNonNull(Objects.requireNonNull(curRoutine.getValue()).getTaskList()));
 
         // Observe tasks for the specified routine.
         taskRepository.findAll(Objects.requireNonNull(getCurRoutine().getValue()).getId()).observe(tasks -> {
             if (tasks == null) return;
 
             var curRoutineTasks = tasks.stream()
-                    .toList();
+                    .collect(Collectors.toList());
 
-            if (!curRoutineTasks.isEmpty()) {
-                this.currTaskList.setValue(curRoutineTasks);
-            }
+            Log.d(TAG, "curRoutineTasks size: " + curRoutineTasks.size());
+
+            Log.d(TAG, "curTasksSubject setValue called with size: " + (curRoutineTasks == null ? "null" : curRoutineTasks.size()), new Exception());
+            this.currTaskList.setValue(curRoutineTasks);
+
+            Log.d(TAG, "currTaskList size: " + currTaskList.getValue().size());
         });
     }
 
@@ -131,8 +136,8 @@ public class MainViewModel extends ViewModel {
         return curRoutine;
     }
 
-    public Subject<List<Task>> getCurTasks() {
-        return taskRepository.findAll(Objects.requireNonNull(curRoutine.getValue()).getId());
+    public static Subject<List<Task>> getCurTasks() {
+        return currTaskList;
     }
 
     public List<Routine> getRoutines() {
