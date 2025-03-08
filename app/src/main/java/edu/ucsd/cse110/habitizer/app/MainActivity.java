@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.habitizer.app.ui.routine.RoutineAdapter;
 import edu.ucsd.cse110.habitizer.app.ui.routine.TaskFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidDeleteRoutineDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
@@ -74,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 },
                 view2 -> {
                     TaskFragment taskFragment = TaskFragment.newInstance();
-                    
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_routine, taskFragment)
@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
                     findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);
                     toggleHomeScreen();
                 });
-        
-        MainViewModel.getCurRoutine().observe(routine -> {
+
+        activityModel.getCurRoutine().observe(routine -> {
             for (int i = 0; i < routineList.size(); i++) {
                 assert routine != null;
                 if (routineList.get(i).getId() == (routine.getId())) {

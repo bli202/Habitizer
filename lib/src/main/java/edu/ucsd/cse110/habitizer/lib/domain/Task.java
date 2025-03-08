@@ -12,6 +12,7 @@ public class Task {
     private boolean completed;
     private int timeSpent;
     private final int id;
+
     private static int idCounter = 0;
     
     /**
@@ -21,6 +22,13 @@ public class Task {
      */
     public Task(String name) {
         this.id = ++idCounter;
+        this.name = name;
+        this.completed = false;
+        this.timeSpent = 0;
+    }
+
+    public Task(int id, String name) {
+        this.id = id;
         this.name = name;
         this.completed = false;
         this.timeSpent = 0;

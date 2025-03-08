@@ -1,7 +1,5 @@
 package edu.ucsd.cse110.habitizer.app.ui.routine.dialog;
 
-import static edu.ucsd.cse110.habitizer.app.MainViewModel.getCurRoutine;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -21,7 +19,7 @@ import edu.ucsd.cse110.observables.PlainMutableSubject;
 public class EditEstimatedTimeDialogFragment extends DialogFragment {
     
     private FragmentEditTimeBinding view;
-    
+    private MainViewModel activityModel;
     public EditEstimatedTimeDialogFragment() {
     
     }
@@ -52,7 +50,7 @@ public class EditEstimatedTimeDialogFragment extends DialogFragment {
         try {
             int newTime = Integer.parseInt(time);
             // Get current routine
-            Routine currentRoutine = getCurRoutine().getValue();
+            Routine currentRoutine = activityModel.getCurRoutine().getValue();
             // Update the time
             assert currentRoutine != null;
             var modelOwner = requireActivity();
@@ -61,7 +59,7 @@ public class EditEstimatedTimeDialogFragment extends DialogFragment {
             var activityModel = modelProvider.get(MainViewModel.class);
             activityModel.setCurRoutineEstimatedTime(newTime);
             // Update the Subject with the modified routine
-            ((PlainMutableSubject<Routine>) getCurRoutine()).setValue(currentRoutine);
+            ((PlainMutableSubject<Routine>) activityModel.getCurRoutine()).setValue(currentRoutine);
             
             Log.d("EditTimeDialogFragment", "Estimated Time: " + currentRoutine.getEstimatedTime());
         } catch (Exception e) {
@@ -81,5 +79,9 @@ public class EditEstimatedTimeDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        var modelOwner = requireActivity();
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        this.activityModel = modelProvider.get(MainViewModel.class);
     }
 }

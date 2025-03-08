@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.R;
@@ -19,6 +20,12 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import android.graphics.Paint;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+// 0. getItemId defaults to position which ISN'T stable
+// 1. LKP: Do you need the whole routine?
+//    Answer: No, you only need to know if
+//       1. data: running/not running.
+//       2. behavior: pass in a callback for checking off instead
 
 public class TaskAdapter extends ArrayAdapter<Task> {
     private final String TAG = "TaskAdapter";
@@ -53,6 +60,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             convertView = inflater.inflate(R.layout.tasklist_item, parent, false);
         }
 
+
+
         Log.d(TAG, "getView() called for position " + position);
 
         // Get the task for this position.
@@ -78,6 +87,17 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             editTaskButton.setVisibility(View.VISIBLE);
             deleteTaskButton.setVisibility(View.VISIBLE);
         }
+
+        taskTitle.setText(task.getName());
+
+        // Set initial strike-through based on task completion state
+        updateStrikeThrough(taskTitle, task.isCompleted());
+
+        // If the task is already completed, display its stored time.
+        if (task.isCompleted()){
+            String timeText = task.getTimeSpentMinutes() + "m";
+            taskTime.setText(timeText);
+        }
         
         editTaskButton.setOnClickListener(v -> {
             var name = task.getName();
@@ -90,18 +110,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             onDeleteClick.accept(task.getName());
             notifyDataSetChanged();
         });
-        
-        taskTitle.setText(task.getName());
-
-        // Set initial strike-through based on task completion state
-        updateStrikeThrough(taskTitle, task.isCompleted());
-
-        // If the task is already completed, display its stored time.
-        if (task.isCompleted()){
-            String timeText = task.getTimeSpentMinutes() + "m";
-            taskTime.setText(timeText);
-        }
-
 
         // Set click listener on the entire view
         convertView.setOnClickListener(v -> {
@@ -112,6 +120,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             String timeText = routine.checkOffTask(task) + "m";
             taskTime.setText(timeText);
         });
+
         
         return convertView;
     }
@@ -131,6 +140,12 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     @Override
     public boolean hasStableIds() {
         return true;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        Task task = getItem(position);
+        return task != null ? task.getId() : position;
     }
 
 

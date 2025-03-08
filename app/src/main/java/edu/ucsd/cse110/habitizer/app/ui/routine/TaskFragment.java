@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.CountDownTimer;
@@ -31,6 +32,7 @@ import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditEstimatedTimeDialogFr
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidStartDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditRoutineDialogFragment;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.observables.Subject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +40,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
  * create an instance of this fragment.
  */
 public class TaskFragment extends Fragment {
-    
+
     private final String TAG = "TaskFragment";
 
     private MainViewModel activityModel;
@@ -46,6 +48,8 @@ public class TaskFragment extends Fragment {
     private FragmentTasklistViewBinding view;
 
     private CountDownTimer timer;
+
+    private Subject<List<Task>> curTaskSubject;
 
     public TaskFragment() {
         // Required empty public constructor
@@ -92,9 +96,9 @@ public class TaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        var curRoutineSubject = MainViewModel.getCurRoutine();
+        var curRoutineSubject = activityModel.getCurRoutine();
         var curRoutine = curRoutineSubject.getValue();
-        var curTasksSubject = activityModel.getCurTasks();
+        curTaskSubject = activityModel.getCurTasks();
 
         this.view = FragmentTasklistViewBinding.inflate(inflater, container, false);
 
@@ -109,11 +113,12 @@ public class TaskFragment extends Fragment {
             }
         });
 
-        curTasksSubject.observe(tasks -> {
+        curTaskSubject.observe(tasks -> {
             if (tasks == null) return;
             adapter.clear();
             adapter.addAll(new ArrayList<>(tasks)); // remember the mutable copy here!
-            adapter.notifyDataSetChanged();
+            //adapter.notifyDataSetChanged();
+
         });
 
         activityModel.getCompleted().observe(completed -> {
@@ -223,5 +228,12 @@ public class TaskFragment extends Fragment {
         }
 
         return view.getRoot();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        curTaskSubject.removeObserver(tasks -> {});
+        // Unregister observers
     }
 }

@@ -26,10 +26,10 @@ public class MainViewModel extends ViewModel {
     private static final String TAG = "MainViewModel";
 
     // Domain state (Model) and current routine context.
-    private static TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
     private final RoutineRepository routineRepository;
 
-    private static PlainMutableSubject<List<Task>> currTaskList;
+    private PlainMutableSubject<List<Task>> currTaskList;
     private final PlainMutableSubject<Integer> estimatedTime;
 
     private final PlainMutableSubject<Task> firstTask;
@@ -83,12 +83,10 @@ public class MainViewModel extends ViewModel {
     public void editRoutine(String oldName, String newName) {
         Routine currentRoutine = getCurRoutine().getValue();
         Log.d(TAG, "routine to edit: " + currentRoutine.getName());
-        if (currentRoutine != null) {
-            // Update in database
-            routineRepository.editRoutineName(currentRoutine.getId(), newName);
-            currentRoutine.setName(newName);
-            curRoutine.setValue(currentRoutine);
-        }
+        // Update in database
+        routineRepository.editRoutineName(currentRoutine.getId(), newName);
+        currentRoutine.setName(newName);
+        curRoutine.setValue(currentRoutine);
     }
 
     /**
@@ -110,15 +108,16 @@ public class MainViewModel extends ViewModel {
 
     public static void switchRoutine(Routine routine) {
         curRoutine.setValue(routine);
-//        currTaskList.setValue(routine.getTaskList());
+//        currTaskList.setValue(routine.getTaskList())
+
+        Log.d(TAG, "curRoutine = "  + Objects.requireNonNull(curRoutine.getValue()));
 
         // Observe tasks for the specified routine.
-        taskRepository.findAll(Objects.requireNonNull(getCurRoutine().getValue()).getId()).observe(tasks -> {
-            if (tasks == null) return;
-            var curRoutineTasks = tasks.stream()
-                    .collect(Collectors.toList());
-            currTaskList.setValue(curRoutineTasks);
-        });
+//        taskRepository.findAll(Objects.requireNonNull(getCurRoutine().getValue()).getId()).observe(tasks -> {
+//            if (tasks == null) return;
+//            var curRoutineTasks = new ArrayList<>(tasks);
+//            currTaskList.setValue(curRoutineTasks);
+//        });
     }
 
     public void startTime() {
@@ -126,13 +125,26 @@ public class MainViewModel extends ViewModel {
         completed.setValue(false);
     }
 
-    public static Subject<Routine> getCurRoutine() {
+    public Subject<Routine> getCurRoutine() {
         return curRoutine;
     }
 
-    public static Subject<List<Task>> getCurTasks() {
+    public Subject<List<Task>> getCurTasks() {
+        Routine routine = curRoutine.getValue();
+        if (routine == null) {
+            Log.e(TAG, "getCurTasks(): curRoutine is null!");
+            return currTaskList; // Possibly return an empty list
+        }
+        taskRepository.findAll(routine.getId()).observe(tasks -> {
+            if (tasks == null) {
+                Log.w(TAG, "No tasks found for routine ID: " + routine.getId());
+                return;
+            }
+            currTaskList.setValue(new ArrayList<>(tasks));
+        });
         return currTaskList;
     }
+
 
     public List<Routine> getRoutines() {
         return routineRepository.getRoutineList().getValue();

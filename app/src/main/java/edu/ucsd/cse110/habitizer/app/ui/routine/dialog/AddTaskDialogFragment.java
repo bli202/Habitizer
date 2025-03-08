@@ -19,46 +19,55 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 public class AddTaskDialogFragment extends DialogFragment {
 
-    private FragmentDialogAddTaskBinding view;
-    
-    public AddTaskDialogFragment() {
+    private FragmentDialogAddTaskBinding binding;
+    private MainViewModel activityModel;
 
-    }
+    private static final String TAG = "AddTaskDialogFragment";
 
+    // Required empty public constructor
+    public AddTaskDialogFragment() {}
+
+    /**
+     * Creates a new instance of AddTaskDialogFragment.
+     *
+     * @return a new instance of AddTaskDialogFragment.
+     */
     public static AddTaskDialogFragment newInstance() {
-        var fragment = new AddTaskDialogFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        return new AddTaskDialogFragment();
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = FragmentDialogAddTaskBinding.inflate(getLayoutInflater());
+        binding = FragmentDialogAddTaskBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("New Task")
-                .setMessage("Please provide task name")
-                .setView(view.getRoot())
+                .setMessage("Please provide a task name")
+                .setView(binding.getRoot())
                 .setPositiveButton("Create", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .create();
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
-        var name = view.taskNameEditText.getText().toString();
+        // Get the task name from the EditText.
+        String taskName = binding.taskNameEditText.getText().toString().trim();
 
-        if (name.isEmpty()) {
+        // Validate task name.
+        if (taskName.isEmpty()) {
+            Log.d(TAG, "Invalid task name: empty");
             var dialogFragment = InvalidTaskDialogFragment.newInstance("");
             dialogFragment.show(getParentFragmentManager(), "InvalidTaskDialogFragment");
             dialog.dismiss();
             return;
         }
-        
+
+        // Ensure task does not already exist.
         try {
-            for (Task t : Objects.requireNonNull(MainViewModel.getCurRoutine().getValue()).getTaskList()) {
-                if (t.getName().equals(name)) {
+            for (Task t : Objects.requireNonNull(activityModel.getCurRoutine().getValue()).getTaskList()) {
+                if (t.getName().equals(taskName)) {
+                    Log.d(TAG, "Task with this name already exists.");
                     var dialogFragment = InvalidTaskDialogFragment.newInstance("");
                     dialogFragment.show(getParentFragmentManager(), "InvalidTaskDialogFragment");
                     dialog.dismiss();
@@ -66,15 +75,12 @@ public class AddTaskDialogFragment extends DialogFragment {
                 }
             }
         } catch (Exception e) {
-            Log.e("EditTaskDialogFragment", "Exception while checking task list", e);
+            Log.e(TAG, "Exception while checking task list", e);
         }
-        var task = new Task(name);
-        
-        var modelOwner = requireActivity();
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        var activityModel = modelProvider.get(MainViewModel.class);
-        activityModel.append(task);
+
+        // Create a new task and add it via ViewModel.
+        Task newTask = new Task(taskName);
+        activityModel.append(newTask);
         dialog.dismiss();
     }
 
@@ -85,6 +91,11 @@ public class AddTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
 
+        // Initialize the ViewModel.
+        var modelOwner = requireActivity();
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        this.activityModel = modelProvider.get(MainViewModel.class);
+    }
 }
