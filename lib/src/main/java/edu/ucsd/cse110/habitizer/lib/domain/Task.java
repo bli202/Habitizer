@@ -15,7 +15,14 @@ public class Task {
     private int timeSpent;
     private final int id;
     private static int idCounter = 0;
-    
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+
     /**
      * Task instantiates name as unique identifier for task.
      *
@@ -27,6 +34,13 @@ public class Task {
         this.completed = false;
         this.timeSpent = 0;
         this.order = order;
+    }
+
+    public Task(int id, String name) {
+        this.id = id;
+        this.name = name;
+        completed = false;
+        timeSpent = 0;
     }
     
     /**

@@ -55,7 +55,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             convertView = inflater.inflate(R.layout.tasklist_item, parent, false);
         }
 
-        Log.d(TAG, "getView() called for position " + position);
+//        Log.d(TAG, "getView() called for position " + position);
 
         // Get the task for this position.
         var task = getItem(position);
@@ -64,7 +64,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             return new View(getContext());
         }
 
-        Log.d(TAG, "Displaying task: " + task.getName());
+//        Log.d(TAG, "Displaying task: " + task.getName());
 
         // UI Elements to reuse.
         FloatingActionButton editTaskButton = convertView.findViewById(R.id.editTaskButton);
@@ -153,7 +153,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     @Override
     public Task getItem(int position) {
         Task task = super.getItem(position);
-        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
+//        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
         return task;
     }
 }

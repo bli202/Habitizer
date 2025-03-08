@@ -57,7 +57,7 @@ public class AddTaskDialogFragment extends DialogFragment {
         }
         
         try {
-            for (Task t : Objects.requireNonNull(MainViewModel.getCurRoutine().getValue()).getTaskList()) {
+            for (Task t : Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getTaskList()) {
                 if (t.getName().equals(name)) {
                     var dialogFragment = InvalidTaskDialogFragment.newInstance("");
                     dialogFragment.show(getParentFragmentManager(), "InvalidTaskDialogFragment");
