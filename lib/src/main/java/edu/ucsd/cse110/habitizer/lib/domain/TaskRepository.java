@@ -2,7 +2,6 @@ package edu.ucsd.cse110.habitizer.lib.domain;
 
 import java.util.List;
 
-import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.observables.Subject;
 
 public interface TaskRepository {
@@ -22,7 +21,7 @@ public interface TaskRepository {
     /**
      * Retrieves an observable subject for the list of tasks in a specific routine.
      */
-    public Subject<List<Task>> findAll(int routineId);
+    public Subject<List<Task>> findAllTasksForRoutine(int routineId);
 
     /**
      * Saves (creates or updates) the given task within the specified routine.

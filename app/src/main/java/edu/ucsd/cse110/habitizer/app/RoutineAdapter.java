@@ -20,12 +20,12 @@ import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 public class RoutineAdapter extends ArrayAdapter<Routine> {
     private final String TAG = "RoutineAdapter";
     private final Consumer<Routine> onDeleteRoutineClick;
-    private final Consumer<View> onRoutineItemClick;
+    private final Consumer<Routine> onRoutineItemClick;
     
     public RoutineAdapter(@NonNull Context context,
                           List<Routine> routineList,
                           Consumer<Routine> onDeleteRoutineClick,
-                          Consumer<View> onRoutineItemClick)
+                          Consumer<Routine> onRoutineItemClick)
     {
         super(context, 0, routineList);
         this.onDeleteRoutineClick = onDeleteRoutineClick;
@@ -40,7 +40,8 @@ public class RoutineAdapter extends ArrayAdapter<Routine> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.routinelist_item, parent, false);
         }
-        
+
+        // UI elements to reuse
         TextView titleView = convertView.findViewById(R.id.RoutineTitle);
         TextView timeView = convertView.findViewById(R.id.RoutineTime);
         
@@ -57,8 +58,7 @@ public class RoutineAdapter extends ArrayAdapter<Routine> {
         });
         
         convertView.setOnClickListener(view2 -> {
-            MainViewModel.switchRoutine(selectedRoutine);
-            onRoutineItemClick.accept(view2);
+            onRoutineItemClick.accept(selectedRoutine);
         });
         
         return convertView;

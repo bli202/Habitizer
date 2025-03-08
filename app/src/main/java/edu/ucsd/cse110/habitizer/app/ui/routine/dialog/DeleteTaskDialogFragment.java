@@ -52,6 +52,7 @@ public class DeleteTaskDialogFragment extends DialogFragment {
             var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
             var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
             var activityModel = modelProvider.get(MainViewModel.class);
+
             activityModel.removeTaskByName(taskNameToDelete);
         }
         dialog.dismiss();

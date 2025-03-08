@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.TaskFragment;
@@ -53,22 +54,25 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         var activityModel = modelProvider.get(MainViewModel.class);
 
-        ArrayList<Routine> routineList = (ArrayList<Routine>) activityModel.getRoutines();
+        var routinesSubjects = activityModel.getRoutinesSubjects();
+        var routines = routinesSubjects.getValue();
+        assert routines != null;
 
         RoutineAdapter adapter = new RoutineAdapter(this,
-                routineList,
+                routinesSubjects.getValue(),
                 routine -> {
                     Log.d(TAG, "Delete Button CLicked");
-                    if (routineList.size() == 1) {
+                    if (routines.size() == 1) {
                         var dialogFragment = new InvalidDeleteRoutineDialogFragment();
                         dialogFragment.show(getSupportFragmentManager(), "InvalidDeleteRoutineDialogFragment");
                     } else {
                         activityModel.removeRoutine(routine);
-                        routineList.remove(routine);
+                        routines.remove(routine);
                     }
                 },
-                view2 -> {
+                routine -> {
                     taskFragment = TaskFragment.newInstance();
+                    MainViewModel.switchRoutine(routine);
 
                     getSupportFragmentManager()
                             .beginTransaction()
@@ -83,10 +87,10 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         MainViewModel.getCurrentRoutine().observe(routine -> {
-            for (int i = 0; i < routineList.size(); i++) {
+            for (int i = 0; i < routinesSubjects.getValue().size(); i++) {
                 assert routine != null;
-                if (routineList.get(i).getId() == (routine.getId())) {
-                    routineList.set(i, routine);
+                if (routines.get(i).getId() == (routine.getId())) {
+                    routines.set(i, routine);
                     adapter.notifyDataSetChanged();
                     break;
                 }
@@ -95,11 +99,11 @@ public class MainActivity extends AppCompatActivity {
 
         addRoutine.setOnClickListener(x -> {
             Log.d(TAG, "Added New Routine");
-            var routine = new Routine((activityModel.getRoutines()
-                    .get(activityModel.getRoutines().size() - 1))
+            var routine = new Routine((routines
+                    .get(routines.size() - 1))
                     .getId() + 1, 0, "New Routine");
-            activityModel.putRoutine(routine);
-            routineList.add(routine);
+            activityModel.addNewRoutine(routine);
+            routines.add(routine);
             adapter.notifyDataSetChanged();
         });
 
@@ -135,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
             routineView.setVisibility(View.VISIBLE);
             Button addRoutine = findViewById(R.id.addRoutine);
             addRoutine.setVisibility(View.VISIBLE);
+            taskFragment.onDestroyView();
             taskFragment.onDestroy();
 
             homeScreen = true;

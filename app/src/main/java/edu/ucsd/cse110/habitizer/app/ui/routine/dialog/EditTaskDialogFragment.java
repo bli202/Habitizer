@@ -92,7 +92,7 @@ public class EditTaskDialogFragment extends DialogFragment {
         }
 
         // Remove the old task and append the new task via the view model.
-        activityModel.edit(oldTaskName, newName);
+        activityModel.editTaskInCurrentRoutine(oldTaskName, newName);
         dialog.dismiss();
     }
 

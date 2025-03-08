@@ -25,7 +25,8 @@ public class EditRoutineDialogFragment extends DialogFragment {
     private static final String TAG = "EditRoutineDialogFragment";
 
     // Required empty public constructor
-    public EditRoutineDialogFragment() { }
+    public EditRoutineDialogFragment() {
+    }
 
     /**
      * Creates a new instance of EditRoutineDialogFragment with the old routine name as an argument.
@@ -94,7 +95,7 @@ public class EditRoutineDialogFragment extends DialogFragment {
         }
 
         // Update the routine name via the view model.
-        activityModel.editRoutine(oldRoutineName, newName);
+        activityModel.editRoutineName(newName);
         dialog.dismiss();
     }
 
