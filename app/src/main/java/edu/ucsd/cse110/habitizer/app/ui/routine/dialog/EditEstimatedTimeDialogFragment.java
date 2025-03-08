@@ -19,25 +19,25 @@ import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.observables.PlainMutableSubject;
 
 public class EditEstimatedTimeDialogFragment extends DialogFragment {
-    
+
     private FragmentEditTimeBinding view;
-    
+
     public EditEstimatedTimeDialogFragment() {
-    
+
     }
-    
+
     public static EditEstimatedTimeDialogFragment newInstance() {
         var fragment = new EditEstimatedTimeDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
-    
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentEditTimeBinding.inflate(getLayoutInflater());
-        
+
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Edit Estimated Routine Time")
                 .setMessage("Please enter the estimated time for this routine!")
@@ -46,7 +46,7 @@ public class EditEstimatedTimeDialogFragment extends DialogFragment {
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .create();
     }
-    
+
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var time = view.editTime.getText().toString();
         try {
@@ -59,10 +59,10 @@ public class EditEstimatedTimeDialogFragment extends DialogFragment {
             var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
             var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
             var activityModel = modelProvider.get(MainViewModel.class);
-            activityModel.setCurRoutineEstimatedTime(newTime);
+            activityModel.setCurrentRoutineEstimatedTime(newTime);
             // Update the Subject with the modified routine
             ((PlainMutableSubject<Routine>) getCurrentRoutine()).setValue(currentRoutine);
-            
+
             Log.d("EditTimeDialogFragment", "Estimated Time: " + currentRoutine.getEstimatedTime());
         } catch (Exception e) {
             var dialogFragment = new InvalidTimeDialogFragment();
@@ -72,12 +72,12 @@ public class EditEstimatedTimeDialogFragment extends DialogFragment {
         }
         dialog.dismiss();
     }
-    
+
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
         dialog.cancel();
     }
-    
-    
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
