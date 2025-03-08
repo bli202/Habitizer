@@ -9,6 +9,7 @@ public interface TaskRepository {
     /**
      * Returns the number of tasks in the specified routine.
      */
+    @SuppressWarnings("unused")
     Integer count(int routineId);
 
     /**
@@ -16,6 +17,7 @@ public interface TaskRepository {
      * @param routineId the id of the routine to retrieve
      * @return the specified routine subject
      */
+    @SuppressWarnings("unused")
     Subject<Routine> findRoutine(int routineId);
 
     /**
