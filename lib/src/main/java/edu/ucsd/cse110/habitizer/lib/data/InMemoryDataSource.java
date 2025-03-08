@@ -11,24 +11,25 @@ import edu.ucsd.cse110.observables.PlainMutableSubject;
 import edu.ucsd.cse110.observables.Subject;
 
 public class InMemoryDataSource {
-    // Mapping from routine name to Routine object.
-    private final Map<String, Routine> routines = new HashMap<>();
+    // Mapping from routine id to Routine object.
+    private final Map<Integer, Routine> routines = new HashMap<>();
 
     // Global mapping from task name to Task object.
     private final Map<String, Task> tasks = new HashMap<>();
 
-    // Mapping from routine name to the list of tasks belonging to that routine.
-    private final Map<String, List<Task>> routineTasks = new HashMap<>();
+    // Mapping from routine id to the list of tasks belonging to that routine.
+    private final Map<Integer, List<Task>> routineTasks = new HashMap<>();
 
     // Observable subjects for individual routines.
-    private final Map<String, PlainMutableSubject<Routine>> routineSubjects = new HashMap<>();
+    private final Map<Integer, PlainMutableSubject<Routine>> routineSubjects = new HashMap<>();
     // Observable subject for the list of all routines.
     private final PlainMutableSubject<List<Routine>> allRoutinesSubject = new PlainMutableSubject<>();
 
     // Observable subjects for individual tasks.
     private final Map<String, PlainMutableSubject<Task>> taskSubjects = new HashMap<>();
     // Observable subjects for the list of tasks in a specific routine.
-    private final Map<String, PlainMutableSubject<List<Task>>> routineTasksSubjects = new HashMap<>();
+    private final Map<Integer, PlainMutableSubject<List<Task>>> routineTasksSubjects = new HashMap<>();
+    
 
     public InMemoryDataSource() {
         allRoutinesSubject.setValue(new ArrayList<>());
@@ -46,20 +47,20 @@ public class InMemoryDataSource {
     /**
      * Returns the Routine object with the given name.
      */
-    public Routine getRoutine(String routineName) {
-        return routines.get(routineName);
+    public Routine getRoutine(int routineId) {
+        return routines.get(routineId);
     }
 
     /**
      * Returns an observable subject for a specific routine.
      */
-    public Subject<Routine> getRoutineSubject(String routineName) {
-        if (!routineSubjects.containsKey(routineName)) {
+    public Subject<Routine> getRoutineSubject(int routineId) {
+        if (!routineSubjects.containsKey(routineId)) {
             PlainMutableSubject<Routine> subject = new PlainMutableSubject<>();
-            subject.setValue(getRoutine(routineName));
-            routineSubjects.put(routineName, subject);
+            subject.setValue(getRoutine(routineId));
+            routineSubjects.put(routineId, subject);
         }
-        return routineSubjects.get(routineName);
+        return routineSubjects.get(routineId);
     }
 
     /**
@@ -77,13 +78,13 @@ public class InMemoryDataSource {
      * Initializes its associated tasks list if not already present.
      */
     public void putRoutine(Routine routine) {
-        String routineName = routine.getTitle();
-        routines.put(routineName, routine);
-        if (!routineTasks.containsKey(routineName)) {
-            routineTasks.put(routineName, new ArrayList<>());
+        int routineId = routine.getId();
+        routines.put(routineId, routine);
+        if (!routineTasks.containsKey(routineId)) {
+            routineTasks.put(routineId, new ArrayList<>());
         }
-        if (routineSubjects.containsKey(routineName)) {
-            routineSubjects.get(routineName).setValue(routine);
+        if (routineSubjects.containsKey(routineId)) {
+            routineSubjects.get(routineId).setValue(routine);
         }
         allRoutinesSubject.setValue(getRoutines());
     }
@@ -91,18 +92,18 @@ public class InMemoryDataSource {
     /**
      * Removes a routine and all its associated tasks.
      */
-    public void removeRoutine(String routineName) {
-        routines.remove(routineName);
+    public void removeRoutine(int routineId) {
+        routines.remove(routineId);
         // Remove all tasks associated with this routine.
-        List<Task> removedTasks = routineTasks.remove(routineName);
+        List<Task> removedTasks = routineTasks.remove(routineId);
         if (removedTasks != null) {
             for (Task task : removedTasks) {
                 tasks.remove(task.getName());
                 taskSubjects.remove(task.getName());
             }
         }
-        routineSubjects.remove(routineName);
-        routineTasksSubjects.remove(routineName);
+        routineSubjects.remove(routineId);
+        routineTasksSubjects.remove(routineId);
         allRoutinesSubject.setValue(getRoutines());
     }
 
@@ -110,8 +111,8 @@ public class InMemoryDataSource {
      * Edits a routine by replacing the old routine with the new one.
      * (You could also update properties directly on the Routine.)
      */
-    public void editRoutine(String oldRoutineName, Routine newRoutine) {
-        removeRoutine(oldRoutineName);
+    public void editRoutine(int oldRoutineId, Routine newRoutine) {
+        removeRoutine(oldRoutineId);
         putRoutine(newRoutine);
     }
 
@@ -120,11 +121,11 @@ public class InMemoryDataSource {
     /**
      * Returns a copy of the tasks in the specified routine.
      */
-    public List<Task> getTasksForRoutine(String routineName) {
-        List<Task> tasksList = routineTasks.get(routineName);
+    public List<Task> getTasksForRoutine(int routineId) {
+        List<Task> tasksList = routineTasks.get(routineId);
         if (tasksList == null) {
             tasksList = new ArrayList<>();
-            routineTasks.put(routineName, tasksList);
+            routineTasks.put(routineId, tasksList);
         }
         return new ArrayList<>(tasksList);
     }
@@ -132,29 +133,29 @@ public class InMemoryDataSource {
     /**
      * Returns an observable subject for the list of tasks for a routine.
      */
-    public Subject<List<Task>> getRoutineTasksSubject(String routineName) {
-        if (!routineTasksSubjects.containsKey(routineName)) {
+    public Subject<List<Task>> getRoutineTasksSubject(int routineId) {
+        if (!routineTasksSubjects.containsKey(routineId)) {
             PlainMutableSubject<List<Task>> subject = new PlainMutableSubject<>();
-            subject.setValue(getTasksForRoutine(routineName));
-            routineTasksSubjects.put(routineName, subject);
+            subject.setValue(getTasksForRoutine(routineId));
+            routineTasksSubjects.put(routineId, subject);
         }
-        return routineTasksSubjects.get(routineName);
+        return routineTasksSubjects.get(routineId);
     }
 
     /**
      * Inserts or updates a task within a specific routine.
      * Updates both the global tasks mapping and the routine's task list.
      */
-    public void putTask(String routineName, Task task) {
+    public void putTask(int routineId, Task task) {
         // Update global mapping.
         tasks.put(task.getName(), task);
         // Update the routine's task list.
-        List<Task> tasksList = routineTasks.get(routineName);
-        Routine routine = routines.get(routineName);
+        List<Task> tasksList = routineTasks.get(routineId);
+        Routine routine = routines.get(routineId);
         routine.addTask(task);
         if (tasksList == null) {
             tasksList = new ArrayList<>();
-            routineTasks.put(routineName, tasksList);
+            routineTasks.put(routineId, tasksList);
         }
         boolean updated = false;
         for (int i = 0; i < tasksList.size(); i++) {
@@ -168,18 +169,18 @@ public class InMemoryDataSource {
             tasksList.add(task);
         }
         // Update observable subject for this routine's tasks.
-        if (routineTasksSubjects.containsKey(routineName)) {
-            routineTasksSubjects.get(routineName).setValue(getTasksForRoutine(routineName));
+        if (routineTasksSubjects.containsKey(routineId)) {
+            routineTasksSubjects.get(routineId).setValue(getTasksForRoutine(routineId));
         }
     }
 
     /**
      * Removes a task from a specific routine.
      */
-    public void removeTask(String routineName, String taskName) {
+    public void removeTask(int routineId, String taskName) {
         // Remove from global mapping.
-        List<Task> tasksList = routineTasks.get(routineName);
-        Routine routine = routines.get(routineName);
+        List<Task> tasksList = routineTasks.get(routineId);
+        Routine routine = routines.get(routineId);
         routine.removeTask(tasks.get(taskName));
 
         tasks.remove(taskName);
@@ -189,8 +190,8 @@ public class InMemoryDataSource {
             tasksList.removeIf(t -> t.getName().equals(taskName));
         }
         // Update observable subject.
-        if (routineTasksSubjects.containsKey(routineName)) {
-            routineTasksSubjects.get(routineName).setValue(getTasksForRoutine(routineName));
+        if (routineTasksSubjects.containsKey(routineId)) {
+            routineTasksSubjects.get(routineId).setValue(getTasksForRoutine(routineId));
         }
         // Remove individual task observable if present.
         taskSubjects.remove(taskName);
@@ -204,20 +205,20 @@ public class InMemoryDataSource {
      * Edits a task within a routine by delegating to the Routine's own editTask method.
      * Updates the global task mapping and observable subjects accordingly.
      *
-     * @param routineName the name of the routine that contains the task.
+     * @param routineId the id of the routine that contains the task.
      * @param oldTaskName the current name of the task.
      * @param newTaskName the new name to set for the task.
      */
-    public void editTask(String routineName, String oldTaskName, String newTaskName) {
+    public void editTask(int routineId, String oldTaskName, String newTaskName) {
         // Retrieve the routine object from the routines mapping.
-        Routine routine = routines.get(routineName);
+        Routine routine = routines.get(routineId);
         if (routine == null) {
             // Optionally handle the error (e.g., routine not found)
             return;
         }
 
         // Get the list of tasks for this routine.
-        List<Task> tasksList = routineTasks.get(routineName);
+        List<Task> tasksList = routineTasks.get(routineId);
         if (tasksList == null) {
             // No tasks for this routine; nothing to edit.
             return;
@@ -249,8 +250,8 @@ public class InMemoryDataSource {
         tasks.put(newTaskName, taskToEdit);
 
         // Update the observable subject for the routine's tasks.
-        if (routineTasksSubjects.containsKey(routineName)) {
-            routineTasksSubjects.get(routineName).setValue(getTasksForRoutine(routineName));
+        if (routineTasksSubjects.containsKey(routineId)) {
+            routineTasksSubjects.get(routineId).setValue(getTasksForRoutine(routineId));
         }
 
         // Update the individual task observable: if a subject exists for the old task name,
@@ -260,6 +261,10 @@ public class InMemoryDataSource {
             subject.setValue(taskToEdit);
             taskSubjects.put(newTaskName, subject);
         }
+    }
+    
+    public void setEstimatedTime(int routineId, int time) {
+        routines.get(routineId).setEstimatedTime(time);
     }
 
 
@@ -294,19 +299,23 @@ public class InMemoryDataSource {
 
 
         // Add default tasks to the default routines.
-        data.putTask(MORNING_ROUTINE.getTitle(), SHOWER);
-        data.putTask(MORNING_ROUTINE.getTitle(), BRUSH_TEETH);
-        data.putTask(MORNING_ROUTINE.getTitle(), DRESS);
-        data.putTask(MORNING_ROUTINE.getTitle(), MAKE_COFFEE);
-        data.putTask(MORNING_ROUTINE.getTitle(), MAKE_LUNCH);
-        data.putTask(MORNING_ROUTINE.getTitle(), DINNER_PREP);
-        data.putTask(MORNING_ROUTINE.getTitle(), PACK_BAG);
-        data.putTask(EVENING_ROUTINE.getTitle(), CHARGE_DEVICES);
-        data.putTask(EVENING_ROUTINE.getTitle(), PREPARE_DINNER);
-        data.putTask(EVENING_ROUTINE.getTitle(), EAT_DINNER);
-        data.putTask(EVENING_ROUTINE.getTitle(), WASH_DISHES);
-        data.putTask(EVENING_ROUTINE.getTitle(), PACK_BAG_EVENING);
-      
+        data.putTask(MORNING_ROUTINE.getId(), SHOWER);
+        data.putTask(MORNING_ROUTINE.getId(), BRUSH_TEETH);
+        data.putTask(MORNING_ROUTINE.getId(), DRESS);
+        data.putTask(MORNING_ROUTINE.getId(), MAKE_COFFEE);
+        data.putTask(MORNING_ROUTINE.getId(), MAKE_LUNCH);
+        data.putTask(MORNING_ROUTINE.getId(), DINNER_PREP);
+        data.putTask(MORNING_ROUTINE.getId(), PACK_BAG);
+        data.putTask(EVENING_ROUTINE.getId(), CHARGE_DEVICES);
+        data.putTask(EVENING_ROUTINE.getId(), PREPARE_DINNER);
+        data.putTask(EVENING_ROUTINE.getId(), EAT_DINNER);
+        data.putTask(EVENING_ROUTINE.getId(), WASH_DISHES);
+        data.putTask(EVENING_ROUTINE.getId(), PACK_BAG_EVENING);
+
         return data;
+    }
+    
+    public void removeTaskById(int routineId, int taskId) {
+    
     }
 }

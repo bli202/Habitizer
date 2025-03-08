@@ -5,8 +5,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.content.DialogInterface;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,16 +12,11 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.R;
 
 
 public class DeleteTaskDialogFragment extends DialogFragment {
-
-    private MainViewModel activityModel;
-
+    
     private static final String tName = "taskName";
-
-
 
     public DeleteTaskDialogFragment() {
         // Required empty public constructor
@@ -50,10 +43,16 @@ public class DeleteTaskDialogFragment extends DialogFragment {
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
+        assert getArguments() != null;
         String taskNameToDelete = getArguments().getString(tName);
         if (taskNameToDelete != null) {
             Log.d("DeleteTaskDialogFragment", "Task being deleted: " + getArguments().getString(tName));
-            activityModel.remove(taskNameToDelete);
+            // Initialize the Model
+            var modelOwner = requireActivity();
+            var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+            var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+            var activityModel = modelProvider.get(MainViewModel.class);
+            activityModel.removeTaskByName(taskNameToDelete);
         }
         dialog.dismiss();
     }
@@ -64,12 +63,5 @@ public class DeleteTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        // Initialize the Model
-        var modelOwner = requireActivity();
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        this.activityModel = modelProvider.get(MainViewModel.class);
     }
 }

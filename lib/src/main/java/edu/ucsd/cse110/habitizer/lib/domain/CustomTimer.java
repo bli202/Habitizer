@@ -78,6 +78,12 @@ public class CustomTimer {
         return returnVal;
     }
 
+    public long getTaskTimeNoReset() {
+        update();
+        taskStartTime = Instant.now();
+        return taskTime / 1000;
+    }
+
     /**
      * Adds specified time to timer.
      *
@@ -108,5 +114,41 @@ public class CustomTimer {
         startTime = Instant.now();
         taskTime += Duration.between(taskStartTime, Instant.now()).toMillis();
         taskStartTime = Instant.now();
+    }
+    
+    public long getCumTime() {
+        return cumTime;
+    }
+    
+    public boolean isOngoing() {
+        return ongoing;
+    }
+    
+    public Instant getStartTime() {
+        return startTime;
+    }
+    
+    public Instant getTaskStartTime() {
+        return taskStartTime;
+    }
+    
+    public void setCumTime(long cumTime) {
+        this.cumTime = cumTime;
+    }
+    
+    public void setTaskTime(long taskTime) {
+        this.taskTime = taskTime;
+    }
+    
+    public void setOngoing(boolean ongoing) {
+        this.ongoing = ongoing;
+    }
+    
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
+    }
+    
+    public void setTaskStartTime(Instant taskStartTime) {
+        this.taskStartTime = taskStartTime;
     }
 }

@@ -10,6 +10,8 @@ public class Routine {
     private int tasksDone;
     private final String name;
     private CustomTimer timer;
+    private final int id;
+    private static int idCounter = 0;
 
     /**
      * Routine Constructor
@@ -18,6 +20,7 @@ public class Routine {
      * @param estimatedTime the total estimated time user picks to display
      */
     public Routine(int estimatedTime, String name) {
+        this.id = idCounter++;
         this.name = name;
         this.taskList = new ArrayList<>();
         this.estimatedTime = estimatedTime;
@@ -26,14 +29,34 @@ public class Routine {
         this.tasksDone = 0;
     }
 
+    public Routine(int id, int estimatedTime, String name) {
+        this.id = id;
+        this.name = name;
+        this.taskList = new ArrayList<>();
+        this.estimatedTime = estimatedTime;
+        this.ongoing = false;
+        this.timer = new CustomTimer();
+        this.tasksDone = 0;
+    }
+
+    public void setName(String newName) {
+        try {
+            java.lang.reflect.Field field = Routine.class.getDeclaredField("name");
+            field.setAccessible(true);
+            field.set(this, newName);
+        } catch (Exception e) {
+            System.err.println("Error changing routine name: " + e.getMessage());
+        }
+    }
+
+    public int getId() {
+        return id;
+    }
+
     public String toString() {
         return name;
     }
-
-    public String getTitle() {
-        return name;
-    }
-
+    
     public int getDuration() {
         return estimatedTime;
     }
@@ -71,6 +94,30 @@ public class Routine {
         // remove task from List
         for (Task t : taskList) {
             if (t.getName().equals(task.getName())) {
+                return taskList.remove(t);
+            }
+        }
+        return false;
+    }
+    
+    public boolean removeTask(String name) {
+        if (ongoing || taskList.isEmpty()) return false;
+        
+        // remove task from List
+        for (Task t : taskList) {
+            if (t.getName().equals(name)) {
+                return taskList.remove(t);
+            }
+        }
+        return false;
+    }
+    
+    public boolean removeTask(int taskId) {
+        if (ongoing || taskList.isEmpty()) return false;
+        
+        // remove task from List
+        for (Task t : taskList) {
+            if (t.getId() == (taskId)) {
                 return taskList.remove(t);
             }
         }
@@ -157,6 +204,10 @@ public class Routine {
         return taskTimeMinutes;
     }
 
+    public int getTaskTime() {
+        return (int) timer.getTaskTimeNoReset();
+    }
+
 
     // Getters for Routine
 
@@ -191,7 +242,6 @@ public class Routine {
      */
     public void setEstimatedTime(int time) {
         estimatedTime = time;
-        System.out.println(estimatedTime);
     }
 
     /**
@@ -199,6 +249,10 @@ public class Routine {
      */
     public boolean getOngoing() {
         return ongoing;
+    }
+
+    public void setOngoing(boolean ongoing) {
+        this.ongoing = ongoing;
     }
 
     /**
@@ -258,5 +312,13 @@ public class Routine {
      */
     public CustomTimer getTimer() {
         return timer;
+    }
+
+    public void setTimer(CustomTimer t) {
+        this.timer = t;
+    }
+
+    public void setTasksDone(int i) {
+        this.tasksDone = i;
     }
 }

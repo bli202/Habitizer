@@ -14,11 +14,8 @@ import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentDuplicateTaskBinding;
 
 public class InvalidTaskDialogFragment extends DialogFragment {
-
-    private FragmentDuplicateTaskBinding view;
-    private MainViewModel activityModel;
-
-
+    
+    
     public InvalidTaskDialogFragment() {
 
     }
@@ -34,7 +31,7 @@ public class InvalidTaskDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = FragmentDuplicateTaskBinding.inflate(getLayoutInflater());
+        FragmentDuplicateTaskBinding view = FragmentDuplicateTaskBinding.inflate(getLayoutInflater());
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Invalid task name!")
@@ -49,7 +46,7 @@ public class InvalidTaskDialogFragment extends DialogFragment {
         if (getArguments() != null) {
             oldTaskName = getArguments().getString("oldTaskName", "");
         }
-        if (oldTaskName.equals("")) {
+        if (oldTaskName.isEmpty()) {
             var dialogFragment = new AddTaskDialogFragment();
             dialogFragment.show(getParentFragmentManager(), "AddTaskDialogFragment");
         }
@@ -64,12 +61,6 @@ public class InvalidTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialize the Model
-        var modelOwner = requireActivity();
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        this.activityModel = modelProvider.get(MainViewModel.class);
     }
 
 }
