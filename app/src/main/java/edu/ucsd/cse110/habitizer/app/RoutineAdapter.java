@@ -11,13 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import java.util.List;
-import java.util.Map;
+
 import java.util.Objects;
 import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 
 public class RoutineAdapter extends ArrayAdapter<Routine> {
+    @SuppressWarnings("unused")
     private final String TAG = "RoutineAdapter";
     private final Consumer<Routine> onDeleteRoutineClick;
     private final Consumer<Routine> onRoutineItemClick;
@@ -57,9 +58,7 @@ public class RoutineAdapter extends ArrayAdapter<Routine> {
             notifyDataSetChanged();
         });
         
-        convertView.setOnClickListener(view2 -> {
-            onRoutineItemClick.accept(selectedRoutine);
-        });
+        convertView.setOnClickListener(view2 -> onRoutineItemClick.accept(selectedRoutine));
         
         return convertView;
     }

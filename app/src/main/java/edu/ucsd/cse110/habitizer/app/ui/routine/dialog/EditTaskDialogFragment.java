@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.Objects;
+
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentEditTaskBinding;
@@ -72,7 +74,7 @@ public class EditTaskDialogFragment extends DialogFragment {
 
         try {
             Log.d(TAG, "About to check task list");
-            for (Task t : activityModel.getCurrentRoutine().getValue().getTaskList()) {
+            for (Task t : Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getTaskList()) {
                 Log.d(TAG, "Task Name: " + t.getName());
                 if (t.getName().equals(newName) || newName.isEmpty()) {
                     Log.d(TAG, "they r equal");

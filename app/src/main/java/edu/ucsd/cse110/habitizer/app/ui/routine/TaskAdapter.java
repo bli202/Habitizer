@@ -81,9 +81,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             onEditClick.accept(name);
         });
         
-        deleteTaskButton.setOnClickListener(v -> {
-            onDeleteClick.accept(task.getName());
-        });
+        deleteTaskButton.setOnClickListener(v -> onDeleteClick.accept(task.getName()));
         
         taskTitle.setText(task.getName());
 
@@ -130,8 +128,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
     @Override
     public Task getItem(int position) {
-        Task task = super.getItem(position);
-//        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
-        return task;
+        //        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
+        return super.getItem(position);
     }
 }

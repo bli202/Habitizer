@@ -5,6 +5,7 @@ import java.util.List;
 import edu.ucsd.cse110.habitizer.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.observables.Subject;
 
+@SuppressWarnings("unused")
 public class SimpleTaskRepository implements TaskRepository {
     private final InMemoryDataSource dataSource;
 

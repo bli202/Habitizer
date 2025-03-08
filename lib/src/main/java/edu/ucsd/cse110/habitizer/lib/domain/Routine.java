@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Routine {
-    private List<Task> taskList;
+    private final List<Task> taskList;
     private int estimatedTime;
     private boolean ongoing;
     private int tasksDone;
@@ -100,18 +100,19 @@ public class Routine {
         return false;
     }
 
-    public boolean removeTask(String name) {
-        if (ongoing || taskList.isEmpty()) return false;
+    public void removeTask(String name) {
+        if (ongoing || taskList.isEmpty()) return;
 
         // remove task from List
         for (Task t : taskList) {
             if (t.getName().equals(name)) {
-                return taskList.remove(t);
+                taskList.remove(t);
+                return;
             }
         }
-        return false;
     }
 
+    @SuppressWarnings("unused")
     public boolean removeTask(int taskId) {
         if (ongoing || taskList.isEmpty()) return false;
 
@@ -202,7 +203,7 @@ public class Routine {
         }
         return taskTimeMinutes;
     }
-
+    @SuppressWarnings("unused")
     public int getTaskTime() {
         return (int) timer.getTaskTimeNoReset();
     }

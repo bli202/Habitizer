@@ -98,7 +98,7 @@ public class EditRoutineDialogFragment extends DialogFragment {
         activityModel.editRoutineName(newName);
         dialog.dismiss();
     }
-
+    @SuppressWarnings("unused")
     private boolean routineNameExists(String name) {
         // Check if a routine with the given name already exists
         try {

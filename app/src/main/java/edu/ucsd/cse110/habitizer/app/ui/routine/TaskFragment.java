@@ -144,7 +144,7 @@ public class TaskFragment extends Fragment {
          * Set up button listeners
          */
         view.editRoutineButton.setOnClickListener(x -> {
-            var dialogFragment = new EditRoutineDialogFragment().newInstance(curRoutine.getName());
+            var dialogFragment = EditRoutineDialogFragment.newInstance(curRoutine.getName());
             dialogFragment.show(getChildFragmentManager(), "EditRoutineDialogFragment");
             Log.d(TAG, "edit routine button pressed");
         });

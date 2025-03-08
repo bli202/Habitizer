@@ -29,7 +29,7 @@ public class MainViewModel extends ViewModel {
     private final PlainMutableSubject<Integer> estimatedTime;
 
     private final PlainMutableSubject<Boolean> completed;
-    private static PlainMutableSubject<Routine> currentRoutine = new PlainMutableSubject<>();
+    private static final PlainMutableSubject<Routine> currentRoutine = new PlainMutableSubject<>();
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
             MainViewModel.class,
