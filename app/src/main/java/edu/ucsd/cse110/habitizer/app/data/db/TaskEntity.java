@@ -21,19 +21,21 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 )
 public class TaskEntity {
 
+//    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public Integer id = null;
 
     @ColumnInfo(name = "routineId")
     public @NonNull Integer routineId;
 
+//    @PrimaryKey
     @ColumnInfo(name = "taskName")
     public @NonNull String taskName;
     
     @ColumnInfo(name = "completed")
     public Boolean completed;
     
-    public TaskEntity(Integer routineId, String taskName) {
+    public TaskEntity(@NonNull Integer routineId, @NonNull String taskName) {
         this.routineId = routineId;
         this.taskName = taskName;
         this.completed = false;

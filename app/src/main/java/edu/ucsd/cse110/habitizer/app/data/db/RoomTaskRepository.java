@@ -36,11 +36,9 @@ public class RoomTaskRepository implements TaskRepository {
     @Override
     public Subject<List<Task>> findAll(int routineId) {
         LiveData<List<TaskEntity>> taskEntities = taskDao.findAllByRoutineIdAsLiveData(routineId);
-        LiveData<List<Task>> tasks = Transformations.map(taskEntities, entities -> {
-            return entities.stream()
-                .map(TaskEntity::toTask)
-                .collect(Collectors.toList());
-            });
+        LiveData<List<Task>> tasks = Transformations.map(taskEntities, entities -> entities.stream()
+            .map(TaskEntity::toTask)
+            .collect(Collectors.toList()));
         return new LiveDataSubjectAdapter<>(tasks);
     }
     

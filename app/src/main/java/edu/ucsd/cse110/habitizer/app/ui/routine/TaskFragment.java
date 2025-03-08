@@ -11,18 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTasklistViewBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
@@ -30,7 +23,10 @@ import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditEstimatedTimeDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.InvalidStartDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.EditRoutineDialogFragment;
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.observables.Observer;
+import edu.ucsd.cse110.observables.Subject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +42,10 @@ public class TaskFragment extends Fragment {
     private FragmentTasklistViewBinding view;
 
     private CountDownTimer timer;
+    private Subject<List<Task>> curTasksSubject;
+    private Observer<? super Routine> routineObserver;
+    private Observer<? super List<Task>> tasksObserver;
+    private Subject<Routine> curRoutineSubject;
 
     public TaskFragment() {
         // Required empty public constructor
@@ -76,7 +76,7 @@ public class TaskFragment extends Fragment {
 
         this.adapter = new TaskAdapter(requireContext(),
                 new ArrayList<>(),
-                activityModel.getCurRoutine().getValue(),
+                activityModel.getCurrentRoutine().getValue(),
                 name -> {
                     var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);
                     EditTaskdialogFragment.show(getParentFragmentManager(), "EditCardDialogFragment");},
@@ -92,16 +92,16 @@ public class TaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        var curRoutineSubject = MainViewModel.getCurRoutine();
+        curRoutineSubject = MainViewModel.getCurrentRoutine();
         var curRoutine = curRoutineSubject.getValue();
-        var curTasksSubject = activityModel.getCurTasks();
+        curTasksSubject = activityModel.getCurrentTasks();
 
         this.view = FragmentTasklistViewBinding.inflate(inflater, container, false);
 
         // Set the adapter on the ListView
         view.taskListView.setAdapter(adapter);
 
-        curRoutineSubject.observe(routine -> {
+        this.routineObserver = curRoutineSubject.observe(routine -> {
             if (routine != null) {
                 view.routineTitle.setText(routine.getName());
                 String timeText = routine.getEstimatedTime() + "m";
@@ -109,11 +109,11 @@ public class TaskFragment extends Fragment {
             }
         });
 
-        curTasksSubject.observe(tasks -> {
+        this.tasksObserver = curTasksSubject.observe(tasks -> {
             if (tasks == null) return;
             adapter.clear();
             adapter.addAll(new ArrayList<>(tasks)); // remember the mutable copy here!
-            adapter.notifyDataSetChanged();
+//            adapter.notifyDataSetChanged();
         });
 
         activityModel.getCompleted().observe(completed -> {
@@ -221,7 +221,20 @@ public class TaskFragment extends Fragment {
             String timeText = curRoutine.getEstimatedTime() + "m";
             view.estimatedTime.setText(timeText);
         }
+//        curTasksSubject.removeObservers();
 
         return view.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        curTasksSubject.removeObserver(tasksObserver);
+        curRoutineSubject.removeObserver(routineObserver);
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
