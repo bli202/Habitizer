@@ -118,7 +118,7 @@ public class TaskFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
-        activityModel.getCompleted().observe(completed -> {
+        activityModel.isCurrentRoutineOngoing().observe(completed -> {
             Log.d(TAG, "COMPLETED!!!");
             if(completed == null) {
                 Log.d(TAG, "COMPLETED = NULL");

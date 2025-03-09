@@ -58,4 +58,14 @@ public class RoomRoutineRepository implements RoutineRepository {
     public void editRoutineName(int routineId, String newRoutineName) {
         routineDao.updateRoutineName(routineId, newRoutineName);
     }
+
+    @Override
+    public void setOngoing(int routineId, boolean b) {
+        routineDao.setOngoing(routineId, b);
     }
+
+    @Override
+    public Subject<Boolean> getOngoing(int routineId) {
+        return routineDao.getOngoing(routineId);
+    }
+}

@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
             routineView.setVisibility(View.VISIBLE);
             Button addRoutine = findViewById(R.id.addRoutine);
             addRoutine.setVisibility(View.VISIBLE);
+
             taskFragment.onDestroyView();
             taskFragment.onDestroy();
 

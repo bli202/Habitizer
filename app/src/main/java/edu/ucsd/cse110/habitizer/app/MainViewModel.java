@@ -28,7 +28,7 @@ public class MainViewModel extends ViewModel {
 
     private final PlainMutableSubject<Integer> estimatedTime;
 
-    private final PlainMutableSubject<Boolean> completed;
+//    private final PlainMutableSubject<Boolean> completed;
     private static final PlainMutableSubject<Routine> currentRoutine = new PlainMutableSubject<>();
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
@@ -45,7 +45,7 @@ public class MainViewModel extends ViewModel {
         this.routineRepository = routineRepository;
 
         // Creating observable subjects.
-        this.completed = new PlainMutableSubject<>(false);
+//        this.completed = new PlainMutableSubject<>(false);
         this.estimatedTime = new PlainMutableSubject<>();
     }
 
@@ -106,7 +106,7 @@ public class MainViewModel extends ViewModel {
 
     public void startCurrentRoutine() {
         Objects.requireNonNull(currentRoutine.getValue()).startRoutine();
-        completed.setValue(false);
+        routineRepository.setOngoing(currentRoutine.getValue().getId(),true);
     }
 
     public static Subject<Routine> getCurrentRoutine() {
@@ -127,11 +127,11 @@ public class MainViewModel extends ViewModel {
 
     public void endCurrentRoutine() {
         Objects.requireNonNull(currentRoutine.getValue()).endRoutine();
-        completed.setValue(true);
+        routineRepository.setOngoing(currentRoutine.getValue().getId(), false);
     }
 
-    public Subject<Boolean> getCompleted() {
-        return completed;
+    public Subject<boolean> isCurrentRoutineOngoing() {
+        return routineRepository.getOngoing(Objects.requireNonNull(currentRoutine.getValue()).getId());
     }
 
     public void addNewRoutine(Routine routine) {
