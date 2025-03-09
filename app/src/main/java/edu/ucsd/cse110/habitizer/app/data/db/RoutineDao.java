@@ -19,13 +19,7 @@ public interface RoutineDao {
     Long insert(RoutineEntity routine);
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insertRoutines(List<RoutineEntity> routines);
-    
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertTask(TaskEntity task);
-    
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insertTasks(List<TaskEntity> tasks);
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertTimer(CustomTimerEntity timer);
