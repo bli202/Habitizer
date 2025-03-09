@@ -49,18 +49,6 @@ public interface TaskDao {
     @Query("SELECT MAX(sortOrder) FROM tasks WHERE routineId = :routineId")
     int getMaxSortOrder(int routineId);
 
-//    @Query("UPDATE tasks SET sortOrder = -1 " +
-//            "WHERE sortOrder = :firstSortOrder AND routineId = :routineId")
-//    void setTemporarySortOrder(int routineId, int firstSortOrder);
-//
-//    @Query("UPDATE tasks SET sortOrder = :firstSortOrder " +
-//            "WHERE sortOrder = :secondSortOrder AND routineId = :routineId")
-//    void updateFirstTaskSortOrder(int routineId, int firstSortOrder, int secondSortOrder);
-//
-//    @Query("UPDATE tasks SET sortOrder = :secondSortOrder " +
-//            "WHERE sortOrder = -1 AND routineId = :routineId")
-//    void updateSecondTaskSortOrder(int routineId, int secondSortOrder);
-
     @Query("UPDATE tasks SET sortOrder = :newSortOrder WHERE sortOrder = :oldSortOrder AND routineId = :routineId")
     void updateSortOrder(int routineId, int oldSortOrder, int newSortOrder);
 

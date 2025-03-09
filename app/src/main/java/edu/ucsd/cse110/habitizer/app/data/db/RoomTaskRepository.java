@@ -100,20 +100,9 @@ public class RoomTaskRepository implements TaskRepository {
         }
     }
 
-//    public void swapTasks(int routineId, int firstSortOrder, int secondSortOrder) {
-//        taskDao.setTemporarySortOrder(routineId, firstSortOrder);
-//        taskDao.updateFirstTaskSortOrder(routineId, firstSortOrder, secondSortOrder);
-//        taskDao.updateSecondTaskSortOrder(routineId, secondSortOrder);
-//    }
-
     public void swapTasks(int routineId, int sortOrder1, int sortOrder2) {
-        // Step 1: Set a temporary sort order to avoid constraint violation
         taskDao.updateSortOrder(routineId, sortOrder1, -1);
-
-        // Step 2: Move second task to the first task's sort order
         taskDao.updateSortOrder(routineId, sortOrder2, sortOrder1);
-
-        // Step 3: Move first task (originally -1) to the second task's sort order
         taskDao.updateSortOrder(routineId, -1, sortOrder2);
     }
 
