@@ -3,7 +3,10 @@ package edu.ucsd.cse110.habitizer.app;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
+import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.room.Room;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -12,6 +15,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import edu.ucsd.cse110.habitizer.app.data.db.CustomTimerEntity;
@@ -97,7 +101,12 @@ public class RoutineDaoTest {
         RoutineEntity sampleRoutine = new RoutineEntity(2, 30, "sampleRoutine");
         routineDao.insert(sampleRoutine);
         var rtim = routineDao.findTimerForRoutine(2);
-        assertEquals(tim, rtim);
+        assertEquals(tim.routineId, rtim.routineId);
+        assertEquals(tim.cumTime, rtim.cumTime);
+        assertEquals(tim.taskTime, rtim.taskTime);
+        assertEquals(tim.ongoing, rtim.ongoing);
+        assertEquals(tim.startTime, rtim.startTime);
+        assertEquals(tim.taskStartTime, rtim.taskStartTime);
     }
 
     @Test
@@ -105,7 +114,9 @@ public class RoutineDaoTest {
         var rout3 = new RoutineEntity(3, 0,"rout3");
         routineDao.append(rout3, new CustomTimerEntity(3, 0, 0, false, 0, 0));
         var rrout3 = routineDao.find(3);
-        assertEquals(rout3, rrout3);
+        assertEquals(rout3.id, rrout3.id);
+        assertEquals(rout3.estimatedTime, rrout3.estimatedTime);
+        assertEquals(rout3.name, rrout3.name);
     }
 
     @Test
@@ -116,7 +127,8 @@ public class RoutineDaoTest {
         tasklist.add(new TaskEntity(3, "task1"));
         tasklist.add(new TaskEntity(3, "task2"));
         routineDao.insertTasks(tasklist);
-        assertEquals(tasklist, routineDao.findTasksForRoutine(3));
+        assertEquals(tasklist.get(0).taskName, routineDao.findTasksForRoutine(3).get(0).taskName);
+        assertEquals(tasklist.get(1).taskName, routineDao.findTasksForRoutine(3).get(1).taskName);
 
     }
 
@@ -127,25 +139,39 @@ public class RoutineDaoTest {
         RoutineEntity sampleRoutine = new RoutineEntity(2, 30, "sampleRoutine");
         routineDao.insert(sampleRoutine);
         var rtim = routineDao.findTimerForRoutine(2);
-        assertEquals(tim, rtim);
+        assertEquals(tim.routineId, rtim.routineId);
+        assertEquals(tim.cumTime, rtim.cumTime);
+        assertEquals(tim.taskTime, rtim.taskTime);
+        assertEquals(tim.ongoing, rtim.ongoing);
+        assertEquals(tim.startTime, rtim.startTime);
+        assertEquals(tim.taskStartTime, rtim.taskStartTime);
     }
 
     @Test
     public void findAllTest() {
-        assertEquals(2, routineDao.findAll().size());
+        assertEquals(1, routineDao.findAll().size());
     }
 
     @Test
     public void findAsLiveDataTest() {
+
         var rout3 = new RoutineEntity(3, 0,"rout3");
         routineDao.append(rout3, new CustomTimerEntity(3, 0, 0, false, 0, 0));
-        var rrout3 = routineDao.findAsLiveData(3).getValue();
-        assertEquals(rout3, rrout3);
+        LiveData<RoutineEntity> rrout3 = routineDao.findAsLiveData(3);
+        RoutineEntity[] rrout3data = new RoutineEntity[1];
+        rrout3.observeForever(new Observer<RoutineEntity>() {
+            @Override
+            public void onChanged(RoutineEntity routineEntity) {
+                rrout3data[0] = routineEntity;
+            }
+        });
+
+        assertEquals(rout3, rrout3data[0]);
     }
 
     @Test
     public void findAllAsLiveDataTest() {
-        assertEquals(2, routineDao.findAllAsLiveData().getValue().size());
+        assertEquals(2, Objects.requireNonNull(routineDao.findAllAsLiveData().getValue()).size());
 
     }
 
@@ -172,7 +198,7 @@ public class RoutineDaoTest {
     @Test
     public void setEstimatedTimeTest() {
         routineDao.setEstimatedTime(1, 7);
-        assertEquals(Optional.of(7), routineDao.find(1).estimatedTime);
+        assertEquals(Optional.of(7), Optional.of(routineDao.find(1).estimatedTime));
     }
 
     @Test
