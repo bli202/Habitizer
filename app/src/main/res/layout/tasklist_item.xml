@@ -17,7 +17,7 @@
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/task_time"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/move_up_arrow"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -61,4 +61,34 @@
         app:layout_constraintEnd_toStartOf="@+id/editTaskButton"
         app:layout_constraintStart_toEndOf="@+id/taskTitle"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/move_up_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/taskTitle"
+        app:layout_constraintBottom_toTopOf="@id/move_down_arrow"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/up_arrow"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:fabCustomSize="28dp"
+        android:background="@android:color/transparent"
+        app:tint="@color/black" />
+
+    <ImageButton
+        android:id="@+id/move_down_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/taskTitle"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/move_up_arrow"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:src="@drawable/down_arrow"
+        app:fabCustomSize="28dp"
+        android:background="@android:color/transparent"
+        app:tint="@color/black" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

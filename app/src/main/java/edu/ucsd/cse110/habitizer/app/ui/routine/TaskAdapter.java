@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
@@ -65,6 +67,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         FloatingActionButton deleteTaskButton = convertView.findViewById(R.id.deleteTaskButton);
         TextView taskTitle = convertView.findViewById(R.id.taskTitle);
         TextView taskTime = convertView.findViewById(R.id.task_time);
+        ImageButton upArrow = convertView.findViewById(R.id.move_up_arrow);
+        ImageButton downArrow = convertView.findViewById(R.id.move_down_arrow);
 
         if (routine.getOngoing()) {
             editTaskButton.setVisibility(View.INVISIBLE);
@@ -81,7 +85,22 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             onEditClick.accept(name);
         });
         
-        deleteTaskButton.setOnClickListener(v -> onDeleteClick.accept(task.getName()));
+        deleteTaskButton.setOnClickListener(v -> {
+            onDeleteClick.accept(task.getName());
+            notifyDataSetChanged();
+        });
+
+        upArrow.setOnClickListener(x -> {
+            MainViewModel.moveUp(routine.getId(), task.getOrder());
+            notifyDataSetChanged();
+            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
+        });
+
+        downArrow.setOnClickListener(x -> {
+            MainViewModel.moveDown(routine.getId(), task.getOrder());
+            notifyDataSetChanged();
+            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
+        });
         
         taskTitle.setText(task.getName());
 
