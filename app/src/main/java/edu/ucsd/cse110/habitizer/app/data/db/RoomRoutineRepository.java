@@ -8,10 +8,6 @@ import java.util.stream.Collectors;
 import edu.ucsd.cse110.habitizer.app.util.LiveDataSubjectAdapter;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
-import edu.ucsd.cse110.habitizer.lib.domain.Task;
-import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
-import edu.ucsd.cse110.observables.PlainMediatorSubject;
-import edu.ucsd.cse110.observables.PlainMutableSubject;
 import edu.ucsd.cse110.observables.Subject;
 
 public class RoomRoutineRepository implements RoutineRepository {
@@ -52,7 +48,7 @@ public class RoomRoutineRepository implements RoutineRepository {
         MutableLiveData<List<Routine>> liveData = new MutableLiveData<>(routines);
         return new LiveDataSubjectAdapter<>(liveData);
     }
-    
+
     @Override
     public void setEstimatedTime(int routineId, int time) {
         routineDao.setEstimatedTime(routineId, time);
