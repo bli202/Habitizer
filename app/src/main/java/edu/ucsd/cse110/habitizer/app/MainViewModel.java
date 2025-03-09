@@ -24,7 +24,7 @@ public class MainViewModel extends ViewModel {
     private static final String TAG = "MainViewModel";
 
     // Domain state (Model) and current routine context.
-    private final TaskRepository taskRepository;
+    private static TaskRepository taskRepository;
     private final RoutineRepository routineRepository;
 
     private final PlainMutableSubject<Integer> estimatedTime;
@@ -105,10 +105,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public static void switchRoutine(Routine routine) {
-        currentRoutine.removeObservers();
-        currentRoutine = new PlainMutableSubject<>(routine);
-//        curRoutine.setValue(routine);
-//        currTaskList.setValue(routine.getTaskList());
+        currentRoutine.setValue(routine);
     }
 
     public void startTime() {
@@ -149,5 +146,13 @@ public class MainViewModel extends ViewModel {
 
     public void removeRoutine(Routine routine) {
         routineRepository.removeRoutine(routine);
+    }
+
+    public static void moveUp(int routineId, int order) {
+        taskRepository.moveUp(routineId, order);
+    }
+
+    public static void moveDown(int routineId, int order) {
+        taskRepository.moveDown(routineId, order);
     }
 }
