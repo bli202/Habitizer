@@ -3,6 +3,7 @@ package edu.ucsd.cse110.habitizer.app.ui.routine;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -76,7 +77,7 @@ public class TaskFragment extends Fragment {
 
         this.adapter = new TaskAdapter(requireContext(),
                 new ArrayList<>(),
-                activityModel.getCurrentRoutine().getValue(),
+                MainViewModel.getCurrentRoutine().getValue(),
                 name -> {
                     var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);
                     EditTaskdialogFragment.show(getParentFragmentManager(), "EditCardDialogFragment");},
@@ -89,12 +90,13 @@ public class TaskFragment extends Fragment {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         curRoutineSubject = MainViewModel.getCurrentRoutine();
         var curRoutine = curRoutineSubject.getValue();
-        curTasksSubject = activityModel.getCurrentTasks();
+        assert curRoutine != null;
+        curTasksSubject = activityModel.getCurrentRoutineTasks();
 
         this.view = FragmentTasklistViewBinding.inflate(inflater, container, false);
 
@@ -113,7 +115,7 @@ public class TaskFragment extends Fragment {
             if (tasks == null) return;
             adapter.clear();
             adapter.addAll(new ArrayList<>(tasks)); // remember the mutable copy here!
-//            adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         });
 
         activityModel.getCompleted().observe(completed -> {
@@ -131,8 +133,18 @@ public class TaskFragment extends Fragment {
             }
         });
 
+        if (getArguments() != null) {
+            view.routineTitle.setText(curRoutine.getName());
+            String timeText = curRoutine.getEstimatedTime() + "m";
+            view.estimatedTime.setText(timeText);
+        }
+
+
+        /*
+         * Set up button listeners
+         */
         view.editRoutineButton.setOnClickListener(x -> {
-            var dialogFragment = new EditRoutineDialogFragment().newInstance(curRoutine.getName());
+            var dialogFragment = EditRoutineDialogFragment.newInstance(curRoutine.getName());
             dialogFragment.show(getChildFragmentManager(), "EditRoutineDialogFragment");
             Log.d(TAG, "edit routine button pressed");
         });
@@ -149,7 +161,6 @@ public class TaskFragment extends Fragment {
             }
         });
 
-
         view.startRoutineButton.setOnClickListener(x -> {
             if (curRoutine.getNumTasks() == 0) {
                 var dialogFragment = InvalidStartDialogFragment.newInstance();
@@ -157,7 +168,9 @@ public class TaskFragment extends Fragment {
                 return;
             }
 
-            activityModel.startTime();
+            adapter.notifyDataSetChanged();
+
+            activityModel.startCurrentRoutine();
             view.addTaskButton.setVisibility(View.INVISIBLE);
             view.startRoutineButton.setVisibility(View.INVISIBLE);
             view.stopRoutineButton.setVisibility(View.VISIBLE);
@@ -212,16 +225,9 @@ public class TaskFragment extends Fragment {
 
         view.stopRoutineButton.setOnClickListener(v -> {
             if(!curRoutine.getOngoing()) return;
-            activityModel.endCurRoutine();
+            activityModel.endCurrentRoutine();
+            adapter.notifyDataSetChanged();
         });
-
-
-        if (getArguments() != null) {
-            view.routineTitle.setText(curRoutine.getName());
-            String timeText = curRoutine.getEstimatedTime() + "m";
-            view.estimatedTime.setText(timeText);
-        }
-//        curTasksSubject.removeObservers();
 
         return view.getRoot();
     }
@@ -231,10 +237,5 @@ public class TaskFragment extends Fragment {
         curTasksSubject.removeObserver(tasksObserver);
         curRoutineSubject.removeObserver(routineObserver);
         super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 }

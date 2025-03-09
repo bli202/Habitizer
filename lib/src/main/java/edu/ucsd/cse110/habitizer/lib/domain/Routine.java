@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Routine {
-    private List<Task> taskList;
+    private final List<Task> taskList;
     private int estimatedTime;
     private boolean ongoing;
     private int tasksDone;
@@ -16,7 +16,7 @@ public class Routine {
     /**
      * Routine Constructor
      *
-     * @param name the name of the routine
+     * @param name          the name of the routine
      * @param estimatedTime the total estimated time user picks to display
      */
     public Routine(int estimatedTime, String name) {
@@ -56,7 +56,7 @@ public class Routine {
     public String toString() {
         return name;
     }
-    
+
     public int getDuration() {
         return estimatedTime;
     }
@@ -99,22 +99,23 @@ public class Routine {
         }
         return false;
     }
-    
-    public boolean removeTask(String name) {
-        if (ongoing || taskList.isEmpty()) return false;
-        
+
+    public void removeTask(String name) {
+        if (ongoing || taskList.isEmpty()) return;
+
         // remove task from List
         for (Task t : taskList) {
             if (t.getName().equals(name)) {
-                return taskList.remove(t);
+                taskList.remove(t);
+                return;
             }
         }
-        return false;
     }
-    
+
+    @SuppressWarnings("unused")
     public boolean removeTask(int taskId) {
         if (ongoing || taskList.isEmpty()) return false;
-        
+
         // remove task from List
         for (Task t : taskList) {
             if (t.getId() == (taskId)) {
@@ -137,8 +138,8 @@ public class Routine {
             throw new IllegalArgumentException("Cannot start a routine with no tasks");
         }
 
-        for(Task t : taskList) {
-            if(t.isCompleted()) t.toggleCompletion();
+        for (Task t : taskList) {
+            if (t.isCompleted()) t.toggleCompletion();
         }
         this.timer = new CustomTimer();
         this.timer.start();
@@ -164,8 +165,7 @@ public class Routine {
         if (ongoing) {
             if (timer.getOngoing()) {
                 timer.pause();
-            }
-            else {
+            } else {
                 timer.start();
             }
         }
@@ -203,7 +203,7 @@ public class Routine {
         }
         return taskTimeMinutes;
     }
-
+    @SuppressWarnings("unused")
     public int getTaskTime() {
         return (int) timer.getTaskTimeNoReset();
     }
@@ -223,7 +223,7 @@ public class Routine {
      * If the routine is ongoing, calculates the duration from start to now
      */
     public int getElapsedTime() {
-        if(ongoing) {
+        if (ongoing) {
             return ((int) timer.getTime()) / 60;
         } else {
             return (int) Math.ceil(timer.getTime() / 60.0);
@@ -295,6 +295,18 @@ public class Routine {
 
         task.setName(name);
         return true;
+    }
+
+    public boolean editTask(String oldName, String name) {
+        if (ongoing) return false;
+
+        for (Task t : taskList) {
+            if (t.getName().equals(oldName)) {
+                t.setName(name);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
