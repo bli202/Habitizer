@@ -24,13 +24,15 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     private final String TAG = "TaskAdapter";
     Consumer<String> onDeleteClick;
     Consumer<String> onEditClick;
+    Consumer<Task> onTaskClick;
     Routine routine;
     
     public TaskAdapter(Context context,
                        List<Task> taskList,
                        Routine routine,
                        Consumer<String> onEditClick,
-                       Consumer<String> onDeleteClick
+                       Consumer<String> onDeleteClick,
+                       Consumer<Task> onTaskClick
                           ) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem(), for example.
@@ -41,8 +43,9 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         this.onEditClick = onEditClick;
         this.onDeleteClick = onDeleteClick;
         this.routine = routine;
+        this.onTaskClick = onTaskClick;
 
-        Log.d(TAG, "task adapter tasklist size:" + taskList.size());
+        Log.d(TAG, "task adapter taskList size:" + taskList.size());
     }
 
     @NonNull
@@ -86,34 +89,36 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         taskTitle.setText(task.getName());
 
         // Set initial strike-through based on task completion state
-        updateStrikeThrough(taskTitle, task.isCompleted());
-
-        // If the task is already completed, display its stored time.
-        if (task.isCompleted()){
-            String timeText = task.getTimeSpentMinutes() + "m";
-            taskTime.setText(timeText);
-        }
+//        if (task.isCompleted()) strikethrough(taskTitle);
+//        else removeStrikethrough(taskTitle);
+//
+//        // If the task is already completed, display its stored time.
+//        if (task.isCompleted()){
+//            String timeText = task.getTimeSpentMinutes() + "m";
+//            taskTime.setText(timeText);
+//        }
 
 
         // Set click listener on the entire view
         convertView.setOnClickListener(v -> {
-            if(task.isCompleted() || !routine.getOngoing()) return;
-            task.toggleCompletion();  // Toggle task completion state
-            Log.d(TAG, "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
-            updateStrikeThrough(taskTitle, task.isCompleted());
-            String timeText = routine.checkOffTask(task) + "m";
-            taskTime.setText(timeText);
+            onTaskClick.accept(task);
+            if (task.isCompleted() && routine.getOngoing()) {
+                Log.d(TAG, "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
+                strikethrough(taskTitle);
+                String timeText = routine.checkOffTask(task) + "m";
+                taskTime.setText(timeText);
+            }
         });
         
         return convertView;
     }
 
-    private void updateStrikeThrough(TextView textView, boolean isCompleted) {
-        if (isCompleted) {
+    private void strikethrough(TextView textView) {
             textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        } else {
-            textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-        }
+    }
+    
+    private void removeStrikethrough(TextView textView) {
+        textView.setPaintFlags(textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
     }
 
     // The below methods aren't strictly necessary, usually.

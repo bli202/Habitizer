@@ -41,4 +41,8 @@ public interface TaskRepository {
      * Edits a task within the specified routine by replacing the old task name with the new one.
      */
     void edit(int routineId, String oldTaskName, String newTaskName);
+    
+    public void setCompleted(int routineId, String taskName, boolean completed);
+    
+    public boolean getCompleted(int routineId, String taskName);
 }

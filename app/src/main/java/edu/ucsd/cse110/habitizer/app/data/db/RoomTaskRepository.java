@@ -40,6 +40,16 @@ public class RoomTaskRepository implements TaskRepository {
     }
     
     @Override
+    public void setCompleted(int routineId, String taskName, boolean completed) {
+        taskDao.setCompleted(routineId, taskName, completed);
+    }
+    
+    @Override
+    public boolean getCompleted(int routineId, String taskName) {
+        return taskDao.getCompleted(routineId, taskName);
+    }
+    
+    @Override
     public void save(int routineId, Task task) {
         TaskEntity taskEntity = TaskEntity.fromTask(routineId, task);
         taskDao.insert(taskEntity);

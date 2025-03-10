@@ -194,11 +194,10 @@ public class Routine {
      */
     public int checkOffTask(Task t) {
         t.completeTask();
-        tasksDone++;
         long taskTime = timer.getTaskTime();
         int taskTimeMinutes = (int) Math.ceil(taskTime / 60.0);
         t.setTime((int) taskTime);
-        if (tasksDone == taskList.size()) {
+        if (++tasksDone == taskList.size()) {
             endRoutine();
         }
         return taskTimeMinutes;

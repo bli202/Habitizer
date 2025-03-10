@@ -56,8 +56,14 @@ public class AddTaskDialogFragment extends DialogFragment {
             return;
         }
         
+        // Initialize MainViewModel
+        var modelOwner = requireActivity();
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        var activityModel = modelProvider.get(MainViewModel.class);
+        
         try {
-            for (Task t : Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getTaskList()) {
+            for (Task t : Objects.requireNonNull(activityModel.getCurrentRoutineTasks().getValue())) {
                 if (t.getName().equals(name)) {
                     var dialogFragment = InvalidTaskDialogFragment.newInstance("");
                     dialogFragment.show(getParentFragmentManager(), "InvalidTaskDialogFragment");
@@ -68,12 +74,9 @@ public class AddTaskDialogFragment extends DialogFragment {
         } catch (Exception e) {
             Log.e("EditTaskDialogFragment", "Exception while checking task list", e);
         }
-        var task = new Task(name);
         
-        var modelOwner = requireActivity();
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        var activityModel = modelProvider.get(MainViewModel.class);
+        // Create new task and add to current routine if checks passed
+        var task = new Task(name);
         activityModel.addTaskToCurrentRoutine(task);
         dialog.dismiss();
     }

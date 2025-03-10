@@ -32,4 +32,10 @@ public interface TaskDao {
     
     @Query("DELETE FROM tasks WHERE routineId = :routineId AND id = :taskId")
     void deleteByRoutineIdAndTaskId(int routineId, int taskId);
+    
+    @Query("UPDATE tasks SET completed = :completed WHERE routineId = :routineId AND taskName = :taskName")
+    void setCompleted(int routineId, String taskName, boolean completed);
+    
+    @Query("SELECT completed FROM tasks WHERE routineId = :routineId AND taskName = :taskName")
+    boolean getCompleted(int routineId, String taskName);
 }

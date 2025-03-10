@@ -18,4 +18,8 @@ public interface RoutineRepository {
     void setOngoing(int routineId, boolean b);
 
     Subject<Boolean> getOngoing(int routineId);
+    
+    void incrementTasksDone(int routineId);
+    
+    int getTasksDone(int routineId);
 }

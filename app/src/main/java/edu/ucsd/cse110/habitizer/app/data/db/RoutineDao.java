@@ -89,5 +89,11 @@ public interface RoutineDao {
     void setOngoing(int routineId, boolean b);
 
     @Query("SELECT ongoing FROM routines WHERE id = :routineId")
-    LiveData<Boolean> getOngoing(int routineId);
+    LiveData<Boolean> getOngoingAsLiveData(int routineId);
+    
+    @Query("UPDATE routines SET tasksDone = tasksDone + 1 WHERE id = :routineId")
+    void incrementTasksDone(int routineId);
+    
+    @Query("SELECT tasksDone FROM routines WHERE id = :routineId")
+    int getTasksDone(int routineId);
 }

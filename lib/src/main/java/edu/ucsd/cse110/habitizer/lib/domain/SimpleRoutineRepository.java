@@ -70,5 +70,15 @@ public class SimpleRoutineRepository implements RoutineRepository {
     public Subject<Boolean> getOngoing(int routineId) {
         return null;
     }
-
+    
+    @Override
+    public void incrementTasksDone(int routineId) {
+    
+    }
+    
+    @Override
+    public int getTasksDone(int routineId) {
+        return 0;
+    }
+    
 }
