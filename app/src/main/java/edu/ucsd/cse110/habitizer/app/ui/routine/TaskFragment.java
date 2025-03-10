@@ -133,6 +133,11 @@ public class TaskFragment extends Fragment {
             }
         });
 
+//        activityModel.getEstimatedTime().observe(time -> {
+//            String newTime = time + "m";
+//            this.view.estimatedTime.setText(newTime);
+//        });
+
         if (getArguments() != null) {
             view.routineTitle.setText(curRoutine.getName());
             String timeText = curRoutine.getEstimatedTime() + "m";

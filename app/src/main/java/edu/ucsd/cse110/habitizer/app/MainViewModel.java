@@ -139,7 +139,9 @@ public class MainViewModel extends ViewModel {
     }
 
     public void setCurrentRoutineEstimatedTime(int time) {
+        Objects.requireNonNull(currentRoutine.getValue()).setEstimatedTime(time);
         routineRepository.setEstimatedTime(Objects.requireNonNull(currentRoutine.getValue()).getId(), time);
+        estimatedTime.setValue(time);
     }
 
     public void removeRoutine(Routine routine) {

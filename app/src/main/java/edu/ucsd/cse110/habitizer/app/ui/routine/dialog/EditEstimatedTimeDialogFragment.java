@@ -57,7 +57,6 @@ public class EditEstimatedTimeDialogFragment extends DialogFragment {
             }
             // Get current routine
             Routine currentRoutine = getCurrentRoutine().getValue();
-            // Update the time
             assert currentRoutine != null;
             var modelOwner = requireActivity();
             var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
@@ -66,8 +65,6 @@ public class EditEstimatedTimeDialogFragment extends DialogFragment {
             activityModel.setCurrentRoutineEstimatedTime(newTime);
 
             // Update the Subject with the modified routine
-            currentRoutine.setEstimatedTime(newTime);
-
             ((PlainMutableSubject<Routine>) getCurrentRoutine()).setValue(currentRoutine);
 
         } catch (Exception e) {
