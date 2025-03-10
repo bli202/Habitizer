@@ -18,7 +18,7 @@ public interface TaskDao {
 
     @Transaction
     default int append(TaskEntity task) {
-        var maxSortOrder = getMaxSortOrder();
+        var maxSortOrder = getMaxSortOrder(task.routineId);
         var newTask  = new TaskEntity(
                 task.routineId, task.taskName, maxSortOrder + 1
         );
@@ -46,20 +46,18 @@ public interface TaskDao {
     @Query("SELECT MIN(sortOrder) FROM tasks")
     int getMinSortOrder();
 
-    @Query("SELECT MAX(sortOrder) FROM tasks")
-    int getMaxSortOrder();
+    @Query("SELECT MAX(sortOrder) FROM tasks WHERE routineId = :routineId")
+    int getMaxSortOrder(int routineId);
 
-    @Query("UPDATE tasks SET sortOrder = -1 " +
-            "WHERE sortOrder = :firstSortOrder AND routineId = :routineId")
-    void setTemporarySortOrder(int routineId, int firstSortOrder);
-
-    @Query("UPDATE tasks SET sortOrder = :firstSortOrder " +
-            "WHERE sortOrder = :secondSortOrder AND routineId = :routineId")
-    void updateFirstTaskSortOrder(int routineId, int firstSortOrder, int secondSortOrder);
-
-    @Query("UPDATE tasks SET sortOrder = :secondSortOrder " +
-            "WHERE sortOrder = -1 AND routineId = :routineId")
-    void updateSecondTaskSortOrder(int routineId, int secondSortOrder);
+    @Query("UPDATE tasks SET sortOrder = :newSortOrder WHERE sortOrder = :oldSortOrder AND routineId = :routineId")
+    void updateSortOrder(int routineId, int oldSortOrder, int newSortOrder);
 
 
+    @Query("UPDATE tasks SET sortOrder = :sortOrder - 1 " +
+            "WHERE sortOrder = :sortOrder AND routineId = :routineId")
+    void moveTaskUp(int routineId, int sortOrder);
+
+
+    @Query("SELECT * FROM tasks WHERE routineId = :routineId AND taskName = :taskName")
+    TaskEntity find(int routineId, String taskName);
 }

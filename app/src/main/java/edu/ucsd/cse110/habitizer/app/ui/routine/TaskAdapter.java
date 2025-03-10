@@ -55,16 +55,12 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             convertView = inflater.inflate(R.layout.tasklist_item, parent, false);
         }
 
-        Log.d(TAG, "getView() called for position " + position);
-
         // Get the task for this position.
         var task = getItem(position);
         if (task == null) {
             Log.e(TAG, "Task is NULL at position " + position);
             return new View(getContext());
         }
-
-        Log.d(TAG, "Displaying task: " + task.getName());
 
         // UI Elements to reuse.
         FloatingActionButton editTaskButton = convertView.findViewById(R.id.editTaskButton);
@@ -87,7 +83,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             var name = task.getName();
             assert name != null;
             onEditClick.accept(name);
-            notifyDataSetChanged();
         });
         
         deleteTaskButton.setOnClickListener(v -> {
@@ -152,8 +147,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
     @Override
     public Task getItem(int position) {
-        Task task = super.getItem(position);
-        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
-        return task;
+        //        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
+        return super.getItem(position);
     }
 }

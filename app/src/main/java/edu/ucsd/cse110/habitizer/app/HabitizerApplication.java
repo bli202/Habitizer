@@ -15,6 +15,8 @@ import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 public class HabitizerApplication extends Application {
     private TaskRepository taskRepository;
     private RoutineRepository routineRepository;
+
+    private String TAG = "HabitizerApplication";
     
     @Override
     public void onCreate() {
