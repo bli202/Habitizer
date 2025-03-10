@@ -93,4 +93,14 @@ public class SimpleTaskRepository implements TaskRepository {
     public boolean getCompleted(int routineId, String taskName) {
         return false;
     }
+
+    @Override
+    public int getTime(int routineId, String taskName) {
+        return 0;
+    }
+
+    @Override
+    public void setTime(int routineId, String taskName) {
+
+    }
 }

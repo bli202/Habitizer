@@ -51,4 +51,8 @@ public interface TaskRepository {
     public void setCompleted(int routineId, String taskName, boolean completed);
     
     public boolean getCompleted(int routineId, String taskName);
+
+    int getTime(int routineId, String taskName);
+
+    void setTime(int routineId, String taskName);
 }

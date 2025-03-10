@@ -36,6 +36,9 @@ public class TaskEntity {
     
     @ColumnInfo(name = "completed")
     public Boolean completed;
+
+    @ColumnInfo(name = "taskTime")
+    public Integer taskTime;
     
     public TaskEntity(@NonNull Integer routineId, @NonNull String taskName, @NonNull Integer sortOrder) {
         this.routineId = routineId;

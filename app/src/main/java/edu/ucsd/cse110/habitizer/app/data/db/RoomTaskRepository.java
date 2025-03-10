@@ -17,6 +17,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 import edu.ucsd.cse110.observables.Subject;
 
+
 public class RoomTaskRepository implements TaskRepository {
     private final TaskDao taskDao;
     private String TAG = "RoomTaskRepository";
@@ -66,7 +67,17 @@ public class RoomTaskRepository implements TaskRepository {
     public boolean getCompleted(int routineId, String taskName) {
         return taskDao.getCompleted(routineId, taskName);
     }
-    
+
+    @Override
+    public int getTime(int routineId, String taskName) {
+        return (int) taskDao.getTaskTime(routineId, taskName);
+    }
+
+    @Override
+    public void setTime(int routineId, String taskName) {
+        taskDao.setTime(routineId, taskName);
+    }
+
     @Override
     public void save(int routineId, Task task) {
         TaskEntity taskEntity = TaskEntity.fromTask(routineId, task);

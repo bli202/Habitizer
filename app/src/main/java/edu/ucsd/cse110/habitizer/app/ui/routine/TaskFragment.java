@@ -157,17 +157,18 @@ public class TaskFragment extends Fragment {
                     var DeleteTaskdialogFragment = DeleteTaskDialogFragment.newInstance(taskName);
                     DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
                 }, task -> {
-            if (curRoutine.getOngoing() && !activityModel.getTaskCompleted(task.getName())) {
-                taskTime = activityModel.checkOffTask(task);
-            }
-        }, task -> {
-            adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName()));
-            adapter.setTaskTime(taskTime);
-        }, task -> {
-            activityModel.moveUp(Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getId(), task.getOrder());
-        }, task -> {
-            activityModel.moveDown(Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getId(), task.getOrder());
-        }
+                if (curRoutine.getOngoing() && !activityModel.getTaskCompleted(task.getName())) {
+                    taskTime = activityModel.checkOffTask(task);
+                }
+                }, task -> {
+                    adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName()));
+                    adapter.setTaskTime(activityModel.getTaskTime(Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getId(), task.getName()));
+//                    adapter.setTaskTime(taskTime);
+                }, task -> {
+                    activityModel.moveUp(Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getId(), task.getOrder());
+                }, task -> {
+                    activityModel.moveDown(Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getId(), task.getOrder());
+                }
         );
         
         
@@ -215,6 +216,7 @@ public class TaskFragment extends Fragment {
                 
                 @Override
                 public void onTick(long l) {
+                    Log.d("timer", "TICKING");
                     String timeText = curRoutine.getElapsedTime() + "m";
                     view.actualTime.setText(timeText);
                     if (!isOngoing) {

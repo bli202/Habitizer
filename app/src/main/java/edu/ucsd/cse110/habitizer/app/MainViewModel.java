@@ -174,4 +174,12 @@ public class MainViewModel extends ViewModel {
     public void moveDown(int routineId, int order) {
         taskRepository.moveDown(routineId, order);
     }
+
+    public int getTaskTime(int routineId, String taskName) {
+        return taskRepository.getTime(routineId, taskName);
+    }
+
+    public void setTaskTime(int routineId, String taskName) {
+        taskRepository.setTime(routineId, taskName);
+    }
 }
