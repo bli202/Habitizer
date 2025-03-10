@@ -99,14 +99,22 @@ public class MainViewModel extends ViewModel {
     
     public void startCurrentRoutine() {
         Objects.requireNonNull(currentRoutine.getValue()).startRoutine();
+        for (Task task : getCurrentRoutineTasks()) {
+            setTaskCompleted(task, false);
+        }
         routineRepository.setOngoing(currentRoutine.getValue().getId(), true);
+        routineRepository.resetTasksDone(currentRoutine.getValue().getId());
     }
     
     public static Subject<Routine> getCurrentRoutine() {
         return currentRoutine;
     }
     
-    public Subject<List<Task>> getCurrentRoutineTasks() {
+    public Subject<List<Task>> getCurrentRoutineTasksSubject() {
+        return taskRepository.findAllTasksForRoutineSubject(Objects.requireNonNull(getCurrentRoutine().getValue()).getId());
+    }
+    
+    public List<Task> getCurrentRoutineTasks() {
         return taskRepository.findAllTasksForRoutine(Objects.requireNonNull(getCurrentRoutine().getValue()).getId());
     }
     

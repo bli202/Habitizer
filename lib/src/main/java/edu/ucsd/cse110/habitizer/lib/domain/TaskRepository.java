@@ -23,7 +23,9 @@ public interface TaskRepository {
     /**
      * Retrieves an observable subject for the list of tasks in a specific routine.
      */
-    Subject<List<Task>> findAllTasksForRoutine(int routineId);
+    Subject<List<Task>> findAllTasksForRoutineSubject(int routineId);
+    
+    List<Task> findAllTasksForRoutine(int routineId);
 
     /**
      * Saves (creates or updates) the given task within the specified routine.

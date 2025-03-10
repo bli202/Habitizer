@@ -36,8 +36,13 @@ public class SimpleTaskRepository implements TaskRepository {
      * Retrieves an observable subject for the list of tasks in a specific routine.
      */
     @Override
-    public Subject<List<Task>> findAllTasksForRoutine(int routineId) {
+    public Subject<List<Task>> findAllTasksForRoutineSubject(int routineId) {
         return dataSource.getRoutineTasksSubject(routineId);
+    }
+    
+    @Override
+    public List<Task> findAllTasksForRoutine(int routineId) {
+        return List.of();
     }
     
     /**
