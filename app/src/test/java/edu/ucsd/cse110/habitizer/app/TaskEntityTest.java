@@ -24,7 +24,7 @@ public class TaskEntityTest {
         Task t = new Task("brush");
         t.completeTask();
         TaskEntity te = TaskEntity.fromTask(0, t);
-        assertEquals("brusft", te.taskName);
+        assertEquals("brush", te.taskName);
         assertTrue(te.completed);
     }
 
