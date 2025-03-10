@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
+import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTasklistViewBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
@@ -107,8 +108,7 @@ public class TaskFragment extends Fragment {
             if (routine == null) return;
             curRoutine = routine;
             view.routineTitle.setText(curRoutine.getName());
-            String timeText = curRoutine.getEstimatedTime() + "m";
-            view.estimatedTime.setText(timeText);
+            view.estimatedTime.setText(curRoutine.getEstimatedTime() + R.string.minutes_shorthand);
         });
         
         /*
@@ -217,8 +217,7 @@ public class TaskFragment extends Fragment {
                 @Override
                 public void onTick(long l) {
                     Log.d("timer", "TICKING");
-                    String timeText = curRoutine.getElapsedTime() + "m";
-                    view.actualTime.setText(timeText);
+                    view.actualTime.setText(curRoutine.getElapsedTime() + R.string.minutes_shorthand);
                     if (!isOngoing) {
                         view.stopRoutineButton.setVisibility(View.INVISIBLE);
                         view.addTaskButton.setVisibility(View.VISIBLE);

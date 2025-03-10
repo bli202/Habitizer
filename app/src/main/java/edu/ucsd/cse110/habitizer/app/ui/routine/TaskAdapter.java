@@ -142,10 +142,9 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         // Then sets the strikethrough accordingly
         if (isCompleted) {
             strikethrough(taskNameText);
-            String taskTimeTextString = taskTime + "m";
-            taskTimeText.setText(taskTimeTextString);
+            taskTimeText.setText(taskTime + R.string.minutes_shorthand);
         } else {
-            taskTimeText.setText("Time Taken");
+            taskTimeText.setText(R.string.time_taken);
             removeStrikethrough(taskNameText);
         }
         return convertView;

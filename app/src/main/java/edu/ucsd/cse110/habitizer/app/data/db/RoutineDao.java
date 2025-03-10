@@ -6,13 +6,10 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
-import androidx.room.Update;
 
 import java.util.List;
 
-import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
-import edu.ucsd.cse110.observables.Subject;
 
 @Dao
 public interface RoutineDao {
@@ -20,13 +17,7 @@ public interface RoutineDao {
     Long insert(RoutineEntity routine);
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insertRoutines(List<RoutineEntity> routines);
-    
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertTask(TaskEntity task);
-    
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insertTasks(List<TaskEntity> tasks);
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertTimer(CustomTimerEntity timer);

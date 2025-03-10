@@ -17,7 +17,6 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
                 childColumns = "routineId",   // Foreign key in TaskEntity
                 onDelete = ForeignKey.CASCADE // Ensures tasks are deleted if routine is deleted
         ),
-//        indices = {@Index(value = "sortOrder", unique = true)}
         indices = {@Index(value = {"routineId", "sortOrder"}, unique = true)}
 )
 public class TaskEntity {
