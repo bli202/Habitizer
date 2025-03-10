@@ -51,6 +51,7 @@ public class TaskFragment extends Fragment {
     private Subject<Boolean> currentRoutineOngoing;
     private Boolean isOngoing;
     private Routine curRoutine;
+    private int taskTime;
     
     public TaskFragment() {
         // Required empty public constructor
@@ -144,7 +145,6 @@ public class TaskFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
         
-        
         this.adapter = new TaskAdapter(requireContext(),
                 activityModel.getCurrentRoutineTasks(),
                 activityModel.isCurrentRoutineOngoing(),
@@ -156,17 +156,17 @@ public class TaskFragment extends Fragment {
                     var DeleteTaskdialogFragment = DeleteTaskDialogFragment.newInstance(taskName);
                     DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
                 }, task -> {
-//            adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName()));
             if (curRoutine.getOngoing() && !activityModel.getTaskCompleted(task.getName())) {
-                activityModel.checkOffTask(task);
-                Log.d(TAG, "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
+                taskTime = activityModel.checkOffTask(task);
             }
-        }, task -> adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName())));
+        }, task -> {
+            adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName()));
+            adapter.setTaskTime(taskTime);
+        });
         
         
         // Set the adapter on the ListView
         view.taskListView.setAdapter(adapter);
-        
         
         /*
          * Set up button listeners
@@ -198,8 +198,6 @@ public class TaskFragment extends Fragment {
             
             activityModel.startCurrentRoutine();
             Log.d(TAG, "Start routine button pressed");
-//            adapter.setOngoingSubject(true);
-            adapter.setTaskCompletionState(false);
             
             timerRunning[0] = true;
             if (timer != null) {

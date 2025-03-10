@@ -28,10 +28,16 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     Consumer<String> onEditClick;
     Consumer<Task> onTaskClick;
     Subject<Boolean> ongoingSubject;
+    
+    int taskTime;
     boolean ongoing;
     private FloatingActionButton editTaskButton;
     private FloatingActionButton deleteTaskButton;
     Boolean isCompleted = false;
+    
+    public void setTaskTime(int taskTime) {
+        this.taskTime = taskTime;
+    }
     
     public TaskAdapter(Context context,
                        List<Task> taskList,
@@ -104,10 +110,13 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             onTaskClick.accept(task);
         });
         
-        // Set initial strike-through based on task completion state
+        // taskCompletionUpdate checks weather the current task is completed or not
         taskCompletionUpdate.accept(task);
+        // Then sets the strikethrough accordingly
         if (isCompleted) {
             strikethrough(taskNameText);
+            String taskTimeTextString = taskTime + "m";
+            taskTimeText.setText(taskTimeTextString);
         } else {
             removeStrikethrough(taskNameText);
         }
@@ -121,6 +130,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     private void strikethrough(TextView textView) {
         textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
+    
+    
     
     private void removeStrikethrough(TextView textView) {
         textView.setPaintFlags(textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
