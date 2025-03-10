@@ -88,9 +88,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         
         taskTitle.setText(task.getName());
 
-        // Set initial strike-through based on task completion state
-//        if (task.isCompleted()) strikethrough(taskTitle);
-//        else removeStrikethrough(taskTitle);
+
+
 //
 //        // If the task is already completed, display its stored time.
 //        if (task.isCompleted()){
@@ -105,10 +104,21 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             if (task.isCompleted() && routine.getOngoing()) {
                 Log.d(TAG, "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
                 strikethrough(taskTitle);
-                String timeText = routine.checkOffTask(task) + "m";
-                taskTime.setText(timeText);
+//                String timeText = routine.checkOffTask(task) + "m";
+//                taskTime.setText(timeText);
             }
         });
+        
+        //         Set initial strike-through based on task completion state
+        if (task.isCompleted()) {
+            strikethrough(taskTitle);
+            Log.d(TAG, "task: " + task.getName() + " - completion state: " + task.isCompleted() + " - strikethrough applied");
+        }
+        else {
+            removeStrikethrough(taskTitle);
+            Log.d(TAG, "task: " + task.getName() + " - completion state: " + task.isCompleted() + " - strikethrough removed");
+        }
+        
         
         return convertView;
     }

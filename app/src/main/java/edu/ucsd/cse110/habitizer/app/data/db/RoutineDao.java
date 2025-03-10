@@ -94,6 +94,9 @@ public interface RoutineDao {
     @Query("UPDATE routines SET tasksDone = tasksDone + 1 WHERE id = :routineId")
     void incrementTasksDone(int routineId);
     
+    @Query("UPDATE routines SET tasksDone = 0 WHERE id = :routineId")
+    void resetTasksDone(int routineId);
+    
     @Query("SELECT tasksDone FROM routines WHERE id = :routineId")
     int getTasksDone(int routineId);
 }

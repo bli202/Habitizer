@@ -77,6 +77,11 @@ public class SimpleRoutineRepository implements RoutineRepository {
     }
     
     @Override
+    public void resetTasksDone(int routineId) {
+    
+    }
+    
+    @Override
     public int getTasksDone(int routineId) {
         return 0;
     }

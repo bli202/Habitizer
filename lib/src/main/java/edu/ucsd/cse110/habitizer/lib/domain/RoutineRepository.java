@@ -21,5 +21,7 @@ public interface RoutineRepository {
     
     void incrementTasksDone(int routineId);
     
+    void resetTasksDone(int routineId);
+    
     int getTasksDone(int routineId);
 }

@@ -139,7 +139,7 @@ public class Routine {
         }
 
         for (Task t : taskList) {
-            if (t.isCompleted()) t.toggleCompletion();
+            t.setCompleted(false);
         }
         this.timer = new CustomTimer();
         this.timer.start();

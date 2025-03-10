@@ -77,6 +77,9 @@ public class RoomRoutineRepository implements RoutineRepository {
     }
     
     @Override
+    public void resetTasksDone(int routineId) {routineDao.resetTasksDone(routineId);}
+    
+    @Override
     public int getTasksDone(int routineId) {
         return routineDao.getTasksDone(routineId);
     }

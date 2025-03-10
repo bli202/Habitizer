@@ -101,6 +101,7 @@ public class TaskFragment extends Fragment {
                 }, task -> {
             if (curRoutine.getOngoing() && !activityModel.getTaskCompleted(task.getName())) {
                 activityModel.checkOffTask(task);
+                Log.d(TAG, "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
             }
         });
         
@@ -191,6 +192,7 @@ public class TaskFragment extends Fragment {
             for (Task task : Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getTaskList()) {
                 activityModel.setTaskCompleted(task, false);
             }
+            Log.d(TAG, "setting task completed to false for all");
             
             adapter.notifyDataSetChanged();
             

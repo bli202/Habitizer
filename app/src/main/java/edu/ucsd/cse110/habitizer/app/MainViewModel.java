@@ -124,6 +124,7 @@ public class MainViewModel extends ViewModel {
     
     public void endCurrentRoutine() {
         Objects.requireNonNull(currentRoutine.getValue()).endRoutine();
+        routineRepository.resetTasksDone(currentRoutine.getValue().getId());
         routineRepository.setOngoing(currentRoutine.getValue().getId(), false);
     }
     
@@ -144,6 +145,7 @@ public class MainViewModel extends ViewModel {
     }
     
     public void setTaskCompleted(Task task, boolean completed) {
+        task.setCompleted(completed);
         taskRepository.setCompleted(Objects.requireNonNull(currentRoutine.getValue()).getId(), task.getName(), completed);
     }
     
