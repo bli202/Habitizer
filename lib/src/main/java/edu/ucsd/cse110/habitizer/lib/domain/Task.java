@@ -61,6 +61,10 @@ public class Task {
         this.completed = !this.completed;
     }
     
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+    
     /**
      * Returns if the task is true.
      *

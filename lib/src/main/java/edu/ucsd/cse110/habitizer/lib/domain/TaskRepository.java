@@ -23,7 +23,9 @@ public interface TaskRepository {
     /**
      * Retrieves an observable subject for the list of tasks in a specific routine.
      */
-    Subject<List<Task>> findAllTasksForRoutine(int routineId);
+    Subject<List<Task>> findAllTasksForRoutineSubject(int routineId);
+    
+    List<Task> findAllTasksForRoutine(int routineId);
 
     /**
      * Saves (creates or updates) the given task within the specified routine.
@@ -45,4 +47,8 @@ public interface TaskRepository {
     void moveUp(int routineId, int order);
 
     void moveDown(int routineId, int order);
+    
+    public void setCompleted(int routineId, String taskName, boolean completed);
+    
+    public boolean getCompleted(int routineId, String taskName);
 }

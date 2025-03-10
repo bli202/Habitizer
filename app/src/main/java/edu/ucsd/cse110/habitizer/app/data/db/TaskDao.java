@@ -6,8 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -60,4 +60,10 @@ public interface TaskDao {
 
     @Query("SELECT * FROM tasks WHERE routineId = :routineId AND taskName = :taskName")
     TaskEntity find(int routineId, String taskName);
+    
+    @Query("UPDATE tasks SET completed = :completed WHERE routineId = :routineId AND taskName = :taskName")
+    void setCompleted(int routineId, String taskName, boolean completed);
+    
+    @Query("SELECT completed FROM tasks WHERE routineId = :routineId AND taskName = :taskName")
+    boolean getCompleted(int routineId, String taskName);
 }

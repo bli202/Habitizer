@@ -37,7 +37,7 @@ public class TaskEntity {
     @ColumnInfo(name = "completed")
     public Boolean completed;
     
-    public TaskEntity(Integer routineId, String taskName, Integer sortOrder) {
+    public TaskEntity(@NonNull Integer routineId, @NonNull String taskName, @NonNull Integer sortOrder) {
         this.routineId = routineId;
         this.taskName = taskName;
         this.completed = false;
