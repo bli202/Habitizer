@@ -116,22 +116,21 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         
         deleteTaskButton.setOnClickListener(v -> {
             onDeleteClick.accept(task.getName());
-            notifyDataSetChanged();
+//            notifyDataSetChanged();
         });
-
+        
         upArrow.setOnClickListener(x -> {
             onUpClick.accept(task);
 //            notifyDataSetChanged();
-//            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
+            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
         });
-
+        
         downArrow.setOnClickListener(x -> {
             onDownClick.accept(task);
 //            notifyDataSetChanged();
-//            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
+            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
         });
         
-
         
         // Set click listener on the entire view
         convertView.setOnClickListener(v -> {
@@ -146,6 +145,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             String taskTimeTextString = taskTime + "m";
             taskTimeText.setText(taskTimeTextString);
         } else {
+            taskTimeText.setText("Time Taken");
             removeStrikethrough(taskNameText);
         }
         return convertView;
@@ -158,7 +158,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     private void strikethrough(TextView textView) {
         textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
-    
     
     
     private void removeStrikethrough(TextView textView) {
@@ -177,7 +176,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     
     @Override
     public Task getItem(int position) {
-        //        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
+//        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
         return super.getItem(position);
     }
 }

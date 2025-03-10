@@ -100,7 +100,7 @@ public class SimpleTaskRepository implements TaskRepository {
     }
 
     @Override
-    public void setTime(int routineId, String taskName) {
+    public void setTime(int routineId, String taskName, int time) {
 
     }
 }

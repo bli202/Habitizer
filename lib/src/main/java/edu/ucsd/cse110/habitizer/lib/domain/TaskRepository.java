@@ -54,5 +54,5 @@ public interface TaskRepository {
 
     int getTime(int routineId, String taskName);
 
-    void setTime(int routineId, String taskName);
+    void setTime(int routineId, String taskName, int time);
 }

@@ -69,7 +69,7 @@ public interface TaskDao {
 
     @Query("SELECT taskTime FROM tasks WHERE routineId = :routineId AND taskName = :taskName")
     long getTaskTime(int routineId, String taskName);
-
-    @Query("UPDATE taskTime SET :time FROM tasks WHERE routineId = :routineId AND taskName = :taskName")
+    
+    @Query("UPDATE tasks SET taskTime = :time WHERE routineId = :routineId AND taskName = :taskName")
     void setTime(int routineId, String taskName, int time);
 }

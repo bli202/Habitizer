@@ -101,6 +101,7 @@ public class MainViewModel extends ViewModel {
         Objects.requireNonNull(currentRoutine.getValue()).startRoutine();
         for (Task task : getCurrentRoutineTasks()) {
             setTaskCompleted(task, false);
+            setTaskTime(currentRoutine.getValue().getId(), task.getName(), 0);
         }
         routineRepository.setOngoing(currentRoutine.getValue().getId(), true);
         routineRepository.resetTasksDone(currentRoutine.getValue().getId());
@@ -160,6 +161,7 @@ public class MainViewModel extends ViewModel {
     public int checkOffTask(Task task) {
         int time = Objects.requireNonNull(currentRoutine.getValue()).checkOffTask(task);
         setTaskCompleted(task, true);
+        setTaskTime(currentRoutine.getValue().getId(), task.getName(), time);
         routineRepository.incrementTasksDone(currentRoutine.getValue().getId());
         if (Objects.requireNonNull(currentRoutine.getValue()).getNumTasks() == routineRepository.getTasksDone(currentRoutine.getValue().getId())) {
             endCurrentRoutine();
@@ -179,7 +181,7 @@ public class MainViewModel extends ViewModel {
         return taskRepository.getTime(routineId, taskName);
     }
 
-    public void setTaskTime(int routineId, String taskName) {
-        taskRepository.setTime(routineId, taskName);
+    public void setTaskTime(int routineId, String taskName, int time) {
+        taskRepository.setTime(routineId, taskName, time);
     }
 }

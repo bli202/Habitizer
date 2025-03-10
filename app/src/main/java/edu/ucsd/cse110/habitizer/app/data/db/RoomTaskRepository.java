@@ -1,14 +1,9 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
-import androidx.room.Query;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.app.util.LiveDataSubjectAdapter;
@@ -74,8 +69,8 @@ public class RoomTaskRepository implements TaskRepository {
     }
 
     @Override
-    public void setTime(int routineId, String taskName) {
-        taskDao.setTime(routineId, taskName);
+    public void setTime(int routineId, String taskName, int time) {
+        taskDao.setTime(routineId, taskName, time);
     }
 
     @Override
