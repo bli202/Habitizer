@@ -16,17 +16,13 @@ import edu.ucsd.cse110.observables.Subject;
 
 @Dao
 public interface RoutineDao {
+
+    @Query("DELETE from routines")
+    void clearAll();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(RoutineEntity routine);
-    
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insertRoutines(List<RoutineEntity> routines);
-    
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Long insertTask(TaskEntity task);
-    
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insertTasks(List<TaskEntity> tasks);
+
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertTimer(CustomTimerEntity timer);
@@ -54,7 +50,7 @@ public interface RoutineDao {
 
     @Query("SELECT * FROM routines WHERE id = :id")
     LiveData<RoutineEntity> findAsLiveData(int id);
-    
+
     @Query("SELECT * FROM routines")
     LiveData<List<RoutineEntity>> findAllAsLiveData();
     
@@ -64,15 +60,7 @@ public interface RoutineDao {
         insert(routine);
         return Math.toIntExact(insert(routine));
     }
-    
-    @Transaction
-    default int addTaskToRoutine(RoutineEntity routineEntity, Task task) {
-        var routine = routineEntity.toRoutine(findTasksForRoutine(routineEntity.id), findTimerForRoutine(routineEntity.id));
-        routine.addTask(task);
-        insertTask(TaskEntity.fromTask(routine.getId(), task));
-        return Math.toIntExact(insert(RoutineEntity.fromRoutine(routine)));
-    }
-    
+
     @Query("DELETE FROM routines WHERE id = :id")
     void delete(int id);
 
