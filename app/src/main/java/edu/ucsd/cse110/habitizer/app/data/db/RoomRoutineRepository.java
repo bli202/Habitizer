@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
@@ -58,4 +59,28 @@ public class RoomRoutineRepository implements RoutineRepository {
     public void editRoutineName(int routineId, String newRoutineName) {
         routineDao.updateRoutineName(routineId, newRoutineName);
     }
+
+    @Override
+    public void setOngoing(int routineId, boolean b) {
+        routineDao.setOngoing(routineId, b);
     }
+
+    @Override
+    public Subject<Boolean> getOngoing(int routineId) {
+        LiveData<Boolean> isOngoingLiveData = routineDao.getOngoingAsLiveData(routineId);
+        return new LiveDataSubjectAdapter<>(isOngoingLiveData);
+    }
+    
+    @Override
+    public void incrementTasksDone(int routineId) {
+        routineDao.incrementTasksDone(routineId);
+    }
+    
+    @Override
+    public void resetTasksDone(int routineId) {routineDao.resetTasksDone(routineId);}
+    
+    @Override
+    public int getTasksDone(int routineId) {
+        return routineDao.getTasksDone(routineId);
+    }
+}

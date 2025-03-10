@@ -8,11 +8,11 @@ import edu.ucsd.cse110.observables.Subject;
 @SuppressWarnings("unused")
 public class SimpleTaskRepository implements TaskRepository {
     private final InMemoryDataSource dataSource;
-
+    
     public SimpleTaskRepository(InMemoryDataSource dataSource) {
         this.dataSource = dataSource;
     }
-
+    
     /**
      * Returns the number of tasks in the specified routine.
      */
@@ -20,9 +20,10 @@ public class SimpleTaskRepository implements TaskRepository {
     public Integer count(int routineId) {
         return dataSource.getTasksForRoutine(routineId).size();
     }
-
+    
     /**
      * Gets a routine subject by its name
+     *
      * @param id the id of the routine to retrieve
      * @return the specified routine subject
      */
@@ -30,15 +31,20 @@ public class SimpleTaskRepository implements TaskRepository {
     public Subject<Routine> findRoutine(int id) {
         return dataSource.getRoutineSubject(id);
     }
-
+    
     /**
      * Retrieves an observable subject for the list of tasks in a specific routine.
      */
     @Override
-    public Subject<List<Task>> findAllTasksForRoutine(int routineId) {
+    public Subject<List<Task>> findAllTasksForRoutineSubject(int routineId) {
         return dataSource.getRoutineTasksSubject(routineId);
     }
-
+    
+    @Override
+    public List<Task> findAllTasksForRoutine(int routineId) {
+        return List.of();
+    }
+    
     /**
      * Saves (creates or updates) the given task within the specified routine.
      */
@@ -46,7 +52,7 @@ public class SimpleTaskRepository implements TaskRepository {
     public void save(int routineId, Task task) {
         dataSource.putTask(routineId, task);
     }
-
+    
     /**
      * Removes the task with the given name from the specified routine.
      */
@@ -67,14 +73,24 @@ public class SimpleTaskRepository implements TaskRepository {
     public void edit(int routineId, String oldTaskName, String newTaskName) {
         dataSource.editTask(routineId, oldTaskName, newTaskName);
     }
-
+    
     @Override
     public void moveUp(int routineId, int order) {
-
+    
     }
-
+    
     @Override
     public void moveDown(int routineId, int order) {
-
+    
+    }
+    
+    @Override
+    public void setCompleted(int routineId, String taskName, boolean completed) {
+    
+    }
+    
+    @Override
+    public boolean getCompleted(int routineId, String taskName) {
+        return false;
     }
 }

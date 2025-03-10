@@ -19,18 +19,18 @@ import edu.ucsd.cse110.observables.PlainMutableSubject;
 import edu.ucsd.cse110.observables.Subject;
 
 public class MainViewModel extends ViewModel {
-
+    
     private static final String TAG = "MainViewModel";
-
+    
     // Domain state (Model) and current routine context.
-    private static TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
     private final RoutineRepository routineRepository;
-
+    
     private final PlainMutableSubject<Integer> estimatedTime;
-
-    private final PlainMutableSubject<Boolean> completed;
+    
+    //    private final PlainMutableSubject<Boolean> completed;
     private static final PlainMutableSubject<Routine> currentRoutine = new PlainMutableSubject<>();
-
+    
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
             MainViewModel.class,
             creationExtras -> {
@@ -39,21 +39,21 @@ public class MainViewModel extends ViewModel {
                 // Here we are initializing the view model for a specific routine.
                 return new MainViewModel(app.getTaskRepository(), app.getRoutineRepository());
             });
-
+    
     public MainViewModel(TaskRepository taskRepository, RoutineRepository routineRepository) {
         this.taskRepository = taskRepository;
         this.routineRepository = routineRepository;
-
+        
         // Creating observable subjects.
-        this.completed = new PlainMutableSubject<>(false);
+//        this.completed = new PlainMutableSubject<>(false);
         this.estimatedTime = new PlainMutableSubject<>();
     }
-
+    
     @SuppressWarnings("unused")
     public Subject<Integer> getEstimatedTime() {
         return estimatedTime;
     }
-
+    
     /**
      * Adds a task to the current routine.
      */
@@ -61,7 +61,7 @@ public class MainViewModel extends ViewModel {
         Objects.requireNonNull(currentRoutine.getValue()).addTask(task);
         taskRepository.save(Objects.requireNonNull(getCurrentRoutine().getValue()).getId(), task);
     }
-
+    
     /**
      * Edits an existing task in the current routine.
      */
@@ -69,7 +69,7 @@ public class MainViewModel extends ViewModel {
         Objects.requireNonNull(currentRoutine.getValue()).editTask(oldName, newName);
         taskRepository.edit(Objects.requireNonNull(getCurrentRoutine().getValue()).getId(), oldName, newName);
     }
-
+    
     /**
      * Edit an existing routine name
      */
@@ -82,7 +82,7 @@ public class MainViewModel extends ViewModel {
         currentRoutine.setName(newName);
         MainViewModel.currentRoutine.setValue(currentRoutine);
     }
-
+    
     /**
      * Removes a task from the current routine.
      */
@@ -92,67 +92,88 @@ public class MainViewModel extends ViewModel {
         taskRepository.remove(Objects.requireNonNull(getCurrentRoutine().getValue()).getId(), name);
         Log.d(TAG, "Number of Tasks: " + getCurrentRoutine().getValue().getNumTasks());
     }
-
-//    public void removeTaskById(int taskId) {
-//        Log.d(TAG, "Task being removed: " + taskId);
-//        Objects.requireNonNull(currentRoutine.getValue()).removeTask(taskId);
-//        taskRepository.remove(Objects.requireNonNull(getCurrentRoutine().getValue()).getId(), taskId);
-//        Log.d(TAG, "Number of Tasks: " + getCurrentRoutine().getValue().getNumTasks());
-//    }
-
+    
     public static void switchRoutine(Routine routine) {
         currentRoutine.setValue(routine);
     }
-
+    
     public void startCurrentRoutine() {
         Objects.requireNonNull(currentRoutine.getValue()).startRoutine();
-        completed.setValue(false);
+        for (Task task : getCurrentRoutineTasks()) {
+            setTaskCompleted(task, false);
+        }
+        routineRepository.setOngoing(currentRoutine.getValue().getId(), true);
+        routineRepository.resetTasksDone(currentRoutine.getValue().getId());
     }
-
+    
     public static Subject<Routine> getCurrentRoutine() {
         return currentRoutine;
     }
-
-    public Subject<List<Task>> getCurrentRoutineTasks() {
+    
+    public Subject<List<Task>> getCurrentRoutineTasksSubject() {
+        return taskRepository.findAllTasksForRoutineSubject(Objects.requireNonNull(getCurrentRoutine().getValue()).getId());
+    }
+    
+    public List<Task> getCurrentRoutineTasks() {
         return taskRepository.findAllTasksForRoutine(Objects.requireNonNull(getCurrentRoutine().getValue()).getId());
     }
-
+    
+    public boolean getTaskCompleted(String taskName) {
+        return taskRepository.getCompleted(Objects.requireNonNull(currentRoutine.getValue()).getId(), taskName);
+    }
+    
     public List<Routine> getRoutines() {
         return routineRepository.getRoutineList().getValue();
     }
-
+    
     public Subject<List<Routine>> getRoutinesSubjects() {
         return routineRepository.getRoutineList();
     }
-
+    
     public void endCurrentRoutine() {
         Objects.requireNonNull(currentRoutine.getValue()).endRoutine();
-        completed.setValue(true);
+        routineRepository.resetTasksDone(currentRoutine.getValue().getId());
+        routineRepository.setOngoing(currentRoutine.getValue().getId(), false);
     }
-
-    public Subject<Boolean> getCompleted() {
-        return completed;
+    
+    public Subject<Boolean> isCurrentRoutineOngoing() {
+        return routineRepository.getOngoing(Objects.requireNonNull(currentRoutine.getValue()).getId());
     }
-
+    
     public void addNewRoutine(Routine routine) {
         routineRepository.addRoutine(routine);
     }
-
+    
     public void setCurrentRoutineEstimatedTime(int time) {
         Objects.requireNonNull(currentRoutine.getValue()).setEstimatedTime(time);
         routineRepository.setEstimatedTime(Objects.requireNonNull(currentRoutine.getValue()).getId(), time);
         estimatedTime.setValue(time);
     }
-
+    
     public void removeRoutine(Routine routine) {
         routineRepository.removeRoutine(routine);
     }
+    
+    public void setTaskCompleted(Task task, boolean completed) {
+        task.setCompleted(completed);
+        taskRepository.setCompleted(Objects.requireNonNull(currentRoutine.getValue()).getId(), task.getName(), completed);
+    }
+    
+    public int checkOffTask(Task task) {
+        int time = Objects.requireNonNull(currentRoutine.getValue()).checkOffTask(task);
+        setTaskCompleted(task, true);
+        routineRepository.incrementTasksDone(currentRoutine.getValue().getId());
+        if (Objects.requireNonNull(currentRoutine.getValue()).getNumTasks() == routineRepository.getTasksDone(currentRoutine.getValue().getId())) {
+            endCurrentRoutine();
+        }
+        return time;
+    }
 
-    public static void moveUp(int routineId, int order) {
+    public void moveUp(int routineId, int order) {
         taskRepository.moveUp(routineId, order);
     }
 
-    public static void moveDown(int routineId, int order) {
+    public void moveDown(int routineId, int order) {
         taskRepository.moveDown(routineId, order);
     }
 }
