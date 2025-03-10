@@ -274,19 +274,19 @@ public class InMemoryDataSource {
      * Default routine and task for bootstrapping.
      */
     public static final Routine MORNING_ROUTINE = new Routine(30, "Morning Routine");
-    public static final Task SHOWER = new Task("Shower", MORNING_ROUTINE.getNumTasks());
-    public static final Task BRUSH_TEETH = new Task("Brush Teeth", MORNING_ROUTINE.getNumTasks());
-    public static final Task DRESS = new Task("Dress", MORNING_ROUTINE.getNumTasks());
-    public static final Task MAKE_COFFEE = new Task("Make Coffee", MORNING_ROUTINE.getNumTasks());
-    public static final Task MAKE_LUNCH = new Task("Make Lunch", MORNING_ROUTINE.getNumTasks());
-    public static final Task DINNER_PREP = new Task("Dinner Prep", MORNING_ROUTINE.getNumTasks());
-    public static final Task PACK_BAG = new Task("Pack Bag", MORNING_ROUTINE.getNumTasks());
+    public static final Task SHOWER = new Task("Shower");
+    public static final Task BRUSH_TEETH = new Task("Brush Teeth");
+    public static final Task DRESS = new Task("Dress");
+    public static final Task MAKE_COFFEE = new Task("Make Coffee");
+    public static final Task MAKE_LUNCH = new Task("Make Lunch");
+    public static final Task DINNER_PREP = new Task("Dinner Prep");
+    public static final Task PACK_BAG = new Task("Pack Bag");
     public static final Routine EVENING_ROUTINE = new Routine(45, "Evening Routine");
-    public static final Task CHARGE_DEVICES = new Task("Charge Devices", EVENING_ROUTINE.getNumTasks());
-    public static final Task PREPARE_DINNER = new Task("Prepare Dinner", EVENING_ROUTINE.getNumTasks());
-    public static final Task EAT_DINNER = new Task("Eat Dinner", EVENING_ROUTINE.getNumTasks());
-    public static final Task WASH_DISHES = new Task("Wash Dishes", EVENING_ROUTINE.getNumTasks());
-    public static final Task PACK_BAG_EVENING = new Task("Pack Bag", EVENING_ROUTINE.getNumTasks());
+    public static final Task CHARGE_DEVICES = new Task("Charge Devices");
+    public static final Task PREPARE_DINNER = new Task("Prepare Dinner");
+    public static final Task EAT_DINNER = new Task("Eat Dinner");
+    public static final Task WASH_DISHES = new Task("Wash Dishes");
+    public static final Task PACK_BAG_EVENING = new Task("Pack Bag");
 
     /**
      * Factory method to create a data source preloaded with default routines and tasks.

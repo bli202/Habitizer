@@ -12,6 +12,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.observables.Subject;
 
 @Dao
 public interface RoutineDao {
@@ -71,4 +72,19 @@ public interface RoutineDao {
     
     @Query("SELECT COUNT(*) FROM routines")
     int count();
+
+    @Query("UPDATE routines SET ongoing = :b WHERE id = :routineId")
+    void setOngoing(int routineId, boolean b);
+
+    @Query("SELECT ongoing FROM routines WHERE id = :routineId")
+    LiveData<Boolean> getOngoingAsLiveData(int routineId);
+    
+    @Query("UPDATE routines SET tasksDone = tasksDone + 1 WHERE id = :routineId")
+    void incrementTasksDone(int routineId);
+    
+    @Query("UPDATE routines SET tasksDone = 0 WHERE id = :routineId")
+    void resetTasksDone(int routineId);
+    
+    @Query("SELECT tasksDone FROM routines WHERE id = :routineId")
+    int getTasksDone(int routineId);
 }

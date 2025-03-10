@@ -79,30 +79,64 @@ public class TaskDaoTest {
         taskDaot.append(t1);
         taskDaot.append(t2);
         List<TaskEntity> taskList = taskDaot.findAllByRoutineId(1);
-        assertEquals("meow", taskList.get(0).taskName);
-        assertEquals("woof", taskList.get(1).taskName);
+        assertEquals("1", taskList.get(0).taskName);
+        assertEquals("2", taskList.get(1).taskName);
+        assertEquals(Integer.valueOf(1), taskList.get(0).sortOrder);
+        assertEquals(Integer.valueOf(2), taskList.get(1).sortOrder);
+
     }
 
     @Test
     public void deleteByRoutineIdAndTaskNameTest() {
-        taskDaot.deleteByRoutineIdAndTaskName(1, "woof");
+
+        TaskEntity t1 = new TaskEntity(1, "1", 0);
+        TaskEntity t2 = new TaskEntity(1, "2", 2);
+        taskDaot.append(t1);
+        taskDaot.append(t2);
+        taskDaot.deleteByRoutineIdAndTaskName(1, "1");
         assertEquals(1, taskDaot.findAllByRoutineId(1).size());
-        taskDaot.deleteByRoutineIdAndTaskName(1, "meow meow");
-        assertEquals(1, taskDaot.findAllByRoutineId(1).size());
+
     }
 
     @Test
-    public void updateTest() {
-        TaskEntity task3 = new TaskEntity(1, "grrr", 1);
-        taskDaot.insert(task3);
-        taskDaot.update(task3);
+    public void editTaskTest() {
+
+        TaskEntity t1 = new TaskEntity(1, "1", 0);
+        taskDaot.append(t1);
+        taskDaot.editTask(1, "1","2");
+        TaskEntity actual = taskDaot.find(1, "2");
+        assertEquals("2", actual.taskName);
+        assertEquals(Integer.valueOf(1), actual.sortOrder);
+
     }
 
     @Test
-    public void getTaskTest() {
-        TaskEntity fetchedTask = taskDaot.find(1,"meow");
-        assertEquals("meow", fetchedTask.taskName);
+    public void findTest() {
+
+        TaskEntity t1 = new TaskEntity(1, "1", 0);
+        taskDaot.append(t1);
+        TaskEntity fetchedTask = taskDaot.find(1,"1");
+        assertEquals("1", fetchedTask.taskName);
+        assertEquals(Integer.valueOf(1), fetchedTask.sortOrder);
+
     }
 
+    @Test
+    public void getMaxSortOrderTest() {
+        TaskEntity t1 = new TaskEntity(1, "1", 0);
+        TaskEntity t2 = new TaskEntity(1, "1", 1);
+        taskDaot.append(t1);
+        taskDaot.append(t2);
 
+        assertEquals(2, taskDaot.getMaxSortOrder(1));
+    }
+
+    @Test
+    public void updateSortOrderTest() {
+
+        TaskEntity t1 = new TaskEntity(1, "1", 5);
+        taskDaot.insert(t1);
+        taskDaot.updateSortOrder(1, 5, 3);
+        assertEquals(3, taskDaot.getMaxSortOrder(1));
+    }
 }

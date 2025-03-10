@@ -14,4 +14,14 @@ public interface RoutineRepository {
     void setEstimatedTime(int routineId, int time);
 
     public void editRoutineName(int routineId, String newTaskName);
+
+    void setOngoing(int routineId, boolean b);
+
+    Subject<Boolean> getOngoing(int routineId);
+    
+    void incrementTasksDone(int routineId);
+    
+    void resetTasksDone(int routineId);
+    
+    int getTasksDone(int routineId);
 }

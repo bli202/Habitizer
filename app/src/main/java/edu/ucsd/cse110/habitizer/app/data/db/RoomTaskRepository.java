@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.room.Query;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class RoomTaskRepository implements TaskRepository {
     }
     
     @Override
-    public Subject<List<Task>> findAllTasksForRoutine(int routineId) {
+    public Subject<List<Task>> findAllTasksForRoutineSubject(int routineId) {
         LiveData<List<TaskEntity>> taskEntities = taskDao.findAllByRoutineIdAsLiveData(routineId);
         LiveData<List<Task>> tasks = Transformations.map(taskEntities, entities -> entities.stream()
             .map(TaskEntity::toTask)
@@ -48,6 +49,22 @@ public class RoomTaskRepository implements TaskRepository {
         return taskEntities.stream()
                 .map(TaskEntity::toTask)
                 .collect(Collectors.toList());
+    }
+    
+    @Override
+    public List<Task> findAllTasksForRoutine(int routineId) {
+        return taskDao.findAllByRoutineId(routineId).stream().map(TaskEntity::toTask).collect(Collectors.toList());
+        
+    }
+    
+    @Override
+    public void setCompleted(int routineId, String taskName, boolean completed) {
+        taskDao.setCompleted(routineId, taskName, completed);
+    }
+    
+    @Override
+    public boolean getCompleted(int routineId, String taskName) {
+        return taskDao.getCompleted(routineId, taskName);
     }
     
     @Override
