@@ -75,6 +75,16 @@ public class SimpleTaskRepository implements TaskRepository {
     }
     
     @Override
+    public void moveUp(int routineId, int order) {
+    
+    }
+    
+    @Override
+    public void moveDown(int routineId, int order) {
+    
+    }
+    
+    @Override
     public void setCompleted(int routineId, String taskName, boolean completed) {
     
     }

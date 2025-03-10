@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTasklistViewBinding;
@@ -162,7 +163,12 @@ public class TaskFragment extends Fragment {
         }, task -> {
             adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName()));
             adapter.setTaskTime(taskTime);
-        });
+        }, task -> {
+            activityModel.moveUp(Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getId(), task.getOrder());
+        }, task -> {
+            activityModel.moveDown(Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getId(), task.getOrder());
+        }
+        );
         
         
         // Set the adapter on the ListView

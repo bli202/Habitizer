@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,9 @@ import androidx.annotation.NonNull;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.habitizer.app.MainViewModel;
 import edu.ucsd.cse110.habitizer.app.R;
+import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.observables.Subject;
 
@@ -24,6 +27,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class TaskAdapter extends ArrayAdapter<Task> {
     private final String TAG = "TaskAdapter";
     private final Consumer<Task> taskCompletionUpdate;
+    private final Consumer<Task> onUpClick;
+    private final Consumer<Task> onDownClick;
     Consumer<String> onDeleteClick;
     Consumer<String> onEditClick;
     Consumer<Task> onTaskClick;
@@ -45,7 +50,9 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                        Consumer<String> onEditClick,
                        Consumer<String> onDeleteClick,
                        Consumer<Task> onTaskClick,
-                       Consumer<Task> taskCompletionUpdate
+                       Consumer<Task> taskCompletionUpdate,
+                       Consumer<Task> onUpClick,
+                       Consumer<Task> onDownClick
     ) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem(), for example.
@@ -58,6 +65,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         this.ongoingSubject = ongoingSubject;
         this.onTaskClick = onTaskClick;
         this.taskCompletionUpdate = taskCompletionUpdate;
+        this.onUpClick = onUpClick;
+        this.onDownClick = onDownClick;
         
         // Set initial ongoing state
         ongoingSubject.observe(ongoing -> this.ongoing = Boolean.TRUE.equals(ongoing));
@@ -83,16 +92,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         deleteTaskButton = convertView.findViewById(R.id.deleteTaskButton);
         TextView taskNameText = convertView.findViewById(R.id.taskTitle);
         TextView taskTimeText = convertView.findViewById(R.id.task_time);
-        
-        taskNameText.setText(task.getName());
-        
-        editTaskButton.setOnClickListener(v -> {
-            var name = task.getName();
-            assert name != null;
-            onEditClick.accept(name);
-        });
-        
-        deleteTaskButton.setOnClickListener(v -> onDeleteClick.accept(task.getName()));
+        ImageButton upArrow = convertView.findViewById(R.id.move_up_arrow);
+        ImageButton downArrow = convertView.findViewById(R.id.move_down_arrow);
         
         /*
          * Set edit and delete buttons visibility based on ongoing state
@@ -104,6 +105,33 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             editTaskButton.setVisibility(View.VISIBLE);
             deleteTaskButton.setVisibility(View.VISIBLE);
         }
+        
+        taskNameText.setText(task.getName());
+        
+        editTaskButton.setOnClickListener(v -> {
+            var name = task.getName();
+            assert name != null;
+            onEditClick.accept(name);
+        });
+        
+        deleteTaskButton.setOnClickListener(v -> {
+            onDeleteClick.accept(task.getName());
+            notifyDataSetChanged();
+        });
+
+        upArrow.setOnClickListener(x -> {
+            onUpClick.accept(task);
+//            notifyDataSetChanged();
+//            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
+        });
+
+        downArrow.setOnClickListener(x -> {
+            onDownClick.accept(task);
+//            notifyDataSetChanged();
+//            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
+        });
+        
+
         
         // Set click listener on the entire view
         convertView.setOnClickListener(v -> {

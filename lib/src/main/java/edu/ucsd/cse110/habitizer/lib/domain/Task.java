@@ -9,6 +9,8 @@ package edu.ucsd.cse110.habitizer.lib.domain;
  */
 public class Task {
     private String name;
+
+    private int order;
     private boolean completed;
     private int timeSpent;
     private final int id;
@@ -26,6 +28,14 @@ public class Task {
      *
      * @param name Name for task.
      */
+    public Task(String name, int order) {
+        this.id = ++idCounter;
+        this.name = name;
+        this.completed = false;
+        this.timeSpent = 0;
+        this.order = order;
+    }
+
     public Task(String name) {
         this.id = ++idCounter;
         this.name = name;
@@ -109,5 +119,7 @@ public class Task {
     public void setName(String name) {
         this.name = name;
     }
+
+    public int getOrder() {return order;}
     
 }

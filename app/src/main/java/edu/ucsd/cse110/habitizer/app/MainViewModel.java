@@ -166,4 +166,12 @@ public class MainViewModel extends ViewModel {
         }
         return time;
     }
+
+    public void moveUp(int routineId, int order) {
+        taskRepository.moveUp(routineId, order);
+    }
+
+    public void moveDown(int routineId, int order) {
+        taskRepository.moveDown(routineId, order);
+    }
 }

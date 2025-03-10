@@ -1,10 +1,14 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
+import androidx.room.Query;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.app.util.LiveDataSubjectAdapter;
@@ -15,6 +19,7 @@ import edu.ucsd.cse110.observables.Subject;
 
 public class RoomTaskRepository implements TaskRepository {
     private final TaskDao taskDao;
+    private String TAG = "RoomTaskRepository";
     
     public RoomTaskRepository(TaskDao taskDao) {
         this.taskDao = taskDao;
@@ -39,6 +44,12 @@ public class RoomTaskRepository implements TaskRepository {
             .collect(Collectors.toList()));
         return new LiveDataSubjectAdapter<>(tasks);
     }
+    public List<Task> findAllAsList(int routineId) {
+        List<TaskEntity> taskEntities = taskDao.findAllByRoutineId(routineId);
+        return taskEntities.stream()
+                .map(TaskEntity::toTask)
+                .collect(Collectors.toList());
+    }
     
     @Override
     public List<Task> findAllTasksForRoutine(int routineId) {
@@ -59,12 +70,18 @@ public class RoomTaskRepository implements TaskRepository {
     @Override
     public void save(int routineId, Task task) {
         TaskEntity taskEntity = TaskEntity.fromTask(routineId, task);
-        taskDao.insert(taskEntity);
+        taskDao.append(taskEntity);
     }
     
     @Override
     public void remove(int routineId, String taskName) {
+        int order = taskDao.find(routineId, taskName).sortOrder;
         taskDao.deleteByRoutineIdAndTaskName(routineId, taskName);
+        for (var t: findAllAsList(routineId)) {
+            if (t.getOrder() > order) {
+                moveTaskUp(routineId, t.getOrder());
+            }
+        }
     }
     
     @Override
@@ -84,4 +101,27 @@ public class RoomTaskRepository implements TaskRepository {
             }
         }
     }
+
+    public void moveUp(int routineId, int order) {
+        if (order != 1) {
+            swapTasks(routineId, order - 1, order);
+        }
+    }
+
+    public void moveDown(int routineId, int order) {
+        if (order != taskDao.getMaxSortOrder(routineId)) {
+            swapTasks(routineId, order, order + 1);
+        }
+    }
+
+    public void swapTasks(int routineId, int sortOrder1, int sortOrder2) {
+        taskDao.updateSortOrder(routineId, sortOrder1, -1);
+        taskDao.updateSortOrder(routineId, sortOrder2, sortOrder1);
+        taskDao.updateSortOrder(routineId, -1, sortOrder2);
+    }
+
+    public void moveTaskUp(int routineId, int sortOrder) {
+        taskDao.moveTaskUp(routineId, sortOrder);
+    }
+
 }
