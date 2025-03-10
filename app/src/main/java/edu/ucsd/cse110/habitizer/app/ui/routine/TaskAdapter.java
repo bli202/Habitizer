@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
+import edu.ucsd.cse110.observables.Subject;
 
 import android.graphics.Paint;
 
@@ -22,20 +23,23 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
     private final String TAG = "TaskAdapter";
+    private final Consumer<Task> taskCompletionUpdate;
     Consumer<String> onDeleteClick;
     Consumer<String> onEditClick;
     Consumer<Task> onTaskClick;
-    Boolean ongoing;
+    Subject<Boolean> ongoingSubject;
+    boolean ongoing;
     private FloatingActionButton editTaskButton;
     private FloatingActionButton deleteTaskButton;
-    private Boolean isCompleted = false;
+    Boolean isCompleted = false;
     
     public TaskAdapter(Context context,
                        List<Task> taskList,
-                       Boolean ongoing,
+                       Subject<Boolean> ongoingSubject,
                        Consumer<String> onEditClick,
                        Consumer<String> onDeleteClick,
-                       Consumer<Task> onTaskClick
+                       Consumer<Task> onTaskClick,
+                       Consumer<Task> taskCompletionUpdate
     ) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem(), for example.
@@ -45,10 +49,12 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         super(context, 0, taskList);
         this.onEditClick = onEditClick;
         this.onDeleteClick = onDeleteClick;
-        this.ongoing = ongoing;
+        this.ongoingSubject = ongoingSubject;
         this.onTaskClick = onTaskClick;
+        this.taskCompletionUpdate = taskCompletionUpdate;
         
-        Log.d(TAG, "task adapter taskList size:" + taskList.size());
+        // Set initial ongoing state
+        ongoingSubject.observe(ongoing -> this.ongoing = Boolean.TRUE.equals(ongoing));
     }
     
     @NonNull
@@ -72,6 +78,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         TextView taskNameText = convertView.findViewById(R.id.taskTitle);
         TextView taskTimeText = convertView.findViewById(R.id.task_time);
         
+        taskNameText.setText(task.getName());
         
         editTaskButton.setOnClickListener(v -> {
             var name = task.getName();
@@ -81,60 +88,35 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         
         deleteTaskButton.setOnClickListener(v -> onDeleteClick.accept(task.getName()));
         
-        taskNameText.setText(task.getName());
-        
+        /*
+         * Set edit and delete buttons visibility based on ongoing state
+         */
         if (ongoing) {
-//            Log.d(TAG, "ongoing is true");
             editTaskButton.setVisibility(View.INVISIBLE);
             deleteTaskButton.setVisibility(View.INVISIBLE);
         } else {
-//            Log.d(TAG, "ongoing is false");
             editTaskButton.setVisibility(View.VISIBLE);
             deleteTaskButton.setVisibility(View.VISIBLE);
         }
-
-
-//
-//        // If the task is already completed, display its stored time.
-//        if (task.isCompleted()){
-//            String timeText = task.getTimeSpentMinutes() + "m";
-//            taskTime.setText(timeText);
-//        }
-        
         
         // Set click listener on the entire view
         convertView.setOnClickListener(v -> {
             onTaskClick.accept(task);
-            if (task.isCompleted() && ongoing) {
-                setTaskCompletionState(true);
-                Log.d(TAG, "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
-                strikethrough(taskNameText);
-//                String timeText = routine.checkOffTask(task) + "m";
-//                taskTime.setText(timeText);
-                notifyDataSetChanged();
-            }
         });
         
         // Set initial strike-through based on task completion state
-        Log.d(TAG, "isCompleted: " + isCompleted);
+        taskCompletionUpdate.accept(task);
         if (isCompleted) {
             strikethrough(taskNameText);
-            Log.d(TAG, "task: " + task.getName() + " - completion state: " + task.isCompleted() + " - strikethrough applied");
         } else {
             removeStrikethrough(taskNameText);
-            Log.d(TAG, "task: " + task.getName() + " - completion state: " + task.isCompleted() + " - strikethrough removed");
         }
         return convertView;
-    }
-    
-    public void setOngoing(Boolean ongoing) {
-        this.ongoing = ongoing;
     }
     
     public void setTaskCompletionState(Boolean inCompleted) {
         isCompleted = inCompleted;
     }
-    
     
     private void strikethrough(TextView textView) {
         textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

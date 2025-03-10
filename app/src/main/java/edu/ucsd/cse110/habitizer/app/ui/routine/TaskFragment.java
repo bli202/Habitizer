@@ -147,7 +147,7 @@ public class TaskFragment extends Fragment {
         
         this.adapter = new TaskAdapter(requireContext(),
                 activityModel.getCurrentRoutineTasks(),
-                isOngoing,
+                activityModel.isCurrentRoutineOngoing(),
                 name -> {
                     var EditTaskdialogFragment = EditTaskDialogFragment.newInstance(name);
                     EditTaskdialogFragment.show(getParentFragmentManager(), "EditCardDialogFragment");
@@ -156,12 +156,12 @@ public class TaskFragment extends Fragment {
                     var DeleteTaskdialogFragment = DeleteTaskDialogFragment.newInstance(taskName);
                     DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
                 }, task -> {
-            adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName()));
+//            adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName()));
             if (curRoutine.getOngoing() && !activityModel.getTaskCompleted(task.getName())) {
                 activityModel.checkOffTask(task);
                 Log.d(TAG, "Task: " + task.getName() + " - Completion state: " + task.isCompleted());
             }
-        });
+        }, task -> adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName())));
         
         
         // Set the adapter on the ListView
@@ -198,7 +198,7 @@ public class TaskFragment extends Fragment {
             
             activityModel.startCurrentRoutine();
             Log.d(TAG, "Start routine button pressed");
-            adapter.setOngoing(true);
+//            adapter.setOngoingSubject(true);
             adapter.setTaskCompletionState(false);
             
             timerRunning[0] = true;
@@ -250,7 +250,7 @@ public class TaskFragment extends Fragment {
         view.stopRoutineButton.setOnClickListener(v -> {
             if (!isOngoing) return;
             activityModel.endCurrentRoutine();
-            adapter.setOngoing(false);
+//            adapter.setOngoingSubject(false);
         });
         
         return view.getRoot();
