@@ -82,6 +82,24 @@ public class MainActivity extends AppCompatActivity {
                     findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);
                     toggleHomeScreen();
                 });
+        
+        for (var r : routines) {
+            if (r.getOngoing()) {
+                taskFragment = TaskFragment.newInstance();
+                MainViewModel.switchRoutine(r);
+                
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_routine, taskFragment)
+                        .addToBackStack(null)
+                        .commit();
+                
+                routineView.setVisibility(View.GONE);
+                addRoutine.setVisibility(View.INVISIBLE);
+                findViewById(R.id.fragment_routine).setVisibility(View.VISIBLE);
+                toggleHomeScreen();
+            }
+        }
 
         MainViewModel.getCurrentRoutine().observe(routine -> {
             for (int i = 0; i < routinesSubjects.getValue().size(); i++) {
@@ -136,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
             routineView.setVisibility(View.VISIBLE);
             Button addRoutine = findViewById(R.id.addRoutine);
             addRoutine.setVisibility(View.VISIBLE);
+
             taskFragment.onDestroyView();
             taskFragment.onDestroy();
 
