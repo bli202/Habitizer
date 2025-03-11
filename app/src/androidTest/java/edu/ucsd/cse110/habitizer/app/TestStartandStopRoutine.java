@@ -1,5 +1,4 @@
 package edu.ucsd.cse110.habitizer.app;
-
 import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.ViewActions;
@@ -50,7 +49,7 @@ import androidx.test.espresso.matcher.BoundedMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-public class CompleteTaskTest {
+public class TestStartandStopRoutine {
 
     public HabitizerDatabase database;
     long routineId;
@@ -87,55 +86,31 @@ public class CompleteTaskTest {
     }
 
     @Test
-    public void testCompleteTaskInRoutine() {
+    public void testStartAndStopRoutine() {
 
         // Given I am in the routine list view
-        // And the routine is started
+        //And its non empty
         onData(anything())
                 .inAdapterView(withId(R.id.routine_view))
                 .atPosition(0) // Assuming it's the first item in the list
                 .perform(click());
 
-        //When I add a non duplicate task
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.task_name_edit_text))
                 .perform(typeText("Brush"), ViewActions.closeSoftKeyboard());
 
+        //When I start the routine
+        //And stop it
         onView(withText("Create")).perform(click());
         SystemClock.sleep(1000);
 
         onView(withId(R.id.start_routine_button)).perform(click());
+        RoutineEntity br = database.routineDao().find((int)routineId);
 
-        //When I click a task
-        onData(anything())
-                .inAdapterView(withId(R.id.task_list_view))
-                .atPosition(0)
-                .perform(click());
-        SystemClock.sleep(1000);
-
-
-        //Then the task should be marked complete
-        onView(withId(R.id.taskTitle)).check(matches(hasStrikethrough()));
-        List<TaskEntity> tasks = database.taskDao().findAllByRoutineId((int) routineId);
-        assertEquals(1, tasks.size());
-        assertTrue("Task should be marked as completed", tasks.get(0).completed);
-
-        //still need to check time;
-    }
-
-    // Custom Matcher to verify strikethrough
-    private static Matcher<View> hasStrikethrough() {
-        return new BoundedMatcher<View, TextView>(TextView.class) {
-            @Override
-            protected boolean matchesSafely(TextView textView) {
-                return (textView.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) != 0;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with strikethrough text");
-            }
-        };
+        //Then the routine's status should display correctly
+        assertTrue(br.ongoing);
+        onView(withId(R.id.stop_routine_button)).perform(click());
+        RoutineEntity brNew = database.routineDao().find((int)routineId);
+        assertFalse(brNew.ongoing);
     }
 }
-
