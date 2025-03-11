@@ -4,7 +4,6 @@ import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Before;
@@ -17,10 +16,8 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static org.hamcrest.CoreMatchers.anything;
 
 import static org.junit.Assert.assertEquals;
@@ -28,7 +25,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.List;
 
-import edu.ucsd.cse110.habitizer.app.data.db.CustomTimerEntity;
 import edu.ucsd.cse110.habitizer.app.data.db.HabitizerDatabase;
 import edu.ucsd.cse110.habitizer.app.data.db.RoomRoutineRepository;
 import edu.ucsd.cse110.habitizer.app.data.db.RoomTaskRepository;
@@ -36,7 +32,7 @@ import edu.ucsd.cse110.habitizer.app.data.db.TaskEntity;
 import edu.ucsd.cse110.habitizer.app.data.db.RoutineEntity;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
-public class DeleteTaskOnRoutineTest {
+public class US13DeleteTaskTest {
 
     public HabitizerDatabase database;
     public TaskRepository taskRepo;
