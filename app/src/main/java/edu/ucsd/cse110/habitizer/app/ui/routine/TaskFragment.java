@@ -234,6 +234,8 @@ public class TaskFragment extends Fragment {
                 return;
             }
             
+            firstTimeStarting = false;
+            
             activityModel.startCurrentRoutine();
             Log.d(TAG, "Start routine button pressed");
             
