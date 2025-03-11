@@ -18,18 +18,23 @@ public class CustomTimerRepository {
         return timerEntity.toCustomTimer();
     }
     
+    public void saveTimer() {
+        CustomTimerEntity timerEntity = new CustomTimerEntity(0, 0, false, 0, 0);
+        customTimerDao.append(timerEntity);
+    }
+    
     public void updateTimer() {
-//        if (!customTimerDao.getOngoing()) return;
+        if (!customTimerDao.getOngoing()) return;
         
         long cumulativeTime1 = customTimerDao.getCumulativeTime();
-        Log.d(TAG, "Cumulative time Before: " + cumulativeTime1);
+//        Log.d(TAG, "Cumulative time Before: " + cumulativeTime1);
         long l = System.currentTimeMillis();
-        Log.d(TAG, "Current time: " + l);
+//        Log.d(TAG, "Current time: " + l);
         long startTime1 = customTimerDao.getStartTime();
-        Log.d(TAG, "Start time Before: " + startTime1);
+//        Log.d(TAG, "Start time Before: " + startTime1);
         
         long cumulativeTime = cumulativeTime1 + l - startTime1;
-        Log.d(TAG, "Cumulative time: " + cumulativeTime);
+//        Log.d(TAG, "Cumulative time: " + cumulativeTime);
         
         long startTime = System.currentTimeMillis();
         long taskTime = customTimerDao.getTaskTime() + System.currentTimeMillis() - customTimerDao.getTaskStartTime();
@@ -42,9 +47,14 @@ public class CustomTimerRepository {
         
         customTimerDao.setOngoing(true);
         customTimerDao.setStartTime(System.currentTimeMillis());
-        Log.d(TAG, "Start time: " + customTimerDao.getStartTime());
+//        Log.d(TAG, "Start time: " + customTimerDao.getStartTime());
         customTimerDao.setTaskStartTime(System.currentTimeMillis());
-        Log.d(TAG, "Task start time: " + customTimerDao.getTaskStartTime());
+//        Log.d(TAG, "Task start time: " + customTimerDao.getTaskStartTime());
+    }
+    
+    public void startTimerOnAppRestart() {
+        customTimerDao.setStartTime(System.currentTimeMillis());
+        customTimerDao.setTaskStartTime(System.currentTimeMillis());
     }
     
     public long pauseTimer() {

@@ -106,9 +106,14 @@ public class MainViewModel extends ViewModel {
             setTaskCompleted(task, false);
             setTaskTime(currentRoutine.getValue().getId(), task.getName(), 0);
         }
+        customTimerRepository.saveTimer();
         customTimerRepository.startTimer();
         routineRepository.setOngoing(currentRoutine.getValue().getId(), true);
         routineRepository.resetTasksDone(currentRoutine.getValue().getId());
+    }
+    
+    public void startTimerOnAppRestart() {
+        customTimerRepository.startTimerOnAppRestart();
     }
     
     public long getCumulativeTime() {
@@ -182,6 +187,7 @@ public class MainViewModel extends ViewModel {
         setTaskCompleted(task, true);
         setTaskTime(currentRoutine.getValue().getId(), task.getName(), time);
         routineRepository.incrementTasksDone(currentRoutine.getValue().getId());
+        time = (int) customTimerRepository.getTaskTime();
         if (Objects.requireNonNull(currentRoutine.getValue()).getNumTasks() == routineRepository.getTasksDone(currentRoutine.getValue().getId())) {
             endCurrentRoutine();
         }
@@ -202,5 +208,9 @@ public class MainViewModel extends ViewModel {
     
     public void setTaskTime(int routineId, String taskName, int time) {
         taskRepository.setTime(routineId, taskName, time);
+    }
+    
+    public void resumeTimer() {
+        customTimerRepository.startTimer();
     }
 }

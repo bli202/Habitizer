@@ -1,10 +1,22 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
 import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 @Dao
 public interface CustomTimerDao {
+    
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Long insert(CustomTimerEntity customTimer);
+    
+    @Transaction
+    default int append(CustomTimerEntity customTimer) {
+        insert(customTimer);
+        return Math.toIntExact(insert(customTimer));
+    }
     
     @Query("SELECT * FROM timers WHERE id = 0")
     CustomTimerEntity findTimer();

@@ -52,6 +52,8 @@ public class TaskFragment extends Fragment {
     private Subject<Boolean> currentRoutineOngoing;
     private Boolean isOngoing;
     private Routine curRoutine;
+    private Boolean firstTimeStarting = true;
+    
     
     public TaskFragment() {
         // Required empty public constructor
@@ -132,11 +134,41 @@ public class TaskFragment extends Fragment {
                 Log.d(TAG, "Routine ongoing is: " + ongoing);
             }
             if (ongoing) {
+                
+                timer = new CountDownTimer(Integer.MAX_VALUE, 1000) {
+                    
+                    
+                    @Override
+                    public void onTick(long l) {
+                        String timeText = activityModel.getCumulativeTime() + "m";
+                        view.actualTime.setText(timeText);
+                        if (!isOngoing) {
+                            view.stopRoutineButton.setVisibility(View.INVISIBLE);
+                            view.addTaskButton.setVisibility(View.VISIBLE);
+                            view.startRoutineButton.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    
+                    @Override
+                    public void onFinish() {
+                    
+                    }
+                }.start();
+                
+                if(firstTimeStarting) {
+                    view.pauseTimerButton.setVisibility(View.INVISIBLE);
+                    view.restartTimerButton.setVisibility(View.VISIBLE);
+                    firstTimeStarting = false;
+                }
+                
                 view.stopRoutineButton.setVisibility(View.VISIBLE);
                 view.addTaskButton.setVisibility(View.INVISIBLE);
                 view.startRoutineButton.setVisibility(View.INVISIBLE);
                 view.editRoutineButton.setVisibility(View.INVISIBLE);
             } else {
+                String timeText = activityModel.getCumulativeTime() + "m";
+                view.actualTime.setText(timeText);
+                
                 view.stopRoutineButton.setVisibility(View.INVISIBLE);
                 view.addTaskButton.setVisibility(View.VISIBLE);
                 view.startRoutineButton.setVisibility(View.VISIBLE);
@@ -241,6 +273,7 @@ public class TaskFragment extends Fragment {
         
         view.pauseTimerButton.setOnClickListener(x -> {
             if (!curRoutine.getTimer().getOngoing()) return;
+            activityModel.pauseTimer();
             curRoutine.pauseRoutineTimer();
             view.pauseTimerButton.setVisibility(View.INVISIBLE);
             view.restartTimerButton.setVisibility(View.VISIBLE);
@@ -248,6 +281,7 @@ public class TaskFragment extends Fragment {
         
         view.restartTimerButton.setOnClickListener(v -> {
             if (curRoutine.getTimer().getOngoing()) return;
+            activityModel.resumeTimer();
             curRoutine.pauseRoutineTimer();
             view.restartTimerButton.setVisibility(View.INVISIBLE);
             view.pauseTimerButton.setVisibility(View.VISIBLE);
