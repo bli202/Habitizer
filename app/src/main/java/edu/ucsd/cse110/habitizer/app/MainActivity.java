@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
             if (r.getOngoing()) {
                 taskFragment = TaskFragment.newInstance();
                 MainViewModel.switchRoutine(r);
+                activityModel.startTimerOnAppRestart();
+                activityModel.pauseTimer();
                 
                 getSupportFragmentManager()
                         .beginTransaction()

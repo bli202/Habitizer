@@ -35,7 +35,7 @@ public class Task {
         this.timeSpent = 0;
         this.order = order;
     }
-
+    
     public Task(String name) {
         this.id = ++idCounter;
         this.name = name;

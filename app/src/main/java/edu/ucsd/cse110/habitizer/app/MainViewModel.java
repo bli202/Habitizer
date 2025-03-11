@@ -11,6 +11,7 @@ import java.util.List;
 
 import java.util.Objects;
 
+import edu.ucsd.cse110.habitizer.app.data.db.CustomTimerRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
@@ -25,6 +26,7 @@ public class MainViewModel extends ViewModel {
     // Domain state (Model) and current routine context.
     private final TaskRepository taskRepository;
     private final RoutineRepository routineRepository;
+    private final CustomTimerRepository customTimerRepository;
     
     private final PlainMutableSubject<Integer> estimatedTime;
     
@@ -37,12 +39,13 @@ public class MainViewModel extends ViewModel {
                 var app = (HabitizerApplication) creationExtras.get(APPLICATION_KEY);
                 assert app != null;
                 // Here we are initializing the view model for a specific routine.
-                return new MainViewModel(app.getTaskRepository(), app.getRoutineRepository());
+                return new MainViewModel(app.getTaskRepository(), app.getRoutineRepository(), app.getCustomTimerRepository());
             });
     
-    public MainViewModel(TaskRepository taskRepository, RoutineRepository routineRepository) {
+    public MainViewModel(TaskRepository taskRepository, RoutineRepository routineRepository, CustomTimerRepository customTimerRepository) {
         this.taskRepository = taskRepository;
         this.routineRepository = routineRepository;
+        this.customTimerRepository = customTimerRepository;
         
         // Creating observable subjects.
 //        this.completed = new PlainMutableSubject<>(false);
@@ -101,9 +104,32 @@ public class MainViewModel extends ViewModel {
         Objects.requireNonNull(currentRoutine.getValue()).startRoutine();
         for (Task task : getCurrentRoutineTasks()) {
             setTaskCompleted(task, false);
+            setTaskTime(currentRoutine.getValue().getId(), task.getName(), 0);
         }
+        customTimerRepository.saveTimer();
+        customTimerRepository.startTimer();
         routineRepository.setOngoing(currentRoutine.getValue().getId(), true);
         routineRepository.resetTasksDone(currentRoutine.getValue().getId());
+    }
+    
+    public void startTimerOnAppRestart() {
+        customTimerRepository.startTimerOnAppRestart();
+    }
+    
+    public long getCumulativeTime() {
+        return customTimerRepository.getCumulativeTime();
+    }
+
+    public long getTaskTimeNoReset() {
+        return customTimerRepository.getTaskTimeNoReset();
+    }
+    
+    public void addSeconds(long seconds) {
+        customTimerRepository.addSeconds(seconds);
+    }
+    
+    public void pauseTimer() {
+        customTimerRepository.pauseTimer();
     }
     
     public static Subject<Routine> getCurrentRoutine() {
@@ -132,10 +158,15 @@ public class MainViewModel extends ViewModel {
     
     public void endCurrentRoutine() {
         Objects.requireNonNull(currentRoutine.getValue()).endRoutine();
+        customTimerRepository.pauseTimer();
         routineRepository.resetTasksDone(currentRoutine.getValue().getId());
         routineRepository.setOngoing(currentRoutine.getValue().getId(), false);
     }
-    
+
+    public boolean isTimerOngoing() {
+        return customTimerRepository.getOngoing();
+    }
+
     public Subject<Boolean> isCurrentRoutineOngoing() {
         return routineRepository.getOngoing(Objects.requireNonNull(currentRoutine.getValue()).getId());
     }
@@ -162,18 +193,32 @@ public class MainViewModel extends ViewModel {
     public int checkOffTask(Task task) {
         int time = Objects.requireNonNull(currentRoutine.getValue()).checkOffTask(task);
         setTaskCompleted(task, true);
+        setTaskTime(currentRoutine.getValue().getId(), task.getName(), time);
         routineRepository.incrementTasksDone(currentRoutine.getValue().getId());
+        time = (int) customTimerRepository.getTaskTime();
         if (Objects.requireNonNull(currentRoutine.getValue()).getNumTasks() == routineRepository.getTasksDone(currentRoutine.getValue().getId())) {
             endCurrentRoutine();
         }
         return time;
     }
-
+    
     public void moveUp(int routineId, int order) {
         taskRepository.moveUp(routineId, order);
     }
-
+    
     public void moveDown(int routineId, int order) {
         taskRepository.moveDown(routineId, order);
+    }
+    
+    public int getTaskTime(int routineId, String taskName) {
+        return taskRepository.getTime(routineId, taskName);
+    }
+    
+    public void setTaskTime(int routineId, String taskName, int time) {
+        taskRepository.setTime(routineId, taskName, time);
+    }
+    
+    public void resumeTimer() {
+        customTimerRepository.startTimer();
     }
 }

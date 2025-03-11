@@ -8,4 +8,6 @@ public abstract class HabitizerDatabase extends RoomDatabase {
     public abstract RoutineDao routineDao();
     
     public abstract TaskDao taskDao();
+    
+    public abstract CustomTimerDao customTimerDao();
 }
