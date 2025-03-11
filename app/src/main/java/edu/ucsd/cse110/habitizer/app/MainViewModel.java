@@ -119,6 +119,10 @@ public class MainViewModel extends ViewModel {
     public long getCumulativeTime() {
         return customTimerRepository.getCumulativeTime();
     }
+
+    public long getTaskTimeNoReset() {
+        return customTimerRepository.getTaskTimeNoReset();
+    }
     
     public void addSeconds(long seconds) {
         customTimerRepository.addSeconds(seconds);
@@ -158,7 +162,11 @@ public class MainViewModel extends ViewModel {
         routineRepository.resetTasksDone(currentRoutine.getValue().getId());
         routineRepository.setOngoing(currentRoutine.getValue().getId(), false);
     }
-    
+
+    public boolean isTimerOngoing() {
+        return customTimerRepository.getOngoing();
+    }
+
     public Subject<Boolean> isCurrentRoutineOngoing() {
         return routineRepository.getOngoing(Objects.requireNonNull(currentRoutine.getValue()).getId());
     }

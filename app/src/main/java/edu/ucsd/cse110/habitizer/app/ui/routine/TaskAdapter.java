@@ -139,8 +139,17 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         taskCompletionUpdate.accept(task);
         // Then sets the strikethrough accordingly
         if (isCompleted) {
+            String timeTextMinSec = "s";
             strikethrough(taskNameText);
-            String timeText = taskTime + "m";
+            if(taskTime == 0) {
+                taskTime = 5;
+            } else if(taskTime < 55) {
+                taskTime = (int) Math.ceil(taskTime / 5.0) * 5;
+            } else {
+                timeTextMinSec = "m";
+                taskTime = (int) Math.ceil(taskTime / 60.0);
+            }
+            String timeText = taskTime + timeTextMinSec;
             taskTimeText.setText(timeText);
         } else {
             taskTimeText.setText(R.string.time_taken);

@@ -64,6 +64,10 @@ public class CustomTimerRepository {
         customTimerDao.setOngoing(false);
         return customTimerDao.getCumulativeTime() / 1000;
     }
+
+    public boolean getOngoing() {
+        return customTimerDao.getOngoing();
+    }
     
     public long getCumulativeTime() {
         updateTimer();
