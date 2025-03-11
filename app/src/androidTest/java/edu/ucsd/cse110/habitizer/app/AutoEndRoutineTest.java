@@ -81,7 +81,6 @@ public class AutoEndRoutineTest {
 
         app.setDataSource(taskRepo, routineRepo);
         RoutineEntity routine = new RoutineEntity(1, 30, "Morning");
-        database.routineDao().insertTimer(new CustomTimerEntity(1, 0, 0, false, 0, 0));
         routineId = database.routineDao().insert(routine);
         // Launch the main activity
         ActivityScenario.launch(MainActivity.class);

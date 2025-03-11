@@ -68,7 +68,6 @@ public class EditTaskOnRoutineTest {
         app.setDataSource(taskRepo, routineRepo);
 
         RoutineEntity routine = new RoutineEntity(0, 30, "Morning Routine");
-        database.routineDao().insertTimer(new CustomTimerEntity(0, 0, 0, false, 0, 0));
         routineId = database.routineDao().insert(routine);
         // Launch the main activity
         ActivityScenario.launch(MainActivity.class);

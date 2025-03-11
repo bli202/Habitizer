@@ -1,14 +1,9 @@
 package edu.ucsd.cse110.habitizer.app.data.db;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
-import androidx.room.Query;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.habitizer.app.util.LiveDataSubjectAdapter;
@@ -16,6 +11,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Routine;
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 import edu.ucsd.cse110.observables.Subject;
+
 
 public class RoomTaskRepository implements TaskRepository {
     private final TaskDao taskDao;
@@ -71,7 +67,17 @@ public class RoomTaskRepository implements TaskRepository {
     public boolean getCompleted(int routineId, String taskName) {
         return taskDao.getCompleted(routineId, taskName);
     }
-    
+
+    @Override
+    public int getTime(int routineId, String taskName) {
+        return (int) taskDao.getTaskTime(routineId, taskName);
+    }
+
+    @Override
+    public void setTime(int routineId, String taskName, int time) {
+        taskDao.setTime(routineId, taskName, time);
+    }
+
     @Override
     public void save(int routineId, Task task) {
         TaskEntity taskEntity = TaskEntity.fromTask(routineId, task);

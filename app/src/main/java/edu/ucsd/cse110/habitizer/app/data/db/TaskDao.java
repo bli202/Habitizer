@@ -2,7 +2,6 @@ package edu.ucsd.cse110.habitizer.app.data.db;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -71,4 +70,10 @@ public interface TaskDao {
     
     @Query("SELECT completed FROM tasks WHERE routineId = :routineId AND taskName = :taskName")
     boolean getCompleted(int routineId, String taskName);
+
+    @Query("SELECT taskTime FROM tasks WHERE routineId = :routineId AND taskName = :taskName")
+    long getTaskTime(int routineId, String taskName);
+    
+    @Query("UPDATE tasks SET taskTime = :time WHERE routineId = :routineId AND taskName = :taskName")
+    void setTime(int routineId, String taskName, int time);
 }

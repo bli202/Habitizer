@@ -95,5 +95,15 @@ public class SimpleTaskRepository implements TaskRepository {
     }
 
     @Override
+    public int getTime(int routineId, String taskName) {
+        return 0;
+    }
+
+    @Override
+    public void setTime(int routineId, String taskName, int time) {
+
+    }
+
+    @Override
     public void clear(){}
 }

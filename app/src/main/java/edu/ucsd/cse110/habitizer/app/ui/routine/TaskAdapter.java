@@ -36,8 +36,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     
     int taskTime;
     boolean ongoing;
-    private FloatingActionButton editTaskButton;
-    private FloatingActionButton deleteTaskButton;
     Boolean isCompleted = false;
     
     public void setTaskTime(int taskTime) {
@@ -88,8 +86,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         }
         
         // UI Elements to reuse.
-        editTaskButton = convertView.findViewById(R.id.editTaskButton);
-        deleteTaskButton = convertView.findViewById(R.id.deleteTaskButton);
+        FloatingActionButton editTaskButton = convertView.findViewById(R.id.editTaskButton);
+        FloatingActionButton deleteTaskButton = convertView.findViewById(R.id.deleteTaskButton);
         TextView taskNameText = convertView.findViewById(R.id.taskTitle);
         TextView taskTimeText = convertView.findViewById(R.id.task_time);
         ImageButton upArrow = convertView.findViewById(R.id.move_up_arrow);
@@ -116,22 +114,21 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         
         deleteTaskButton.setOnClickListener(v -> {
             onDeleteClick.accept(task.getName());
-            notifyDataSetChanged();
+//            notifyDataSetChanged();
         });
-
+        
         upArrow.setOnClickListener(x -> {
             onUpClick.accept(task);
 //            notifyDataSetChanged();
-//            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
+            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
         });
-
+        
         downArrow.setOnClickListener(x -> {
             onDownClick.accept(task);
 //            notifyDataSetChanged();
-//            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
+            Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
         });
         
-
         
         // Set click listener on the entire view
         convertView.setOnClickListener(v -> {
@@ -142,10 +139,20 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         taskCompletionUpdate.accept(task);
         // Then sets the strikethrough accordingly
         if (isCompleted) {
+            String timeTextMinSec = "s";
             strikethrough(taskNameText);
-            String taskTimeTextString = taskTime + "m";
-            taskTimeText.setText(taskTimeTextString);
+            if(taskTime == 0) {
+                taskTime = 5;
+            } else if(taskTime < 55) {
+                taskTime = (int) Math.ceil(taskTime / 5.0) * 5;
+            } else {
+                timeTextMinSec = "m";
+                taskTime = (int) Math.ceil(taskTime / 60.0);
+            }
+            String timeText = taskTime + timeTextMinSec;
+            taskTimeText.setText(timeText);
         } else {
+            taskTimeText.setText(R.string.time_taken);
             removeStrikethrough(taskNameText);
         }
         return convertView;
@@ -158,7 +165,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     private void strikethrough(TextView textView) {
         textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
-    
     
     
     private void removeStrikethrough(TextView textView) {
@@ -177,7 +183,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     
     @Override
     public Task getItem(int position) {
-        //        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
+//        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
         return super.getItem(position);
     }
 }

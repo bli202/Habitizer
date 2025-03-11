@@ -72,7 +72,6 @@ public class PersistanceTest {
 
         //Given I have a routine with tasks
         RoutineEntity routine = new RoutineEntity(0, 30, "Morning Routine");
-        database.routineDao().insertTimer(new CustomTimerEntity(0, 0, 0, false, 0, 0));
         routineId = database.routineDao().insert(routine);
         ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
         onData(anything())

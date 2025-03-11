@@ -65,7 +65,6 @@ public class AddTaskToRoutineTest {
 
         // Launch the main activity
         RoutineEntity routine = new RoutineEntity(0, 30, "Morning Routine");
-        database.routineDao().insertTimer(new CustomTimerEntity(0, 0, 0, false, 0, 0));
         routineId = database.routineDao().insert(routine);
         ActivityScenario.launch(MainActivity.class);
     }
