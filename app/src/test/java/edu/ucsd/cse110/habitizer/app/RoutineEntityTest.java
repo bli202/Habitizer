@@ -27,7 +27,7 @@ public class RoutineEntityTest {
         r.addTask(task1);
         r.addTask(task2);
         re = new RoutineEntity(3, 20, "routineEntity 1");
-        cte = new CustomTimerEntity(3, 0, 35, false, 0, 0);
+//        cte = new CustomTimerEntity(3, 0, 35, false, 0, 0);
     }
     @Test
     public void fromRoutine() {
@@ -46,7 +46,7 @@ public class RoutineEntityTest {
         List<TaskEntity> teList = new ArrayList<>();
         teList.add(te1);
         teList.add(te2);
-        Routine re2 = re.toRoutine(teList, cte);
+        Routine re2 = re.toRoutine(teList);
         assertEquals(te1.taskName, re2.getTaskList().get(0).getName());
         assertEquals(te1.routineId, Integer.valueOf(re2.getTaskList().get(0).getId()));
         assertEquals(te2.taskName, re2.getTaskList().get(1).getName());
