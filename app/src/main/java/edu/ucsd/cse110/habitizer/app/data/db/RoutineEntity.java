@@ -16,9 +16,6 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 @Entity(
         tableName = "routines",
-        foreignKeys = {
-                @ForeignKey(entity = CustomTimerEntity.class, parentColumns = "routineId", childColumns = "id")
-        },
         indices = {@Index(value = "id", unique = true)}
 )
 public class RoutineEntity {
@@ -50,13 +47,13 @@ public class RoutineEntity {
         return new RoutineEntity(routine.getId(), routine.getEstimatedTime(), routine.getName());
     }
     
-    public @NonNull Routine toRoutine(List<TaskEntity> taskEntities, CustomTimerEntity timerEntity) {
+    public @NonNull Routine toRoutine(List<TaskEntity> taskEntities) {
         Routine r = new Routine(id, estimatedTime, name);
         for (TaskEntity te : taskEntities) {
             r.addTask(te.toTask());
         }
         r.setOngoing(this.ongoing);
-        r.setTimer(timerEntity.toCustomTimer());
+//        r.setTimer(timerEntity.toCustomTimer());
         r.setTasksDone(this.tasksDone);
         return r;
     }

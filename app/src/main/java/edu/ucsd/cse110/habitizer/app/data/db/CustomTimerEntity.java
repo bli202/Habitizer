@@ -2,7 +2,6 @@ package edu.ucsd.cse110.habitizer.app.data.db;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.time.Instant;
@@ -10,25 +9,21 @@ import java.time.Instant;
 import edu.ucsd.cse110.habitizer.lib.domain.CustomTimer;
 
 @Entity(
-        tableName = "timers",
-        indices = {@Index(value = "routineId", unique = true)}
+        tableName = "timers"
 )
 public class CustomTimerEntity {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     @ColumnInfo(name = "id")
-    public Integer id = null;
+    public Integer id = 0;
+    
+    @ColumnInfo(name = "ongoing")
+    public boolean ongoing;
 
-    @ColumnInfo(name = "routineId")
-    public Integer routineId;
-
-    @ColumnInfo(name = "cumTime")
-    public long cumTime;
+    @ColumnInfo(name = "cumulativeTime")
+    public long cumulativeTime;
 
     @ColumnInfo(name = "taskTime")
     public long taskTime;
-
-    @ColumnInfo(name = "ongoing")
-    public boolean ongoing;
 
     @ColumnInfo(name = "startTime")
     public long startTime;
@@ -36,9 +31,8 @@ public class CustomTimerEntity {
     @ColumnInfo(name = "taskStartTime")
     public long taskStartTime;
 
-    public CustomTimerEntity(Integer routineId, long cumTime, long taskTime, boolean ongoing, long startTime, long taskStartTime) {
-        this.routineId = routineId;
-        this.cumTime = cumTime;
+    public CustomTimerEntity(long cumulativeTime, long taskTime, boolean ongoing, long startTime, long taskStartTime) {
+        this.cumulativeTime = cumulativeTime;
         this.taskTime = taskTime;
         this.ongoing = ongoing;
         this.startTime = startTime;
@@ -48,7 +42,7 @@ public class CustomTimerEntity {
     // Method to convert CustomTimerEntity to CustomTimer
     public CustomTimer toCustomTimer() {
         CustomTimer timer = new CustomTimer();
-        timer.setCumTime(cumTime);
+        timer.setCumTime(cumulativeTime);
         timer.setTaskTime(taskTime);
         timer.setOngoing(ongoing);
         timer.setStartTime(Instant.ofEpochMilli(startTime));
@@ -57,9 +51,8 @@ public class CustomTimerEntity {
     }
 
     // Method to create CustomTimerEntity from CustomTimer
-    public static CustomTimerEntity fromCustomTimer(CustomTimer timer, Integer routineId) {
+    public static CustomTimerEntity fromCustomTimer(CustomTimer timer) {
         return new CustomTimerEntity(
-                routineId,
                 timer.getCumTime(),
                 timer.getTaskTimeNoReset(),
                 timer.getOngoing(),

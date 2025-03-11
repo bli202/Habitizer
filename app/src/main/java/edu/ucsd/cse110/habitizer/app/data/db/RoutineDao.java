@@ -19,17 +19,17 @@ public interface RoutineDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertTask(TaskEntity task);
     
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Long insertTimer(CustomTimerEntity timer);
-    
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    Long insertTimer(CustomTimerEntity timer);
+//
     @Query("SELECT * FROM routines WHERE id = :id")
     RoutineEntity find(int id);
     
     @Query("SELECT * FROM tasks WHERE routineId = :routineId")
     List<TaskEntity> findTasksForRoutine(int routineId);
     
-    @Query("SELECT * FROM timers WHERE routineId = :routineId")
-    CustomTimerEntity findTimerForRoutine(int routineId);
+//    @Query("SELECT * FROM timers WHERE routineId = :routineId")
+//    CustomTimerEntity findTimerForRoutine(int routineId);
     
     @Query("SELECT * FROM routines")
     List<RoutineEntity> findAll();
@@ -50,15 +50,15 @@ public interface RoutineDao {
     LiveData<List<RoutineEntity>> findAllAsLiveData();
     
     @Transaction
-    default int append(RoutineEntity routine, CustomTimerEntity timer) {
-        insertTimer(timer);
+    default int append(RoutineEntity routine) {
+//        insertTimer(timer);
         insert(routine);
         return Math.toIntExact(insert(routine));
     }
     
     @Transaction
     default int addTaskToRoutine(RoutineEntity routineEntity, Task task) {
-        var routine = routineEntity.toRoutine(findTasksForRoutine(routineEntity.id), findTimerForRoutine(routineEntity.id));
+        var routine = routineEntity.toRoutine(findTasksForRoutine(routineEntity.id));
         routine.addTask(task);
         insertTask(TaskEntity.fromTask(routine.getId(), task));
         return Math.toIntExact(insert(RoutineEntity.fromRoutine(routine)));
@@ -67,8 +67,8 @@ public interface RoutineDao {
     @Query("DELETE FROM routines WHERE id = :id")
     void delete(int id);
 
-    @Query("DELETE FROM timers WHERE routineId = :id")
-    void deleteTimer(int id);
+//    @Query("DELETE FROM timers WHERE routineId = :id")
+//    void deleteTimer(int id);
     
     @Query("UPDATE routines SET estimatedTime = :time WHERE id = :routineId")
     void setEstimatedTime(int routineId, int time);

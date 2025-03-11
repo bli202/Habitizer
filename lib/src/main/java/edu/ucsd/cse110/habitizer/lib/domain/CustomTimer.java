@@ -27,6 +27,18 @@ public class CustomTimer {
         taskTime = 0;
         ongoing = false;
     }
+    
+    /**
+     * Helper method to update the timer.
+     * Method is called whenever a value needs to be accessed.
+     */
+    private void update() {
+        if(!ongoing) return;
+        cumTime += Duration.between(startTime, Instant.now()).toMillis();
+        startTime = Instant.now();
+        taskTime += Duration.between(taskStartTime, Instant.now()).toMillis();
+        taskStartTime = Instant.now();
+    }
 
     /**
      * Must be called to start timer or resume after pausing.
@@ -102,18 +114,6 @@ public class CustomTimer {
      */
     public boolean getOngoing() {
         return ongoing;
-    }
-
-    /**
-     * Helper method to update the timer.
-     * Method is called whenever a value needs to be accessed.
-     */
-    private void update() {
-        if(!ongoing) return;
-        cumTime += Duration.between(startTime, Instant.now()).toMillis();
-        startTime = Instant.now();
-        taskTime += Duration.between(taskStartTime, Instant.now()).toMillis();
-        taskStartTime = Instant.now();
     }
     
     public long getCumTime() {

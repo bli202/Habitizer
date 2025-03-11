@@ -196,7 +196,7 @@ public class TaskFragment extends Fragment {
         });
         
         view.startRoutineButton.setOnClickListener(x -> {
-            if (curRoutine.getNumTasks() == 0) {
+            if (activityModel.getCurrentRoutineTasks().isEmpty()) {
                 var dialogFragment = InvalidStartDialogFragment.newInstance();
                 dialogFragment.show(getParentFragmentManager(), "InvalidStartDialogFragment");
                 return;
@@ -215,7 +215,7 @@ public class TaskFragment extends Fragment {
                 
                 @Override
                 public void onTick(long l) {
-                    String timeText = curRoutine.getElapsedTime() + "m";
+                    String timeText = activityModel.getCumulativeTime() + "m";
                     view.actualTime.setText(timeText);
                     if (!isOngoing) {
                         view.stopRoutineButton.setVisibility(View.INVISIBLE);
@@ -234,7 +234,9 @@ public class TaskFragment extends Fragment {
         
         view.fastForwardTimerButton.setOnClickListener(x -> {
             if (!isOngoing) return;
-            curRoutine.manualAddTime(30);
+            Log.d(TAG, "Fast forward timer button pressed");
+            activityModel.addSeconds(15);
+            curRoutine.manualAddTime(15);
         });
         
         view.pauseTimerButton.setOnClickListener(x -> {
