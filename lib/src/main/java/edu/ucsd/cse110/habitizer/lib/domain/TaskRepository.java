@@ -32,6 +32,7 @@ public interface TaskRepository {
      */
     void save(int routineId, Task task);
 
+    void clear();
     /**
      * Removes the task with the given name from the specified routine.
      */

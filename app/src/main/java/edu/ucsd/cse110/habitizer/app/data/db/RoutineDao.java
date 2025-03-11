@@ -14,6 +14,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 @Dao
 public interface RoutineDao {
 
+    @Transaction
     @Query("DELETE from routines")
     void clearAll();
 
