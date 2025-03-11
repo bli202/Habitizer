@@ -5,7 +5,7 @@ import android.util.Log;
 
 import androidx.room.Room;
 
-import edu.ucsd.cse110.habitizer.app.data.db.CustomTimerRepository;
+import edu.ucsd.cse110.habitizer.app.data.db.RoomCustomTimerRepository;
 import edu.ucsd.cse110.habitizer.app.data.db.HabitizerDatabase;
 import edu.ucsd.cse110.habitizer.app.data.db.RoomRoutineRepository;
 import edu.ucsd.cse110.habitizer.app.data.db.RoomTaskRepository;
@@ -16,7 +16,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 public class HabitizerApplication extends Application {
     private TaskRepository taskRepository;
     private RoutineRepository routineRepository;
-    private CustomTimerRepository customTimerRepository;
+    private RoomCustomTimerRepository roomCustomTimerRepository;
     private String TAG = "HabitizerApplication";
     
     @Override
@@ -34,7 +34,7 @@ public class HabitizerApplication extends Application {
         
         this.routineRepository = new RoomRoutineRepository(database.routineDao());
         this.taskRepository = new RoomTaskRepository(database.taskDao());
-        this.customTimerRepository = new CustomTimerRepository(database.customTimerDao());
+        this.roomCustomTimerRepository = new RoomCustomTimerRepository(database.customTimerDao());
         
         // Populate the database with some initial data on the first run.
         var sharedPreferences = getSharedPreferences("habitizer", MODE_PRIVATE);
@@ -77,6 +77,12 @@ public class HabitizerApplication extends Application {
         this.routineRepository = routineRepository;
     }
 
+    public void setDataSource(TaskRepository taskRepository, RoutineRepository routineRepository, RoomCustomTimerRepository customTimerRepository){
+        this.taskRepository = taskRepository;
+        this.routineRepository = routineRepository;
+        this.roomCustomTimerRepository = customTimerRepository;
+    }
+
     public TaskRepository getTaskRepository() {
         return taskRepository;
     }
@@ -85,5 +91,5 @@ public class HabitizerApplication extends Application {
         return routineRepository;
     }
     
-    public CustomTimerRepository getCustomTimerRepository() { return customTimerRepository; }
+    public RoomCustomTimerRepository getCustomTimerRepository() { return roomCustomTimerRepository; }
 }

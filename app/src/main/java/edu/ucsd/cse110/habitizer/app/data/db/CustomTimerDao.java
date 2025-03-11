@@ -8,7 +8,8 @@ import androidx.room.Transaction;
 
 @Dao
 public interface CustomTimerDao {
-    
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(CustomTimerEntity customTimer);
     
@@ -59,4 +60,7 @@ public interface CustomTimerDao {
     
     @Query("UPDATE timers SET cumulativeTime = :cumulativeTime WHERE id = 0")
     void setCumulativeTime(long cumulativeTime);
+
+    @Query("DELETE FROM timers")
+    void clearAll();
 }
