@@ -69,7 +69,12 @@ public class HabitizerApplication extends Application {
         this.taskRepository.save(InMemoryDataSource.EVENING_ROUTINE.getId(), InMemoryDataSource.WASH_DISHES);
         this.taskRepository.save(InMemoryDataSource.EVENING_ROUTINE.getId(), InMemoryDataSource.PACK_BAG_EVENING);
     }
-    
+
+    public void setDataSource(TaskRepository taskRepository, RoutineRepository routineRepository){
+        this.taskRepository = taskRepository;
+        this.routineRepository = routineRepository;
+    }
+
     public TaskRepository getTaskRepository() {
         return taskRepository;
     }
