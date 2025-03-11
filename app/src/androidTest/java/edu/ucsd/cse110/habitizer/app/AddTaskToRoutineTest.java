@@ -61,12 +61,8 @@ public class AddTaskToRoutineTest {
         this.routineRepo = new RoomRoutineRepository(database.routineDao());
         this.taskRepo.clear();
         this.routineRepo.clear();
-        database.taskDao().clearALL();
-        database.routineDao().clearAll();
         app.setDataSource(taskRepo, routineRepo);
 
-        app.getTaskRepository().clear();
-        app.getRoutineRepository().clear();
         // Launch the main activity
         RoutineEntity routine = new RoutineEntity(0, 30, "Morning Routine");
         database.routineDao().insertTimer(new CustomTimerEntity(0, 0, 0, false, 0, 0));

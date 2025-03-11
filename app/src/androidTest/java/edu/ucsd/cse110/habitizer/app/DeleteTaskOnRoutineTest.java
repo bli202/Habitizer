@@ -52,6 +52,9 @@ public class DeleteTaskOnRoutineTest {
                 .allowMainThreadQueries()
                 .build();
 
+        this.taskRepo = new RoomTaskRepository(database.taskDao());
+        this.routineRepo = new RoomRoutineRepository(database.routineDao());
+
         if (taskRepo != null) {
             this.taskRepo.clear();
         }
@@ -59,9 +62,6 @@ public class DeleteTaskOnRoutineTest {
         if (routineRepo != null) {
             this.routineRepo.clear();
         }
-
-        this.taskRepo = new RoomTaskRepository(database.taskDao());
-        this.routineRepo = new RoomRoutineRepository(database.routineDao());
 
         app.setDataSource(taskRepo, routineRepo);
         RoutineEntity routine = new RoutineEntity(0, 30, "Morning Routine");
@@ -83,7 +83,7 @@ public class DeleteTaskOnRoutineTest {
 
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.task_name_edit_text))
-                .perform(typeText("Brush Teeth"), ViewActions.closeSoftKeyboard());
+                .perform(typeText("Brush Teeth5"), ViewActions.closeSoftKeyboard());
         onView(withText("Create")).perform(click());
 
         SystemClock.sleep(1000);

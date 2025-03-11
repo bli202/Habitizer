@@ -54,6 +54,9 @@ public class EditTaskOnRoutineTest {
                 .build();
 
 
+        this.taskRepo = new RoomTaskRepository(database.taskDao());
+        this.routineRepo = new RoomRoutineRepository(database.routineDao());
+
         if (taskRepo != null) {
             this.taskRepo.clear();
         }
@@ -61,10 +64,6 @@ public class EditTaskOnRoutineTest {
         if (routineRepo != null) {
             this.routineRepo.clear();
         }
-
-
-        this.taskRepo = new RoomTaskRepository(database.taskDao());
-        this.routineRepo = new RoomRoutineRepository(database.routineDao());
 
         app.setDataSource(taskRepo, routineRepo);
 
@@ -88,7 +87,7 @@ public class EditTaskOnRoutineTest {
 
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.task_name_edit_text))
-                .perform(typeText("Brush Teeth"), ViewActions.closeSoftKeyboard());
+                .perform(typeText("Brush Teeth6"), ViewActions.closeSoftKeyboard());
         onView(withText("Create")).perform(click());
 
         SystemClock.sleep(1000);

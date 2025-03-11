@@ -62,7 +62,6 @@ public class CompleteTaskTest {
 
         HabitizerApplication app = (HabitizerApplication) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
 
-        // Create a new in-memory database with foreign key constraints
         database = Room.inMemoryDatabaseBuilder(app, HabitizerDatabase.class)
                 .allowMainThreadQueries()
                 .build();
@@ -99,7 +98,7 @@ public class CompleteTaskTest {
         //When I add a non duplicate task
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.task_name_edit_text))
-                .perform(typeText("Brush"), ViewActions.closeSoftKeyboard());
+                .perform(typeText("Brush2"), ViewActions.closeSoftKeyboard());
 
         onView(withText("Create")).perform(click());
         SystemClock.sleep(1000);

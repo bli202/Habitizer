@@ -1,4 +1,5 @@
 package edu.ucsd.cse110.habitizer.app;
+
 import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.ViewActions;
@@ -6,22 +7,16 @@ import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-
 import org.junit.Before;
 import org.junit.Test;
 
 
-import android.graphics.Paint;
 import android.os.SystemClock;
-import android.util.Log;
-import android.widget.TextView;
 
 import static androidx.test.espresso.Espresso.onData;
-import static androidx.test.espresso.Espresso.onIdle;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -40,29 +35,19 @@ import edu.ucsd.cse110.habitizer.app.data.db.TaskEntity;
 import edu.ucsd.cse110.habitizer.app.data.db.RoutineEntity;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
-import android.graphics.Paint;
-import android.view.View;
-import android.widget.TextView;
 
-import androidx.test.espresso.matcher.BoundedMatcher;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-
-
-
-public class AutoEndRoutineTest {
+public class PersistanceTest {
 
     public HabitizerDatabase database;
-    long routineId;
     public TaskRepository taskRepo;
     public RoutineRepository routineRepo;
+    public long routineId;
 
     @Before
     public void setUp() {
-
         HabitizerApplication app = (HabitizerApplication) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
 
+        // Create in-memory database
         database = Room.inMemoryDatabaseBuilder(app, HabitizerDatabase.class)
                 .allowMainThreadQueries()
                 .build();
@@ -80,40 +65,53 @@ public class AutoEndRoutineTest {
         }
 
         app.setDataSource(taskRepo, routineRepo);
-        RoutineEntity routine = new RoutineEntity(1, 30, "Morning");
-        database.routineDao().insertTimer(new CustomTimerEntity(1, 0, 0, false, 0, 0));
-        routineId = database.routineDao().insert(routine);
-        // Launch the main activity
-        ActivityScenario.launch(MainActivity.class);
     }
 
     @Test
-    public void testAutoEnd() {
+    public void testPersistance() {
 
-        // Given I am in the routine list view
-        //And its non empty
-        //And the routine is started
+        //Given I have a routine with tasks
+        RoutineEntity routine = new RoutineEntity(0, 30, "Morning Routine");
+        database.routineDao().insertTimer(new CustomTimerEntity(0, 0, 0, false, 0, 0));
+        routineId = database.routineDao().insert(routine);
+        ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
         onData(anything())
                 .inAdapterView(withId(R.id.routine_view))
                 .atPosition(0) // Assuming it's the first item in the list
                 .perform(click());
-
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.task_name_edit_text))
-                .perform(typeText("Brush1"), ViewActions.closeSoftKeyboard());
+                .perform(typeText("task1"), ViewActions.closeSoftKeyboard());
         onView(withText("Create")).perform(click());
         SystemClock.sleep(1000);
-        onView(withId(R.id.start_routine_button)).perform(click());
+        onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.task_name_edit_text))
+                .perform(typeText("task2"), ViewActions.closeSoftKeyboard());
+        onView(withText("Create")).perform(click());
+        SystemClock.sleep(1000);
 
-
-        //When I click to complete the last task
+        //When I close and reopen the app
+        scenario.close();
+        scenario = ActivityScenario.launch(MainActivity.class);
         onData(anything())
-                .inAdapterView(withId(R.id.task_list_view))
+                .inAdapterView(withId(R.id.routine_view))
                 .atPosition(0)
                 .perform(click());
 
-        //Then the routine should be stopped
-        RoutineEntity br = database.routineDao().find((int)routineId);
-        assertFalse(br.ongoing);
+        //Then the routine and tasks should persist
+        List<String> tasks = List.of("task1", "task2");
+        onView(withText("task1")).check(matches(ViewMatchers.isDisplayed()));
+        onView(withText("task2")).check(matches(ViewMatchers.isDisplayed()));
+        List<TaskEntity> taskL = database.taskDao().findAllByRoutineId((int) routineId);
+        assertEquals(2, tasks.size());
+        assertEquals("task1", taskL.get(0).taskName);
+        assertEquals("task2", taskL.get(1).taskName);
+
+        // Close the scenario after test completion
+        scenario.close();
+
+
     }
+
+
 }
