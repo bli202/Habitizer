@@ -17,6 +17,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -36,7 +37,7 @@ import edu.ucsd.cse110.habitizer.app.data.db.RoutineEntity;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
 
-public class AddTaskToRoutineTest {
+public class EditTaskOnRoutineTest {
 
     public HabitizerDatabase database;
     public TaskRepository taskRepo;
@@ -61,32 +62,42 @@ public class AddTaskToRoutineTest {
     }
 
     @Test
-    public void testAddTaskToRoutine() {
-
-
-        //Given I am in the routine list view
+    public void testEditTaskInRoutine() {
+        // Given I am in the task list
         RoutineEntity routine = new RoutineEntity(0, 30, "Morning Routine");
         database.routineDao().insertTimer(new CustomTimerEntity(0, 0, 0, false, 0, 0));
         long routineId = database.routineDao().insert(routine);
         ActivityScenario.launch(MainActivity.class);
+
+        //Given I am in task view
         onData(anything())
                 .inAdapterView(withId(R.id.routine_view))
-                .atPosition(0) // Assuming it's the first item in the list
+                .atPosition(0)
                 .perform(click());
 
-        //When I add a non duplicate task
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.task_name_edit_text))
                 .perform(typeText("Brush Teeth"), ViewActions.closeSoftKeyboard());
-
         onView(withText("Create")).perform(click());
+
         SystemClock.sleep(1000);
 
-        //Then the task should be displayed
+        //When I edit a existing task
+        onData(anything())
+                .inAdapterView(withId(R.id.task_list_view))
+                .atPosition(0)
+                .onChildView(withId(R.id.editTaskButton))
+                .perform(click());
+        onView(withId(R.id.edit_task))
+                .perform(ViewActions.replaceText("Shower"), ViewActions.closeSoftKeyboard());
+        onView(withText("Edit")).perform(click());
+        SystemClock.sleep(1000);
+
+        //Then the task list and db should update the task
         List<TaskEntity> tasks = database.taskDao().findAllByRoutineId((int) routineId);
         assertEquals(1, tasks.size());
-        assert tasks.get(0).taskName.equals("Brush Teeth");
-        onView(withText("Brush Teeth")).check(matches(ViewMatchers.isDisplayed()));
-
+        assertEquals("Shower", tasks.get(0).taskName);
+        onView(withText("Shower")).check(matches(isDisplayed()));
     }
+
 }
