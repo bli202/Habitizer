@@ -41,34 +41,43 @@ public class AddTaskToRoutineTest {
     public HabitizerDatabase database;
     public TaskRepository taskRepo;
     public RoutineRepository routineRepo;
+    long routineId;
+    public HabitizerApplication app = (HabitizerApplication) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
+
 
     @Before
     public void setUp() {
-        HabitizerApplication app = (HabitizerApplication) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
 
         // Create in-memory database
         database = Room.inMemoryDatabaseBuilder(app, HabitizerDatabase.class)
                 .allowMainThreadQueries()
                 .build();
 
+        database.taskDao().clearALL();
+        database.routineDao().clearAll();
+
+
         this.taskRepo = new RoomTaskRepository(database.taskDao());
         this.routineRepo = new RoomRoutineRepository(database.routineDao());
-
+        this.taskRepo.clear();
+        this.routineRepo.clear();
+        database.taskDao().clearALL();
+        database.routineDao().clearAll();
         app.setDataSource(taskRepo, routineRepo);
 
+        app.getTaskRepository().clear();
+        app.getRoutineRepository().clear();
         // Launch the main activity
+        RoutineEntity routine = new RoutineEntity(0, 30, "Morning Routine");
+        database.routineDao().insertTimer(new CustomTimerEntity(0, 0, 0, false, 0, 0));
+        routineId = database.routineDao().insert(routine);
         ActivityScenario.launch(MainActivity.class);
     }
 
     @Test
     public void testAddTaskToRoutine() {
 
-
         //Given I am in the routine list view
-        RoutineEntity routine = new RoutineEntity(0, 30, "Morning Routine");
-        database.routineDao().insertTimer(new CustomTimerEntity(0, 0, 0, false, 0, 0));
-        long routineId = database.routineDao().insert(routine);
-        ActivityScenario.launch(MainActivity.class);
         onData(anything())
                 .inAdapterView(withId(R.id.routine_view))
                 .atPosition(0) // Assuming it's the first item in the list

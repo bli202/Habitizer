@@ -85,5 +85,8 @@ public class SimpleRoutineRepository implements RoutineRepository {
     public int getTasksDone(int routineId) {
         return 0;
     }
+
+    @Override
+    public void clear(){}
     
 }

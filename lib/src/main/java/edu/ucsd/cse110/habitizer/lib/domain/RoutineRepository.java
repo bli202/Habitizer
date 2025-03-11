@@ -24,4 +24,6 @@ public interface RoutineRepository {
     void resetTasksDone(int routineId);
     
     int getTasksDone(int routineId);
+
+    void clear();
 }

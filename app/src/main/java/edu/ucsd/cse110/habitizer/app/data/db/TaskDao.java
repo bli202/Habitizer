@@ -14,6 +14,7 @@ import java.util.List;
 @Dao
 public interface TaskDao {
 
+    @Transaction
     @Query("DELETE FROM tasks")
     void clearALL();
 

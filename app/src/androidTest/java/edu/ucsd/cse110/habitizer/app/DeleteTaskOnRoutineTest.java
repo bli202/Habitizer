@@ -36,8 +36,7 @@ import edu.ucsd.cse110.habitizer.app.data.db.TaskEntity;
 import edu.ucsd.cse110.habitizer.app.data.db.RoutineEntity;
 import edu.ucsd.cse110.habitizer.lib.domain.RoutineRepository;
 import edu.ucsd.cse110.habitizer.lib.domain.TaskRepository;
-
-public class EditTaskOnRoutineTest {
+public class DeleteTaskOnRoutineTest {
 
     public HabitizerDatabase database;
     public TaskRepository taskRepo;
@@ -53,7 +52,6 @@ public class EditTaskOnRoutineTest {
                 .allowMainThreadQueries()
                 .build();
 
-
         if (taskRepo != null) {
             this.taskRepo.clear();
         }
@@ -62,23 +60,20 @@ public class EditTaskOnRoutineTest {
             this.routineRepo.clear();
         }
 
-
         this.taskRepo = new RoomTaskRepository(database.taskDao());
         this.routineRepo = new RoomRoutineRepository(database.routineDao());
 
         app.setDataSource(taskRepo, routineRepo);
-
         RoutineEntity routine = new RoutineEntity(0, 30, "Morning Routine");
         database.routineDao().insertTimer(new CustomTimerEntity(0, 0, 0, false, 0, 0));
         routineId = database.routineDao().insert(routine);
+
         // Launch the main activity
         ActivityScenario.launch(MainActivity.class);
     }
 
     @Test
-    public void testEditTaskInRoutine() {
-        // Given I am in the task list
-
+    public void testDeleteTaskInRoutine() {
 
         //Given I am in task view
         onData(anything())
@@ -93,22 +88,19 @@ public class EditTaskOnRoutineTest {
 
         SystemClock.sleep(1000);
 
-        //When I edit a existing task
+        //When I delete an existing task
         onData(anything())
                 .inAdapterView(withId(R.id.task_list_view))
                 .atPosition(0)
-                .onChildView(withId(R.id.editTaskButton))
+                .onChildView(withId(R.id.deleteTaskButton))
                 .perform(click());
-        onView(withId(R.id.edit_task))
-                .perform(ViewActions.replaceText("Shower"), ViewActions.closeSoftKeyboard());
-        onView(withText("Edit")).perform(click());
+
+        onView(withText("Delete")).perform(click());
         SystemClock.sleep(1000);
 
-        //Then the task list and db should update the task
+        //Then the tasklist should show nothing
         List<TaskEntity> tasks = database.taskDao().findAllByRoutineId((int) routineId);
-        assertEquals(1, tasks.size());
-        assertEquals("Shower", tasks.get(0).taskName);
-        onView(withText("Shower")).check(matches(isDisplayed()));
+        assertEquals(0, tasks.size());
+        onView(withText("Brush Teeth")).check(ViewAssertions.doesNotExist());
     }
-
 }

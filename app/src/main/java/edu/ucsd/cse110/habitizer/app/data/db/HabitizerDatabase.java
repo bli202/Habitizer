@@ -8,4 +8,9 @@ public abstract class HabitizerDatabase extends RoomDatabase {
     public abstract RoutineDao routineDao();
     
     public abstract TaskDao taskDao();
+
+    @Override
+    public void clearAllTables() {
+        clearAllTables();
+    }
 }

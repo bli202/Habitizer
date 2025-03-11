@@ -93,4 +93,7 @@ public class SimpleTaskRepository implements TaskRepository {
     public boolean getCompleted(int routineId, String taskName) {
         return false;
     }
+
+    @Override
+    public void clear(){}
 }

@@ -24,7 +24,12 @@ public class RoomTaskRepository implements TaskRepository {
     public RoomTaskRepository(TaskDao taskDao) {
         this.taskDao = taskDao;
     }
-    
+
+    @Override
+    public void clear() {
+        taskDao.clearALL();
+    }
+
     @Override
     public Integer count(int routineId) {
         return taskDao.findAllByRoutineId(routineId).size();

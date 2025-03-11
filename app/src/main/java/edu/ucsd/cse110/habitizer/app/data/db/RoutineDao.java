@@ -17,6 +17,7 @@ import edu.ucsd.cse110.observables.Subject;
 @Dao
 public interface RoutineDao {
 
+    @Transaction
     @Query("DELETE from routines")
     void clearAll();
 
