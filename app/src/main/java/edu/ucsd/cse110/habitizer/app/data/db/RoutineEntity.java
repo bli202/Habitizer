@@ -35,7 +35,7 @@ public class RoutineEntity {
     @ColumnInfo(name = "name")
     public String name;
     
-    RoutineEntity(int id, int estimatedTime, String name) {
+    public RoutineEntity(int id, int estimatedTime, String name) {
         this.id = id;
         this.name = name;
         this.estimatedTime = estimatedTime;

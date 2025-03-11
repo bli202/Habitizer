@@ -5,12 +5,12 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 @Entity(
         tableName = "tasks",
-        primaryKeys = {"routineId", "taskName"},
         foreignKeys = @ForeignKey(
                 entity = RoutineEntity.class, // References RoutineEntity
                 parentColumns = "id",         // Primary key in RoutineEntity
@@ -21,6 +21,7 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 )
 public class TaskEntity {
 
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public Integer id = null;
 

@@ -13,6 +13,10 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 
 @Dao
 public interface RoutineDao {
+
+    @Query("DELETE from routines")
+    void clearAll();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(RoutineEntity routine);
     
@@ -45,7 +49,7 @@ public interface RoutineDao {
 
     @Query("SELECT * FROM routines WHERE id = :id")
     LiveData<RoutineEntity> findAsLiveData(int id);
-    
+
     @Query("SELECT * FROM routines")
     LiveData<List<RoutineEntity>> findAllAsLiveData();
     
@@ -63,7 +67,6 @@ public interface RoutineDao {
         insertTask(TaskEntity.fromTask(routine.getId(), task));
         return Math.toIntExact(insert(RoutineEntity.fromRoutine(routine)));
     }
-    
     @Query("DELETE FROM routines WHERE id = :id")
     void delete(int id);
 

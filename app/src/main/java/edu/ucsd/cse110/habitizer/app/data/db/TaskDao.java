@@ -12,6 +12,10 @@ import java.util.List;
 
 @Dao
 public interface TaskDao {
+
+    @Query("DELETE FROM tasks")
+    void clearALL();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(TaskEntity task);
 
