@@ -31,3 +31,12 @@ MS2 iteration 1:
 3/7: 16 person hours
 
 52 / 72 = .72
+
+MS2 iteration 2:
+
+3/8: 6 person hours
+3/9: 16 person hours
+3/10: 12 person hours
+3/11: 14 person hours
+
+38 / 48 = .79
