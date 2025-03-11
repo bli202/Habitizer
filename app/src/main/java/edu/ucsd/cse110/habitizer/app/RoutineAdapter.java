@@ -48,7 +48,8 @@ public class RoutineAdapter extends ArrayAdapter<Routine> {
         
         Routine selectedRoutine = Objects.requireNonNull(getItem(position));
         titleView.setText(selectedRoutine.getName());
-        timeView.setText(selectedRoutine.getDuration() + R.string.minutes_shorthand);
+        String timeText = selectedRoutine.getDuration() + "m";
+        timeView.setText(timeText);
         
         ImageButton deleteButton = convertView.findViewById(R.id.deleteRoutineButton);
         

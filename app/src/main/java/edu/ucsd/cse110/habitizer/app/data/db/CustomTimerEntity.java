@@ -17,25 +17,25 @@ public class CustomTimerEntity {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public Integer id = null;
-    
+
     @ColumnInfo(name = "routineId")
     public Integer routineId;
-    
+
     @ColumnInfo(name = "cumTime")
     public long cumTime;
-    
+
     @ColumnInfo(name = "taskTime")
     public long taskTime;
-    
+
     @ColumnInfo(name = "ongoing")
     public boolean ongoing;
-    
+
     @ColumnInfo(name = "startTime")
     public long startTime;
-    
+
     @ColumnInfo(name = "taskStartTime")
     public long taskStartTime;
-    
+
     public CustomTimerEntity(Integer routineId, long cumTime, long taskTime, boolean ongoing, long startTime, long taskStartTime) {
         this.routineId = routineId;
         this.cumTime = cumTime;
@@ -44,7 +44,7 @@ public class CustomTimerEntity {
         this.startTime = startTime;
         this.taskStartTime = taskStartTime;
     }
-    
+
     // Method to convert CustomTimerEntity to CustomTimer
     public CustomTimer toCustomTimer() {
         CustomTimer timer = new CustomTimer();
@@ -55,7 +55,7 @@ public class CustomTimerEntity {
         timer.setTaskStartTime(Instant.ofEpochMilli(taskStartTime));
         return timer;
     }
-    
+
     // Method to create CustomTimerEntity from CustomTimer
     public static CustomTimerEntity fromCustomTimer(CustomTimer timer, Integer routineId) {
         return new CustomTimerEntity(

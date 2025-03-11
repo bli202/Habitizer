@@ -36,8 +36,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     
     int taskTime;
     boolean ongoing;
-    private FloatingActionButton editTaskButton;
-    private FloatingActionButton deleteTaskButton;
     Boolean isCompleted = false;
     
     public void setTaskTime(int taskTime) {
@@ -88,8 +86,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         }
         
         // UI Elements to reuse.
-        editTaskButton = convertView.findViewById(R.id.editTaskButton);
-        deleteTaskButton = convertView.findViewById(R.id.deleteTaskButton);
+        FloatingActionButton editTaskButton = convertView.findViewById(R.id.editTaskButton);
+        FloatingActionButton deleteTaskButton = convertView.findViewById(R.id.deleteTaskButton);
         TextView taskNameText = convertView.findViewById(R.id.taskTitle);
         TextView taskTimeText = convertView.findViewById(R.id.task_time);
         ImageButton upArrow = convertView.findViewById(R.id.move_up_arrow);
@@ -142,7 +140,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         // Then sets the strikethrough accordingly
         if (isCompleted) {
             strikethrough(taskNameText);
-            taskTimeText.setText(taskTime + R.string.minutes_shorthand);
+            String timeText = taskTime + "m";
+            taskTimeText.setText(timeText);
         } else {
             taskTimeText.setText(R.string.time_taken);
             removeStrikethrough(taskNameText);

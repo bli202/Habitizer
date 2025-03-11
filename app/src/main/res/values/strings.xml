@@ -22,7 +22,7 @@
     <string name="invalid_time">Invalid estimated time, please change it!</string>
     <string name="delete_routine">delete_routine</string>
     <string name="add_routine_button_text">Add Routine</string>
-    <string name="minutes_shorthand">%1$dm</string>
+    <string name="minutes_shorthand">m</string>
     <string name="invalid_delete">Cannot delete the last routine!</string>
     <string name="edit_routine">edit_routine</string>
 </resources>

@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Objects;
 
 import edu.ucsd.cse110.habitizer.app.MainViewModel;
-import edu.ucsd.cse110.habitizer.app.R;
 import edu.ucsd.cse110.habitizer.app.databinding.FragmentTasklistViewBinding;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.AddTaskDialogFragment;
 import edu.ucsd.cse110.habitizer.app.ui.routine.dialog.DeleteTaskDialogFragment;
@@ -53,7 +52,6 @@ public class TaskFragment extends Fragment {
     private Subject<Boolean> currentRoutineOngoing;
     private Boolean isOngoing;
     private Routine curRoutine;
-    private int taskTime;
     
     public TaskFragment() {
         // Required empty public constructor
@@ -108,7 +106,8 @@ public class TaskFragment extends Fragment {
             if (routine == null) return;
             curRoutine = routine;
             view.routineTitle.setText(curRoutine.getName());
-            view.estimatedTime.setText(curRoutine.getEstimatedTime() + R.string.minutes_shorthand);
+            String timeText = curRoutine.getEstimatedTime() + "m";
+            view.estimatedTime.setText(timeText);
         });
         
         /*
@@ -146,6 +145,9 @@ public class TaskFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
         
+        /*
+         * Initialize TaskAdapter
+         */
         this.adapter = new TaskAdapter(requireContext(),
                 activityModel.getCurrentRoutineTasks(),
                 activityModel.isCurrentRoutineOngoing(),
@@ -157,20 +159,17 @@ public class TaskFragment extends Fragment {
                     var DeleteTaskdialogFragment = DeleteTaskDialogFragment.newInstance(taskName);
                     DeleteTaskdialogFragment.show(getParentFragmentManager(), "ConfirmDeleteCardDialogFragment");
                 }, task -> {
-                if (curRoutine.getOngoing() && !activityModel.getTaskCompleted(task.getName())) {
-                    taskTime = activityModel.checkOffTask(task);
-                }
-                }, task -> {
-                    adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName()));
-                    adapter.setTaskTime(activityModel.getTaskTime(Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getId(), task.getName()));
-//                    adapter.setTaskTime(taskTime);
-                }, task -> {
-                    activityModel.moveUp(Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getId(), task.getOrder());
-                }, task -> {
-                    activityModel.moveDown(Objects.requireNonNull(MainViewModel.getCurrentRoutine().getValue()).getId(), task.getOrder());
-                }
-        );
-        
+            if (curRoutine.getOngoing() && !activityModel.getTaskCompleted(task.getName())) {
+                activityModel.setTaskTime(curRoutine.getId(), task.getName(), activityModel.checkOffTask(task));
+            }
+        }, task -> {
+            adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName()));
+            adapter.setTaskTime(activityModel.getTaskTime(curRoutine.getId(), task.getName()));
+        }, task -> {
+            activityModel.moveUp(curRoutine.getId(), task.getOrder());
+        }, task -> {
+            activityModel.moveDown(curRoutine.getId(), task.getOrder());
+        });
         
         // Set the adapter on the ListView
         view.taskListView.setAdapter(adapter);
@@ -216,8 +215,8 @@ public class TaskFragment extends Fragment {
                 
                 @Override
                 public void onTick(long l) {
-                    Log.d("timer", "TICKING");
-                    view.actualTime.setText(curRoutine.getElapsedTime() + R.string.minutes_shorthand);
+                    String timeText = curRoutine.getElapsedTime() + "m";
+                    view.actualTime.setText(timeText);
                     if (!isOngoing) {
                         view.stopRoutineButton.setVisibility(View.INVISIBLE);
                         view.addTaskButton.setVisibility(View.VISIBLE);
@@ -255,7 +254,6 @@ public class TaskFragment extends Fragment {
         view.stopRoutineButton.setOnClickListener(v -> {
             if (!isOngoing) return;
             activityModel.endCurrentRoutine();
-//            adapter.setOngoingSubject(false);
         });
         
         return view.getRoot();
