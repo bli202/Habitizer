@@ -114,18 +114,15 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         
         deleteTaskButton.setOnClickListener(v -> {
             onDeleteClick.accept(task.getName());
-//            notifyDataSetChanged();
         });
         
         upArrow.setOnClickListener(x -> {
             onUpClick.accept(task);
-//            notifyDataSetChanged();
             Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
         });
         
         downArrow.setOnClickListener(x -> {
             onDownClick.accept(task);
-//            notifyDataSetChanged();
             Log.d(TAG, "task : " + task.getName() + " order: " + task.getOrder());
         });
         
@@ -183,7 +180,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     
     @Override
     public Task getItem(int position) {
-//        Log.d(TAG, "getItem() called for position " + position + ": " + (task != null ? task.getName() : "NULL"));
         return super.getItem(position);
     }
 }

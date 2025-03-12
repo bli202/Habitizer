@@ -15,7 +15,6 @@ import edu.ucsd.cse110.observables.Subject;
 
 public class RoomTaskRepository implements TaskRepository {
     private final TaskDao taskDao;
-    private String TAG = "RoomTaskRepository";
     
     public RoomTaskRepository(TaskDao taskDao) {
         this.taskDao = taskDao;

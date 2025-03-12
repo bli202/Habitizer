@@ -18,7 +18,6 @@ import edu.ucsd.cse110.habitizer.lib.domain.Task;
 public class RoutineEntityTest {
     Routine r;
     RoutineEntity re;
-    CustomTimerEntity cte;
     @Before
     public void setUp() {
         r = new Routine(0, 13, "routine 1");
@@ -27,7 +26,6 @@ public class RoutineEntityTest {
         r.addTask(task1);
         r.addTask(task2);
         re = new RoutineEntity(3, 20, "routineEntity 1");
-//        cte = new CustomTimerEntity(3, 0, 35, false, 0, 0);
     }
     @Test
     public void fromRoutine() {

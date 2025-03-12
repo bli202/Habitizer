@@ -25,13 +25,11 @@ public class RoomRoutineRepository implements RoutineRepository {
     @Override
     public void removeRoutine(Routine routine) {
         routineDao.delete(routine.getId());
-//        routineDao.deleteTimer(routine.getId());
     }
     
     @Override
     public void addRoutine(Routine routine) {
         var routineEntity = new RoutineEntity(routine.getId(), routine.getEstimatedTime(), routine.getName());
-//        var customTimerEntity = new CustomTimerEntity(routine.getId(), 0, 0, false, 0, 0);
         routineDao.append(routineEntity);
     }
     
@@ -44,7 +42,6 @@ public class RoomRoutineRepository implements RoutineRepository {
         List<Routine> routines = routineEntities.stream()
                 .map(routineEntity -> {
                     List<TaskEntity> taskEntities = routineDao.findTasksForRoutine(routineEntity.id);
-//                    CustomTimerEntity timerEntity = routineDao.findTimerForRoutine(routineEntity.id);
                     return routineEntity.toRoutine(taskEntities);
                 })
                 .collect(Collectors.toList());
