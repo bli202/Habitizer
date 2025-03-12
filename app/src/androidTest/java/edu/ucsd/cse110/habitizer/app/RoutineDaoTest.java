@@ -43,7 +43,6 @@ public class RoutineDaoTest {
         this.taskDao = database.taskDao();
         this.routineDao = database.routineDao();
         RoutineEntity DummyRoutine = new RoutineEntity(1, 30,"Routine1");
-//        CustomTimerEntity DummyTimer = new CustomTimerEntity(1, 0, 0, false, 0, 0);
         routineDao.append(DummyRoutine);
 
     }
@@ -52,7 +51,6 @@ public class RoutineDaoTest {
     public void insertTest() {
 
         RoutineEntity sampleRoutine = new RoutineEntity(2, 30, "sampleRoutine");
-//        routineDao.insertTimer(new CustomTimerEntity(2, 0, 0, false, 0, 0));
         routineDao.insert(sampleRoutine);
         assertEquals(2, routineDao.findAll().size());
         assertEquals("Routine1", routineDao.find(1).name);
@@ -62,23 +60,6 @@ public class RoutineDaoTest {
 
 
     }
-
-
-
-//`    @Test
-//    public void insertTimerTest() {
-//        var tim =  new CustomTimerEntity(2, 0, 0, false, 0, 0);
-//        routineDao.insertTimer(tim);
-//        RoutineEntity sampleRoutine = new RoutineEntity(2, 30, "sampleRoutine");
-//        routineDao.insert(sampleRoutine);
-//        var rtim = routineDao.findTimerForRoutine(2);
-//        assertEquals(tim.routineId, rtim.routineId);
-//        assertEquals(tim.cumTime, rtim.cumTime);
-//        assertEquals(tim.taskTime, rtim.taskTime);
-//        assertEquals(tim.ongoing, rtim.ongoing);
-//        assertEquals(tim.startTime, rtim.startTime);
-//        assertEquals(tim.taskStartTime, rtim.taskStartTime);
-//    }`
 
     @Test
     public void findTest() {
@@ -91,29 +72,11 @@ public class RoutineDaoTest {
         assertFalse(rrout3.ongoing);
     }
 
-//
-//    @Test
-//    public void findTimerForRoutineTest() {
-//        var tim =  new CustomTimerEntity(2, 0, 0, false, 0, 0);
-//        routineDao.insertTimer(tim);
-//        RoutineEntity sampleRoutine = new RoutineEntity(2, 30, "sampleRoutine");
-//        routineDao.insert(sampleRoutine);
-//        var rtim = routineDao.findTimerForRoutine(2);
-//        assertEquals(tim.routineId, rtim.routineId);
-//        assertEquals(tim.cumTime, rtim.cumTime);
-//        assertEquals(tim.taskTime, rtim.taskTime);
-//        assertEquals(tim.ongoing, rtim.ongoing);
-//        assertEquals(tim.startTime, rtim.startTime);
-//        assertEquals(tim.taskStartTime, rtim.taskStartTime);
-//    }
-
     @Test
     public void findAllTest() {
         RoutineEntity r1 = new RoutineEntity(2, 30, "sampleRoutine1");
-//        routineDao.insertTimer(new CustomTimerEntity(2, 0, 0, false, 0, 0));
         routineDao.insert(r1);
         RoutineEntity r2 = new RoutineEntity(3, 30, "sampleRoutine2");
-//        routineDao.insertTimer(new CustomTimerEntity(3, 0, 0, false, 0, 0));
         routineDao.insert(r2);
 
         List<RoutineEntity> actList = new ArrayList<>(routineDao.findAll());
@@ -151,7 +114,6 @@ public class RoutineDaoTest {
     public void countTest() {
         assertEquals(1, routineDao.count());
         RoutineEntity r1 = new RoutineEntity(2, 30, "sampleRoutine1");
-//        routineDao.insertTimer(new CustomTimerEntity(2, 0, 0, false, 0, 0));
         routineDao.insert(r1);
         assertEquals(2, routineDao.count());
     }

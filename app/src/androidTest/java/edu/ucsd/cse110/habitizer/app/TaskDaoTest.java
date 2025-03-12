@@ -38,7 +38,6 @@ public class TaskDaoTest {
         this.taskDaot = database.taskDao();
         this.routineDaot = database.routineDao();
         RoutineEntity DummyRoutine = new RoutineEntity(1, 30,"Routine1");
-//        CustomTimerEntity DummyTimer = new CustomTimerEntity(1, 0, 0, false, 0, 0);
         routineDaot.append(DummyRoutine);
 
 

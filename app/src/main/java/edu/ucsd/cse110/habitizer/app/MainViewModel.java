@@ -48,7 +48,6 @@ public class MainViewModel extends ViewModel {
         this.roomCustomTimerRepository = roomCustomTimerRepository;
         
         // Creating observable subjects.
-//        this.completed = new PlainMutableSubject<>(false);
         this.estimatedTime = new PlainMutableSubject<>();
     }
     

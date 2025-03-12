@@ -50,7 +50,7 @@ public class TaskFragment extends Fragment {
     private Subject<Routine> curRoutineSubject;
     private Observer<? super Boolean> onGoingObserver;
     private Subject<Boolean> currentRoutineOngoing;
-    private Boolean isOngoing;
+    private boolean isOngoing;
     private Routine curRoutine;
     private Boolean firstTimeStarting = true;
 
@@ -126,7 +126,7 @@ public class TaskFragment extends Fragment {
          * For updating buttons when routine is started or stopped
          */
         this.onGoingObserver = currentRoutineOngoing.observe(ongoing -> {
-            isOngoing = ongoing;
+            isOngoing = Boolean.TRUE.equals(ongoing);
             if (ongoing == null) {
                 Log.d(TAG, "Routine ongoing is NULL");
                 return;
@@ -209,10 +209,8 @@ public class TaskFragment extends Fragment {
                 activityModel.setTaskTime(curRoutine.getId(), task.getName(), activityModel.checkOffTask(task));
             }
         }, task -> {
-//            if (activityModel.isTimerOngoing()) {
                 adapter.setTaskCompletionState(activityModel.getTaskCompleted(task.getName()));
                 adapter.setTaskTime(activityModel.getTaskTime(curRoutine.getId(), task.getName()));
-//            }
         }, task -> {
             activityModel.moveUp(curRoutine.getId(), task.getOrder());
         }, task -> {

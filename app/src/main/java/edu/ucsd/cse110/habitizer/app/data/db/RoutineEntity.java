@@ -53,7 +53,6 @@ public class RoutineEntity {
             r.addTask(te.toTask());
         }
         r.setOngoing(this.ongoing);
-//        r.setTimer(timerEntity.toCustomTimer());
         r.setTasksDone(this.tasksDone);
         return r;
     }
