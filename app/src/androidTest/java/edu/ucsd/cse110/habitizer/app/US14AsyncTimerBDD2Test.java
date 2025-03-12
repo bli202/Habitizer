@@ -27,7 +27,6 @@ import android.os.SystemClock;
 
 import edu.ucsd.cse110.habitizer.app.data.db.CustomTimerDao;
 import edu.ucsd.cse110.habitizer.app.data.db.CustomTimerEntity;
-import edu.ucsd.cse110.habitizer.app.data.db.CustomTimerRepository;
 import edu.ucsd.cse110.habitizer.app.data.db.HabitizerDatabase;
 import edu.ucsd.cse110.habitizer.app.data.db.RoomRoutineRepository;
 import edu.ucsd.cse110.habitizer.app.data.db.RoomTaskRepository;
