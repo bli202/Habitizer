@@ -94,13 +94,13 @@ public class TaskTimerTest {
 
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.task_name_edit_text))
-                .perform(typeText("Brush"), ViewActions.closeSoftKeyboard());
+                .perform(typeText("Brush10"), ViewActions.closeSoftKeyboard());
 
         onView(withText("Create")).perform(click());
 
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.task_name_edit_text))
-                .perform(typeText("Shower"), ViewActions.closeSoftKeyboard());
+                .perform(typeText("Shower10"), ViewActions.closeSoftKeyboard());
 
         //When I start the routine
         //And stop it
@@ -113,7 +113,7 @@ public class TaskTimerTest {
         //Check that the task time is equal to the displayed task time
         SystemClock.sleep(61000);
         onView(withId(R.id.actual_time)).check(matches(withSubstring("Task: " + customTimerRepo.getTaskTime() / 60)));
-        onView(allOf(withId(R.id.taskTitle), withText("Brush"))).perform(click());
+        onView(allOf(withId(R.id.taskTitle), withText("Brush10"))).perform(click());
         SystemClock.sleep(61000);
         onView(withId(R.id.actual_time)).check(matches(withSubstring("Task: " + customTimerRepo.getTaskTime() / 60)));
 

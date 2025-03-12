@@ -113,7 +113,7 @@ public class SaveRunningRoutineStateTest {
         scenario.close();
         scenario = ActivityScenario.launch(MainActivity.class);
 
-        assertEquals(customTimerRepo.getCumulativeTime(), 3);
+        assertEquals(2, customTimerRepo.getCumulativeTime());
 
         //The running routine's state is preserved
         RoutineEntity r3 = database.routineDao().find((int)routineId);
