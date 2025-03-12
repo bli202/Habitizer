@@ -4,15 +4,18 @@ import android.util.Log;
 
 import edu.ucsd.cse110.habitizer.lib.domain.CustomTimer;
 
-public class CustomTimerRepository {
+public class RoomCustomTimerRepository {
     private final CustomTimerDao customTimerDao;
     
     private final String TAG = "CustomTimerRepository";
     
-    public CustomTimerRepository(CustomTimerDao customTimerDao) {
+    public RoomCustomTimerRepository(CustomTimerDao customTimerDao) {
         this.customTimerDao = customTimerDao;
     }
-    
+
+    public void clear() {
+        customTimerDao.clearAll();
+    }
     public CustomTimer getTimer() {
         CustomTimerEntity timerEntity = customTimerDao.findTimer();
         return timerEntity.toCustomTimer();
