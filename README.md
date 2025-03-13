@@ -27,6 +27,19 @@
 git clone https://github.com/your-username/habitizer.git
 cd habitizer
 ```
+### 2. Open in Android Studio
+Open Android Studio and select Open an Existing Project.
+Navigate to the cloned habitizer directory and open it.
+
+### 3. Configure Dependencies
+Ensure that you have the latest Android SDK and Gradle.
+Sync the Gradle project if not done automatically.
+
+### 4. Build and Run
+Connect an Android device or start an emulator.
+Run the project using Android Studio.
+
+---
 
 ## Velocity Calculation
 
