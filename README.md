@@ -1,20 +1,34 @@
-Wassup
+# Habitizer 📱
 
-## Make branch hahaao awerhiuaeghipuaegrhiuagwe
+**Habitizer** is a productivity-focused Android mobile app that allows users to build and manage daily routines with tasks and timers. The app emphasizes habit formation by enabling users to track, complete, and visualize their daily habits.
+
+---
+
+## 🚀 Features
+
+- ✅ **Create and Manage Routines:** Organize your daily tasks into custom routines.
+- 📅 **Task Management:** Add, delete, edit, and reorder tasks within routines.
+- ⏰ **Timers and Tracking:** Track actual time spent on each task.
+- 📈 **Progress Visualization:** Mark tasks as completed with visual strikethroughs.
+- 📝 **Persistence:** All routines and tasks persist across app restarts.
+- 🧪 **Robust Testing:** Extensive test coverage using Espresso.
+
+---
+
+## 📱 Screenshots
+
+
+---
+
+## 🛠️ Installation & Setup
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/habitizer.git
+cd habitizer
 ```
-git fetch origin
-git checkout -b [branch name]
-```
 
-## Switch branch
-```
-git fetch origin
-git checkout [branch name]
-```
-
-
-
-## VELOCITY CALCULATION
+## Velocity Calculation
 
 MS1 total:
 
